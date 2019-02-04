@@ -12,4 +12,5 @@ and the sum of their story points
 ## Sprint goals for following sprint
 ## A 5 minute video[3]
 (http://user.it.uu.se/~writo649/pss/project.html#fn.3)  video demonstration that shows clear improvements in the MVP** 
-## An updated burn-down chart
+## An updated burn-down chart 
+
