@@ -2,7 +2,7 @@
   "collectCoverageFrom": ["<rootDir>/src/**/*.js", "!<rootDir>/src/index.js"],
   "coverageReporters": ["lcov", "text"],
   "preset": "jest-expo",
-  "testMatch": ["<rootDir>/src/**/?(*.)+(test).js"],
+  "testMatch": ["<rootDir>/__tests__/*.js"],
   "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
   "transform": {
     "\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
