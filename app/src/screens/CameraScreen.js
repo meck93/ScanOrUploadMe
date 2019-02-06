@@ -12,6 +12,8 @@ import {
   Alert
 } from "react-native";
 import { ImagePicker, Permissions } from "expo";
+import { detectText } from "../../api/detectText";
+import { uploadImageAsync } from "../../api/uploadImage";
 
 export default class CameraScreen extends React.Component {
   state = {
@@ -173,19 +175,27 @@ export default class CameraScreen extends React.Component {
   _handleImagePicked = async pickerResult => {
     let uploadResponse;
     let uploadResult;
+    let responseJson;
 
     try {
       this.setState({ uploading: true });
 
       if (!pickerResult.cancelled) {
         // set the picture to the state - display it locally
-        this.setState({
-          image: pickerResult.uri
-        });
+        // this.setState({ image: pickerResult.uri });
+
+        // upload the image to server
+        uploadResponse = await uploadImageAsync(pickerResult.uri);
+        uploadResult = await uploadResponse.json();
+        this.setState({ image: uploadResult.location });
+
+        // get google cloud vision api to process the image
+        responseJson = await detectText(uploadResult.location);
       }
     } catch (error) {
       console.log({ uploadResponse });
       console.log({ uploadResult });
+      console.log({ responseJson });
       console.log({ error });
 
       Alert.alert("Upload failed, sorry :(");
