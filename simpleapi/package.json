@@ -1,17 +1,28 @@
 {
-  "name": "tutorial",
-  "version": "1.0.0",
-  "description": "trying to work with express for the first time",
-  "main": "index.js",
+  "name": "scanoruploadme-backend",
+  "version": "0.0.1",
+  "description": "basic express server",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "nodemon --exec babel-node src/app.js",
+    "build": "babel src --out-dir dist",
+    "start": "node dist/app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "faker": "^4.1.0",
-    "routes": "^2.1.0"
+    "faker": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.1",
+    "nodemon": "^1.18.9"
   }
 }
