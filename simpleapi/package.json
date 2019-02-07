@@ -4,12 +4,14 @@
   "description": "basic express server",
   "main": "app.js",
   "scripts": {
-    "serve": "nodemon --exec babel-node src/app.js",
-    "build": "babel src --out-dir dist",
-    "start": "node dist/app.js"
+    "serve": "nodemon --exec babel-node ./src/app.js",
+    "build": "babel src --out-dir ./dist --source-maps",
+    "start": "node ./dist/app.js",
+    "test": "./node_modules/.bin/mocha --compilers js:@babel/register",
+    "debug": "node --inspect-brk ./dist/app.js",
+    "postinstall": "babel src --out-dir ./dist --source-maps"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
@@ -23,6 +25,9 @@
     "@babel/node": "^7.2.2",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.9"
   }
 }
