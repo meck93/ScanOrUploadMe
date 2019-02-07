@@ -1,6 +1,35 @@
-to run app.js in terminal run:
-$ node app.js
-"app running on port" text should be visible in the shell
-go to localhost3000, you should see "Welcome to our restful API"
-go to localhost/user to see a random generated user
-go to localhost/users/n to see several random generated users (replace n for any positive number of users you want to see)
+## How to use this repository? (server-side)
+
+### Serve (i.e. running in development mode)
+
+To run the serve in development mode, run: 
+```javascript
+npm run serve
+$ [nodemon] 1.18.9
+$ [nodemon] to restart at any time, enter `rs`
+$ [nodemon] watching: *.*
+$ [nodemon] starting `babel-node ./src/app.js`
+$ Running stuff on http://127.0.0.1:3000. NODE_ENV: development.
+```
+
+Navigate to http://127.0.0.1:3000/ or localhost:3000/. It should display "Welcome to our restful API".
+/users will return a random generated user
+
+### Test 
+
+To test the app.js run: 
+```javascript
+npm run test
+```
+
+### Build & Run 
+
+To build the app in the format such that it can be deployed, run: 
+```javascript
+npm run build
+```
+
+A new folder should be created called **./dist** which contains the transpiled code. It can now be run using: 
+```javascript
+npm start
+```
