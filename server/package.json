@@ -18,7 +18,9 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "faker": "^4.1.0"
+    "express-rate-limit": "^3.3.2",
+    "express-session": "^1.15.6",
+    "helmet": "^3.15.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
