@@ -14,28 +14,37 @@ import {
 import { ImagePicker, Permissions } from "expo";
 import { detectText } from "../../api/detectText";
 import { uploadImageAsync } from "../../api/uploadImage";
+import { withNavigation } from "react-navigation";
 
-export default class CameraScreen extends React.Component {
-  state = {
-    hasCameraPermission: null,
-    hasCameraRollPermission: null,
-    image: null,
-    uploading: false
+class CameraScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      image: null,
+      uploading: false
+    };
+  }
+
+  static navigationOptions = {
+    headerRight: (
+      <Button
+        onPress={() =>
+          Alert.alert(
+            "I should help to navigate to the created calendar event once an event has been created. Currently, I don't do much."
+          )
+        }
+        title="To Event"
+      />
+    )
   };
 
   async componentDidMount() {
     try {
       // Get camera permission
-      const camPerm = await Permissions.askAsync(Permissions.CAMERA);
-      this.setState({
-        hasCameraPermission: camPerm.status === "granted"
-      });
+      await Permissions.askAsync(Permissions.CAMERA);
 
       // Get camera_roll & storage permission
-      const camRollPerm = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      this.setState({
-        hasCameraRollPermission: camRollPerm.status === "granted"
-      });
+      await Permissions.askAsync(Permissions.CAMERA_ROLL);
     } catch (error) {
       // display the error to the user
       Alert.alert(error);
@@ -182,15 +191,18 @@ export default class CameraScreen extends React.Component {
 
       if (!pickerResult.cancelled) {
         // set the picture to the state - display it locally
-        // this.setState({ image: pickerResult.uri });
+        this.setState({ image: pickerResult.uri });
+        this.props.navigation.navigate("Calendar", {
+          photoUri: pickerResult.uri
+        });
 
         // upload the image to server
-        uploadResponse = await uploadImageAsync(pickerResult.uri);
-        uploadResult = await uploadResponse.json();
-        this.setState({ image: uploadResult.location });
+        // uploadResponse = await uploadImageAsync(pickerResult.uri);
+        // uploadResult = await uploadResponse.json();
+        // this.setState({ image: uploadResult.location });
 
         // get google cloud vision api to process the image
-        responseJson = await detectText(uploadResult.location);
+        // responseJson = await detectText(uploadResult.location);
       }
     } catch (error) {
       console.log({ uploadResponse });
@@ -204,6 +216,8 @@ export default class CameraScreen extends React.Component {
     }
   };
 }
+
+export default withNavigation(CameraScreen);
 
 const styles = StyleSheet.create({
   imageContainer: {
