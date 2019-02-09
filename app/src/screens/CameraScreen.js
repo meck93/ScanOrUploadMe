@@ -47,7 +47,6 @@ class CameraScreen extends React.Component {
       await Permissions.askAsync(Permissions.CAMERA);
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
       await Permissions.askAsync(Permissions.CALENDAR);
-
     } catch (error) {
       // display the error to the user
       Alert.alert(error);
@@ -197,23 +196,44 @@ class CameraScreen extends React.Component {
         uploadResponse = await uploadImageAsync(pickerResult.uri);
         uploadResult = await uploadResponse.json();
 
-        if (uploadResult.success) {
+        if (!uploadResult.uploaded) {
+          console.log("Uploaded to server failed.");
           this.setState({
+            image: null,
+            calendarEvent: null
+          });
+          Alert.alert("Image Upload Failed!", "Uploaded to server failed.");
+        } else if (!uploadResult.success) {
+          console.log(
+            "Uploaded to server successfull but no result from Google Cloud."
+          );
+          this.setState({
+            image: null,
+            calendarEvent: null
+          });
+          Alert.alert(
+            "No Feedback from Google Cloud",
+            "Uploaded to server successfull but no result from Google Cloud."
+          );
+        } else {
+          // Upload was sucessfull and got result from Google Cloud
+          this.setState({
+            // set state to URL of upload location
             image: uploadResult.location,
+            // set process result of Google Cloud
             calendarEvent: uploadResult
           });
+
           console.log(this.state.calendarEvent);
           // Currently stores the received event locally
           // TODO: decide what we store and how
           // TODO: forwarding the key: "event" to the Calendar screen
           _storeData("event", uploadResult.calendarEvent).then(
-            // Navigating needs to be the last action
+            // navigate to the new screen as last action
             this.props.navigation.navigate("Calendar", {
               photoUri: uploadResult.location
             })
           );
-        } else {
-          new Error("No image returned.");
         }
       }
     } catch (error) {
@@ -222,7 +242,7 @@ class CameraScreen extends React.Component {
       console.log({ responseJson });
       console.log({ error });
 
-      Alert.alert("Upload failed!");
+      Alert.alert("Upload Failed!", error.message);
     } finally {
       this.setState({ uploading: false });
     }
