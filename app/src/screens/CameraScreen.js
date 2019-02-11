@@ -190,7 +190,7 @@ export default class CameraScreen extends React.Component {
         this.setState({ image: uploadResult.location });
 
         // get google cloud vision api to process the image
-        responseJson = await detectText(uploadResult.location);
+        // responseJson = await detectText(uploadResult.location);
       }
     } catch (error) {
       console.log({ uploadResponse });
