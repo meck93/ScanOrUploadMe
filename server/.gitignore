@@ -8,3 +8,4 @@ npm-debug.*
 .env
 config/
 dist/
+uploads/
