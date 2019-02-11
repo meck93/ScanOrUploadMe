@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const multer = require("multer");
 
 // import routes
 import images from "./routes/images";
@@ -43,11 +44,16 @@ if (app.get("env") === "production") {
   sesh.cookie.secure = true;
 }
 
+// make the content of the directory /uploads static and available via the link /uploads
+app.use("/uploads", express.static("uploads"));
+
 // apply session options to server
 app.use(session(sesh));
 
-// encode url
+// for parsing application/json
 app.use(bodyParser.json());
+
+// for parsing application/xwww-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // enable different routes
