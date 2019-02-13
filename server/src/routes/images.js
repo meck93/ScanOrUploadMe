@@ -3,6 +3,8 @@ const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
 
+import jsonEvent from "../../data/mockEvent";
+
 // define destination and how the filename for each uploaded file is created
 const storage = multer.diskStorage({
   destination: "uploads",
@@ -23,25 +25,10 @@ const storage = multer.diskStorage({
 // creates a disk storage object for local file storage
 const upload = multer({ storage: storage });
 
-// middleware that is specific to this router
-// example: attaches the current date to each request below /images
-router.use((req, res, next) => {
-  req.requestTime = Date.now();
-  next();
-});
-
-// define the /images default url
-router.get("/", (req, res) => {
-  res
-    .status(200)
-    .send(`This is the /images route requested at ${req.requestTime}`);
-});
-
-router.get("/:id", (req, res) => {});
-
 router.post("/", upload.single("photo"), (req, res, next) => {
   if (!req.file) {
     return res.json({
+      calendarEvent: null,
       msg: "File upload failed!",
       success: false
     });
@@ -55,7 +42,7 @@ router.post("/", upload.single("photo"), (req, res, next) => {
       };
 
       // log the endpoint to which the request was sent to
-      console.log(req.headers.host);
+      console.log(`Current Endpoint: ${req.headers.host}`);
 
       // create imgUrl with which the img can be viewed
       const imgUrl = `http://${
@@ -64,12 +51,35 @@ router.post("/", upload.single("photo"), (req, res, next) => {
         req.file.path.lastIndexOf("\\") + 1
       )}`;
 
+      // TODO: Implement sending the received picture to Google Cloud
+      // 1. Implement API call to GoogleCloud in separate file
+      // 2. Call API from here
+      // 3. Process the result
+      // 4. Send calendarEvent (like the fake one created below) to the client
+
+      // dummy calendar event
+      const calendarEvent = {
+        id: jsonEvent.id,
+        status: jsonEvent.status,
+        created: jsonEvent.created,
+        updated: jsonEvent.updated,
+        summary: jsonEvent.summary,
+        description: jsonEvent.description,
+        location: jsonEvent.location,
+        start: jsonEvent.start,
+        end: jsonEvent.end,
+        iCalUID: jsonEvent.iCalUID,
+        sequence: jsonEvent.sequence,
+        reminders: jsonEvent.reminders
+      };
+
       // set the response object
       res.contentType("image/jpeg");
 
       // send success message plus link to picture
       res.json({
         location: imgUrl,
+        calendarEvent: calendarEvent,
         msg: "File uploaded successfully!",
         success: true
       });
