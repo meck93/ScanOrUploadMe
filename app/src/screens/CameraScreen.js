@@ -15,6 +15,8 @@ import { ImagePicker, Permissions } from "expo";
 import { uploadImageAsync } from "../../api/uploadImage";
 import { withNavigation } from "react-navigation";
 
+import { _storeData, _retrieveData } from "../helpers/localStorage";
+
 class CameraScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +32,8 @@ class CameraScreen extends React.Component {
       <Button
         onPress={() =>
           Alert.alert(
-            "I should help to navigate to the created calendar event once an event has been created. Currently, I don't do much."
+            "Dummy Button",
+            "I should help to navigate to the created calendar event once an event has been created. Currently, I don't do much. The goal would be to only be active when the user has created an event (i.e. uploaded an image) and then to navigate back to the screen with the calendar event displayed."
           )
         }
         title="To Event"
@@ -188,12 +191,6 @@ class CameraScreen extends React.Component {
       this.setState({ uploading: true });
 
       if (!pickerResult.cancelled) {
-        // set the picture to the state - display it locally
-        this.setState({ image: pickerResult.uri });
-        this.props.navigation.navigate("Calendar", {
-          photoUri: pickerResult.uri
-        });
-
         // upload the image to server
         uploadResponse = await uploadImageAsync(pickerResult.uri);
         uploadResult = await uploadResponse.json();
@@ -204,6 +201,13 @@ class CameraScreen extends React.Component {
             calendarEvent: uploadResult
           });
           console.log(this.state.calendarEvent);
+          this.props.navigation.navigate("Calendar", {
+            photoUri: uploadResult.location
+          });
+          // Currently stores the received event locally
+          // TODO: decide what we store and how
+          // TODO: forwarding the key: "event" to the Calendar screen
+          await _storeData("event", uploadResult.calendarEvent);
         } else {
           new Error("No image returned.");
         }
