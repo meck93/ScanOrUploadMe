@@ -12,30 +12,20 @@ import {
   Alert
 } from "react-native";
 import { ImagePicker, Permissions } from "expo";
-import { detectText } from "../../api/detectText";
 import { uploadImageAsync } from "../../api/uploadImage";
 
 export default class CameraScreen extends React.Component {
   state = {
-    hasCameraPermission: null,
-    hasCameraRollPermission: null,
     image: null,
-    uploading: false
+    uploading: false,
+    calendarEvent: null
   };
 
   async componentDidMount() {
     try {
-      // Get camera permission
-      const camPerm = await Permissions.askAsync(Permissions.CAMERA);
-      this.setState({
-        hasCameraPermission: camPerm.status === "granted"
-      });
-
-      // Get camera_roll & storage permission
-      const camRollPerm = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      this.setState({
-        hasCameraRollPermission: camRollPerm.status === "granted"
-      });
+      // get camera, camera roll and storage permission
+      await Permissions.askAsync(Permissions.CAMERA);
+      await Permissions.askAsync(Permissions.CAMERA_ROLL);
     } catch (error) {
       // display the error to the user
       Alert.alert(error);
@@ -148,7 +138,7 @@ export default class CameraScreen extends React.Component {
 
   // remove currently display image
   _reset = () => {
-    this.setState({ image: null });
+    this.setState({ image: null, calendarEvent: null });
   };
 
   // take photo with the phone camera
@@ -187,10 +177,16 @@ export default class CameraScreen extends React.Component {
         // upload the image to server
         uploadResponse = await uploadImageAsync(pickerResult.uri);
         uploadResult = await uploadResponse.json();
-        this.setState({ image: uploadResult.location });
 
-        // get google cloud vision api to process the image
-        // responseJson = await detectText(uploadResult.location);
+        if (uploadResult.success) {
+          this.setState({
+            image: uploadResult.location,
+            calendarEvent: uploadResult
+          });
+          console.log(this.state.calendarEvent);
+        } else {
+          new Error("No image returned.");
+        }
       }
     } catch (error) {
       console.log({ uploadResponse });
@@ -198,7 +194,7 @@ export default class CameraScreen extends React.Component {
       console.log({ responseJson });
       console.log({ error });
 
-      Alert.alert("Upload failed, sorry :(");
+      Alert.alert("Upload failed!");
     } finally {
       this.setState({ uploading: false });
     }
