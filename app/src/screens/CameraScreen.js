@@ -13,12 +13,29 @@ import {
 } from "react-native";
 import { ImagePicker, Permissions } from "expo";
 import { uploadImageAsync } from "../../api/uploadImage";
+import { withNavigation } from "react-navigation";
 
-export default class CameraScreen extends React.Component {
-  state = {
-    image: null,
-    uploading: false,
-    calendarEvent: null
+class CameraScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      image: null,
+      uploading: false,
+      calendarEvent: null
+    };
+  }
+
+  static navigationOptions = {
+    headerRight: (
+      <Button
+        onPress={() =>
+          Alert.alert(
+            "I should help to navigate to the created calendar event once an event has been created. Currently, I don't do much."
+          )
+        }
+        title="To Event"
+      />
+    )
   };
 
   async componentDidMount() {
@@ -172,7 +189,10 @@ export default class CameraScreen extends React.Component {
 
       if (!pickerResult.cancelled) {
         // set the picture to the state - display it locally
-        // this.setState({ image: pickerResult.uri });
+        this.setState({ image: pickerResult.uri });
+        this.props.navigation.navigate("Calendar", {
+          photoUri: pickerResult.uri
+        });
 
         // upload the image to server
         uploadResponse = await uploadImageAsync(pickerResult.uri);
@@ -200,6 +220,8 @@ export default class CameraScreen extends React.Component {
     }
   };
 }
+
+export default withNavigation(CameraScreen);
 
 const styles = StyleSheet.create({
   imageContainer: {
