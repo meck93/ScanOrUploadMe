@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+- stable
+branches:
+- master
+cache:
+  directories:
+  - node_modules
+before_install:
+- cd ./server
+install:
+- npm install
+script:
+- npm run build
+- npm run test
+deploy:
+  provider: heroku
+  api_key:
+    secure: cHxN1Jpj6HSmeH0m35E16zaIvTIM95J9KSe75HV7r6ML1NV5bz5iTOKUL0EbIN18XZiUcvf0cak53n/+6zaK2sg2WQ7oXPjKOw1eaZBcuNFuE5+mJVyWkGEjJ+0pSBAuRiAuy9/oeQZbfx27uLGQvumesnYM7pk4fuQMtCF5LFrCVxXKwO3yIA+vnonEyloJZpp6jEWe29IkMfOlBFnKUPySdVWlqwN1XeTqt5CeQZ88tGdK07SCXFh+KaeuYFdxWKipzoVPT72ycb2lqzzrqzxGqweyCDRf0dS8TXHpJ24kmtH/wBi+i1RNWppF7s/e2+XBtuD/jDqMeloiwp3xS+9IEmnuWB7EhMpKE3m92M1jj47roYEXLMLB0aCJ7XC194IQqiPNS9yP6Y87ppRWR7/W8y+e1RWWlRUvZ2pXH5Ogku4BscDfW+A6EgdFIVPcss5oQJ+PJYO2p/COmCNgFcU+05gcBER/w5UXhScGuP1Bls4H77UxM/ZRQ81O+lTr5LF5yoO5/Eq9iVldb0CW3rs50N8S5c9rl0gQ7xrqVfVU77F5qG9dcU/EjqxqbwzXhQAW+zyrFZHu8/sMnzw/Do3gJ9JqwKEqyA32dcOZB1+E8ZUD8ne2XfG3ysPLAtO5v7GJpPzZIZhF13eX/CRfmT5WS/zJsqZzInfpsPjqqjg=
+  app: scanoruploadme
+notifications:
+  slack:
+    rooms:
+      secure: twuPIzvNFmT2RD4O/PmUmQ/mCuqVxPwQyAPVO0qtD/odKR7tkAV8gP/VZvnnExq1fIh4eoKpYNepY8WFF+Ye8kKhTAJIEnMbKtLd+H5VqoOMc9llFNd5Mtib1Lh2xzHIvbKU4OyNxT1pHJyxQKzRliNNj0lxFgien4jKnSamGkfXu++ZBDuSpVJLDYPqkSd2PAQxXzPWwJc79fSRjqEWcVapcqk36JJdinlg3mDdFo4zesET29gpLFnumGkDgkbiiWLtxWhLgizqAUVhtjaRyCWRGwqjo+vbmveEtQpi0RqHojQXAJqxzYoveLSsSq1WzG6sj2FgWBz+aJzI4CjbAt5q/1WfMs7y9yqKm4uU3NP5nDxxAH7o5i8IRDs7aWWX5abmAVXKwglfHt9M1eRpj4RQFcZPak0rVM8v5LnjloacOUK9nSaWd1NKiY2JrAN4f+mmqvl8nUupj5OWJMqzu9ndtwhYotm7YgjnC62iN1g+OBpYWBY9xX1J0qcQm2n4N8Jdquz64Tp8SXZC0LkCQc47PC+LEPNDzXVIFgMS3Le+DXmAje/HJVBdKeiywJZTms/qKYcsb665id6+FoCe6UQTbQkAfEMIJ7IgP785ymSUc5Sf2yoY7w1qeUbIo4ZlCEUXklMVVE2KZcHymsqCTmE+CrJHfoVCPT4rtblTCSE=
+    on_success: always
+    on_failure: always
+  email: false

@@ -12,7 +12,6 @@ import {
   Alert
 } from "react-native";
 import { ImagePicker, Permissions } from "expo";
-import { detectText } from "../../api/detectText";
 import { uploadImageAsync } from "../../api/uploadImage";
 import { withNavigation } from "react-navigation";
 
@@ -21,7 +20,8 @@ class CameraScreen extends React.Component {
     super(props);
     this.state = {
       image: null,
-      uploading: false
+      uploading: false,
+      calendarEvent: null
     };
   }
 
@@ -40,10 +40,8 @@ class CameraScreen extends React.Component {
 
   async componentDidMount() {
     try {
-      // Get camera permission
+      // get camera, camera roll and storage permission
       await Permissions.askAsync(Permissions.CAMERA);
-
-      // Get camera_roll & storage permission
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
     } catch (error) {
       // display the error to the user
@@ -157,7 +155,7 @@ class CameraScreen extends React.Component {
 
   // remove currently display image
   _reset = () => {
-    this.setState({ image: null });
+    this.setState({ image: null, calendarEvent: null });
   };
 
   // take photo with the phone camera
@@ -197,12 +195,18 @@ class CameraScreen extends React.Component {
         });
 
         // upload the image to server
-        // uploadResponse = await uploadImageAsync(pickerResult.uri);
-        // uploadResult = await uploadResponse.json();
-        // this.setState({ image: uploadResult.location });
+        uploadResponse = await uploadImageAsync(pickerResult.uri);
+        uploadResult = await uploadResponse.json();
 
-        // get google cloud vision api to process the image
-        // responseJson = await detectText(uploadResult.location);
+        if (uploadResult.success) {
+          this.setState({
+            image: uploadResult.location,
+            calendarEvent: uploadResult
+          });
+          console.log(this.state.calendarEvent);
+        } else {
+          new Error("No image returned.");
+        }
       }
     } catch (error) {
       console.log({ uploadResponse });
@@ -210,7 +214,7 @@ class CameraScreen extends React.Component {
       console.log({ responseJson });
       console.log({ error });
 
-      Alert.alert("Upload failed, sorry :(");
+      Alert.alert("Upload failed!");
     } finally {
       this.setState({ uploading: false });
     }
