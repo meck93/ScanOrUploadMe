@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
 
-import jsonEvent from "../../data/mockEvent";
+import jsonEvent from "../fakeData/mockEvent";
 
 // define destination and how the filename for each uploaded file is created
 const storage = multer.diskStorage({
