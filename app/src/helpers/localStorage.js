@@ -18,10 +18,6 @@ export async function _storeData(key, item) {
 export async function _retrieveData(key) {
   try {
     const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      // We have data!!
-      console.log(value);
-    }
     return value;
   } catch (error) {
     // Error retrieving data
