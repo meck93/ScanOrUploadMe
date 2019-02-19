@@ -201,13 +201,15 @@ class CameraScreen extends React.Component {
             calendarEvent: uploadResult
           });
           console.log(this.state.calendarEvent);
-          this.props.navigation.navigate("Calendar", {
-            photoUri: uploadResult.location
-          });
           // Currently stores the received event locally
           // TODO: decide what we store and how
           // TODO: forwarding the key: "event" to the Calendar screen
-          await _storeData("event", uploadResult.calendarEvent);
+          _storeData("event", uploadResult.calendarEvent).then(
+            // Navigating needs to be the last action
+            this.props.navigation.navigate("Calendar", {
+              photoUri: uploadResult.location
+            })
+          );
         } else {
           new Error("No image returned.");
         }
