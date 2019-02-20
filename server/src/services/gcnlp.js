@@ -1,7 +1,7 @@
 // Imports the Google Cloud client library
 import { LanguageServiceClient } from "@google-cloud/language";
 
-async function analyzeText(text) {
+async function getEntitiesFromText(text) {
   // Creates a client
   const client = new LanguageServiceClient({
     keyFilename: process.env.PATH_TO_CREDENTIALS
@@ -10,18 +10,42 @@ async function analyzeText(text) {
   // Prepares a document, representing the provided text
   const document = {
     content: text,
-    type: "PLAIN_TEXT"
+    type: "PLAIN_TEXT",
+    language: "en"
   };
 
-  // Detects entities in the document
-  client.analyzeEntities({ document }).then(response => {
-    response[0].entities.forEach(entity => {
-      // prints each detected entity including type and confidence
-      console.log(
-        `${entity.name} - Type: ${entity.type}, Salience: ${entity.salience}`
-      );
-    });
+  return new Promise((resolve, reject) => {
+    // detects entities in the string
+    client
+      .analyzeEntities({ document })
+      .then(response => {
+        // if the request was successfull but contains an error object
+        // resolve the error object and handle it further down
+        if (response.error) {
+          console.log(
+            "GC-NLP-ERROR: Request successfull but contains error object"
+          );
+          resolve(response);
+        } else {
+          // request was successfull and contains no error object
+          let result = [];
+          // extract the relevant information for each entity discovered
+          response[0].entities.forEach(entity => {
+            result.push({
+              name: entity.name,
+              type: entity.type,
+              salience: entity.salience
+            });
+          });
+          resolve(result);
+        }
+      })
+      .catch(err => {
+        // request was unsuccessfull
+        console.error("ERROR:", err);
+        reject(err);
+      });
   });
 }
 
-export { analyzeText };
+export { getEntitiesFromText };

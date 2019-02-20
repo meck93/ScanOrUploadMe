@@ -10,6 +10,7 @@ config/
 dist/
 uploads/
 credentials.json
+google-services.json
 
 # Logs
 logs
