@@ -43,6 +43,8 @@ class CalendarEventScreen extends React.Component {
             this.state.description +
             " SUMMARY: " +
             this.state.summary +
+          " LOCATION: " +
+          this.state.location +
             " START: " +
             this.state.startTime +
             " END: " +
