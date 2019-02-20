@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, TextInput, View, StyleSheet } from "react-native";
+import { Button, Text, TextInput, View, StyleSheet, Alert } from "react-native";
 import { withNavigation } from "react-navigation";
-
+import { Calendar, Permissions } from "expo";
 import { _storeData, _retrieveData } from "../helpers/localStorage";
 
 class CalendarEventScreen extends React.Component {
@@ -80,6 +80,17 @@ class CalendarEventScreen extends React.Component {
           value={this.state.endTime}
           onChangeText={text => this.setState({ endTime: text })}
         />
+        <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+        <Button onPress={this._addToCalendar} title="Add to Calendar" />
+        </View>
+        <View style={styles.buttonContainer}>
+        <Button onPress={this._deleteEvent} title="Remove Event" />
+        </View>
+        <View style={styles.buttonContainer}>
+        <Button onPress={this._findEvent} title="Find Events" />
+        </View>
+        </View>
       </View>
     );
   }
@@ -104,6 +115,69 @@ class CalendarEventScreen extends React.Component {
       this.setState(stateUpdate);
     });
   };
+  _deleteEvent = async () => {
+    try {
+      if (this.state.eventId) {
+        const id = this.state.eventId;
+
+        // TODO: Fix - Event is not deleted!
+        await Calendar.deleteEventAsync(`${id}`, {
+          instanceStartDate: "2019-02-19T15:00:00.000Z",
+          futureEvents: true
+        });
+
+        this.setState({ eventId: null });
+        Alert.alert(`Event with ID: ${id} has been deleted.`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  _addToCalendar = async () => {
+    //create dummy event
+    const eventDetails = {
+      title: "I am your new event",
+      startDate: "2019-02-19T15:00:00.000Z", //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
+      endDate: "2019-02-19T16:00:00.000Z",
+      allDay: false,
+      location: "Ångström, Uppsala, Sweden",
+      notes: "Testing add to Calendar",
+      alarms: [
+        {
+          relativeOffset: -15,
+          method: Calendar.AlarmMethod.DEFAULT
+        }
+      ],
+      recurrenceRule: {
+        frequency: Calendar.Frequency.DAILY,
+        interval: 2,
+        endDate: "2019-02-22T16:00:00.000Z",
+        occurrence: 4
+      },
+      availability: "busy",
+      timeZone: "GMT+1",
+      url: "http://www..."
+    };
+
+    try {
+      //add event to default calendar
+      const eventId = await Calendar.createEventAsync(
+          Calendar.DEFAULT,
+          eventDetails
+      );
+
+      this.setState({ eventId: eventId });
+
+      console.log("Event Id", eventId);
+
+      Alert.alert(`The event ${eventId} is added to your calendar!`);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+
 }
 
 export default withNavigation(CalendarEventScreen);
