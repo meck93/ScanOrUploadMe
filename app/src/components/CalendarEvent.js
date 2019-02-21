@@ -41,8 +41,9 @@ class CalendarEvent extends React.Component {
 
   _findEvent = async () => {
     // TODO: Change which event is fetched maybe using a property passed from the CameraScreen using navigation properties
-    const event = await _retrieveData("event");
-    this.setState({ calendarEvent: event });
+    _retrieveData("event").then(data => {
+      this.setState({ calendarEvent: data });
+    });
   };
 }
 

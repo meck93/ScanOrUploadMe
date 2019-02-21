@@ -39,7 +39,45 @@ async function uploadImageAsync(uri) {
     }
   };
 
-  return fetch(apiUrl, options);
+  const FETCH_TIMEOUT = 15000;
+  let didTimeOut = false;
+
+  // new fetch request including a timeout interval to cancel the request if the server cannot be reached
+  return new Promise((resolve, reject) => {
+    // creates timeout interval
+    const timeout = setTimeout(() => {
+      didTimeOut = true;
+      reject(
+        new Error(
+          "The request has timed out. Unfortunately, the server cannot be reached. Check if you are connected to the Internet."
+        )
+      );
+    }, FETCH_TIMEOUT);
+
+    fetch(apiUrl, options)
+      .then(response => {
+        // Clear the timeout
+        clearTimeout(timeout);
+
+        // check if request timed out
+        if (!didTimeOut) {
+          // no timeout, request successfull
+          resolve(response);
+        }
+      })
+      .catch(error => {
+        console.log("Fetch Failed!", error);
+
+        // rejection already happend with setTimeout
+        if (didTimeOut) {
+          console.log("Request had already timed out");
+          return;
+        }
+
+        // reject with error
+        reject(error);
+      });
+  });
 }
 
 export { uploadImageAsync };
