@@ -26,10 +26,6 @@ async function getTextFromImage(pathToImage, lang) {
         // if the request was successfull but contains an error object
         // resolve the error object and handle it further down
         if (response.error) {
-          console.log(
-            "GC-VISION-ERROR: request successfull but contains error object\n",
-            response.error
-          );
           resolve(response);
           // request was successfull and contains no error object
         } else {

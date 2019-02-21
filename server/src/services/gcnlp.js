@@ -22,9 +22,6 @@ async function getEntitiesFromText(text) {
         // if the request was successfull but contains an error object
         // resolve the error object and handle it further down
         if (response.error) {
-          console.log(
-            "GC-NLP-ERROR: Request successfull but contains error object"
-          );
           resolve(response);
         } else {
           // request was successfull and contains no error object

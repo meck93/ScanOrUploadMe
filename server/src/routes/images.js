@@ -30,6 +30,14 @@ const storage = multer.diskStorage({
 // creates a disk storage object for local file storage
 const upload = multer({ storage: storage });
 
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+  while (end < start + ms) {
+    end = new Date().getTime();
+  }
+}
+
 router.post("/", upload.single("photo"), (req, res) => {
   if (!req.file) {
     // if no file is contained in the request send a upload failure response
@@ -64,12 +72,17 @@ router.post("/", upload.single("photo"), (req, res) => {
     let docText;
     let entities;
 
+    // TODO: fix this!
+    // we need to wait to make sure the image is ready
+    wait(1500);
+
     getTextFromImage(imageUrl, "en")
       .then(result => {
         if (typeof result === "undefined") {
-          new Error("Failed! No result from GC Vision!");
+          throw new Error("Failed! No result from GC Vision!");
         } else if (typeof result.error !== "undefined") {
-          new Error(
+          console.log(result.error);
+          throw new Error(
             "GC Vision was unable to access the image URL or no feedback!"
           );
         } else {
@@ -80,9 +93,10 @@ router.post("/", upload.single("photo"), (req, res) => {
           getEntitiesFromText(docText.description)
             .then(result => {
               if (typeof result === "undefined") {
-                new Error("Failed! No result from GC NLP!");
+                throw new Error("Failed! No result from GC NLP!");
               } else if (typeof result.error !== "undefined") {
-                new Error("Failed! GC NLP result contains error!");
+                console.log(result.error);
+                throw new Error("Failed! GC NLP result contains error!");
               } else {
                 entities = result;
                 console.log("GC-NLP-ENTITIES:", JSON.stringify(entities));
