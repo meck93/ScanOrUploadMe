@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import { _storeData, _retrieveData } from "../helpers/localStorage";

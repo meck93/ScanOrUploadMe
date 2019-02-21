@@ -46,6 +46,7 @@ class CameraScreen extends React.Component {
       // get camera, camera roll and storage permission
       await Permissions.askAsync(Permissions.CAMERA);
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      await Permissions.askAsync(Permissions.CALENDAR);
     } catch (error) {
       // display the error to the user
       Alert.alert(error);
