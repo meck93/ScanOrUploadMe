@@ -195,9 +195,31 @@ class CameraScreen extends React.Component {
         uploadResponse = await uploadImageAsync(pickerResult.uri);
         uploadResult = await uploadResponse.json();
 
-        if (uploadResult.success) {
+        if (!uploadResult.uploaded) {
+          console.log("Uploaded to server failed.");
           this.setState({
+            image: null,
+            calendarEvent: null
+          });
+          Alert.alert("Image Upload Failed!", "Uploaded to server failed.");
+        } else if (!uploadResult.success) {
+          console.log(
+            "Uploaded to server successfull but no result from Google Cloud."
+          );
+          this.setState({
+            image: null,
+            calendarEvent: null
+          });
+          Alert.alert(
+            "No Feedback from Google Cloud",
+            "Uploaded to server successfull but no result from Google Cloud."
+          );
+        } else {
+          // Upload was sucessfull and got result from Google Cloud
+          this.setState({
+            // set state to URL of upload location
             image: uploadResult.location,
+            // set process result of Google Cloud
             calendarEvent: uploadResult
           });
 
@@ -211,12 +233,6 @@ class CameraScreen extends React.Component {
               photoUri: uploadResult.location
             })
           );
-        } else {
-          console.error("No image returned.");
-          this.setState({
-            image: null,
-            calendarEvent: null
-          });
         }
       }
     } catch (error) {
@@ -225,7 +241,7 @@ class CameraScreen extends React.Component {
       console.log({ responseJson });
       console.log({ error });
 
-      Alert.alert("Upload failed!");
+      Alert.alert("Upload Failed!", error.message);
     } finally {
       this.setState({ uploading: false });
     }
