@@ -1,5 +1,5 @@
 function nlpToEvent(nlpObject, ocrResult){
-    let organization, person, summary, location, event; 
+    let organization, person, summary, location, event;
 
     // Extract necessary information from NLP response
     // TODO: Support multiple people/organizations/etc
