@@ -19,8 +19,11 @@ class CalendarEventScreen extends React.Component {
 
   async componentDidMount() {
     try {
+      // get event name from navigation prop (passed from camera screen)
+      const createdEventName = this.props.navigation.getParam("eventName");
+
       // TODO: decide what and when an event is fetched
-      this._findEvent();
+      this._findEvent(createdEventName);
     } catch (error) {
       Alert.alert(error);
       console.log({ error });
@@ -97,11 +100,11 @@ class CalendarEventScreen extends React.Component {
     );
   }
 
-  _findEvent = async () => {
+  _findEvent = async eventName => {
     // TODO: Change which event is fetched maybe using a property passed from the CameraScreen using navigation properties
 
     // load the data for the event from the local storage
-    _retrieveData("event").then(data => {
+    _retrieveData(eventName).then(data => {
       // create the initial state
       const event = JSON.parse(data);
       const stateUpdate = {

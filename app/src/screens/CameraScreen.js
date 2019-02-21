@@ -231,7 +231,8 @@ class CameraScreen extends React.Component {
           _storeData("event", uploadResult.calendarEvent).then(
             // navigate to the new screen as last action
             this.props.navigation.navigate("Calendar", {
-              photoUri: uploadResult.location
+              photoUri: uploadResult.location,
+              eventName: "event"
             })
           );
         }
