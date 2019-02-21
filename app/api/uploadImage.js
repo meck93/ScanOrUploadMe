@@ -39,7 +39,7 @@ async function uploadImageAsync(uri) {
     }
   };
 
-  const FETCH_TIMEOUT = 1000;
+  const FETCH_TIMEOUT = 15000;
   let didTimeOut = false;
 
   // new fetch request including a timeout interval to cancel the request if the server cannot be reached
