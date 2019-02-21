@@ -31,9 +31,6 @@ class CalendarEventScreen extends React.Component {
     return (
       <View>
         <Text style={styles.textContainer}>
-          calendar event! info fr image fr Google Cloud.
-        </Text>
-        <Text style={styles.textContainer}>
           Image URL: {this.props.navigation.getParam("photoUri")}
         </Text>
         <Text style={styles.textContainer}>
@@ -136,12 +133,12 @@ class CalendarEventScreen extends React.Component {
 
   _addToCalendar = async () => {
     //create dummy event
-    const eventDetails = {
-      title: "I am your new event",
-      startDate: "2019-02-19T15:00:00.000Z", //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
+    let eventDetails = {
+      title: "I am your new event",//
+      startDate: "2019-02-19T15:00:00.000Z",///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
       endDate: "2019-02-19T16:00:00.000Z",
       allDay: false,
-      location: "Ångström, Uppsala, Sweden",
+      location: this.state.location,
       notes: "Testing add to Calendar",
       alarms: [
         {
@@ -159,8 +156,15 @@ class CalendarEventScreen extends React.Component {
       timeZone: "GMT+1",
       url: "http://www..."
     };
-
+    debugger;
     try {
+      if (this.state.startTime){
+        eventDetails.title= this.state.summary;
+        eventDetails.location= this.state.location;
+        eventDetails.startDate= new Date(this.state.startTime);
+        eventDetails.endDate= new Date(this.state.endTime);
+        eventDetails.recurrenceRule.endDate=new Date(this.state.endTime);
+      }
       //add event to default calendar
       const eventId = await Calendar.createEventAsync(
           Calendar.DEFAULT,
