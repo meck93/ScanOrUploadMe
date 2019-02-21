@@ -4,7 +4,7 @@ This is the weekly progress report for week/sprint 3 for the "ScanOrUploadMe" pr
 ## Current Team Velocity
 29 story points (sprint 3)
 
-- decrease by 3 story points from sprint 2 (DOUBLE CHECK, we have new issues without points)
+- decrease by 4 story points from sprint 2 (DOUBLE CHECK, we have new issues without points)
 
 ## Tickets finished and the sum of their story points
 The names listed below are issues that we have closed this sprint and can be found in the project's [closed column](https://github.com/IOOPM-UU/ScanOrUploadMe/projects/1): 
