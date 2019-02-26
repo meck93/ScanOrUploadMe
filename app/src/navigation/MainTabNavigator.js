@@ -6,8 +6,10 @@ import {
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
+
 import CameraScreen from "../screens/CameraScreen";
 import CalendarEventScreen from "../screens/CalendarEventScreen";
+import PreferencesScreen from "../screens/PreferencesScreen";
 
 const CameraStack = createStackNavigator(
   {
@@ -29,16 +31,42 @@ const CameraStack = createStackNavigator(
   }
 );
 
+const PreferencesStack = createStackNavigator(
+  {
+    Preferences: {
+      screen: PreferencesScreen,
+      navigationOptions: {
+        title: "My Preferences"
+      }
+    }
+  },
+  {
+    initialRouteName: "Preferences"
+  }
+);
+
 export default createBottomTabNavigator(
   {
     CameraTab: {
       screen: CameraStack,
       navigationOptions: {
-        tabBarLabel: "Camera",
+        tabBarLabel: "Home",
         tabBarIcon: ({ focused }) => (
           <TabBarIcon
             focused={focused}
-            name={Platform.OS === "ios" ? "ios-camera" : "md-camera"}
+            name={Platform.OS === "ios" ? "ios-home" : "md-home"}
+          />
+        )
+      }
+    },
+    PreferencesTab: {
+      screen: PreferencesStack,
+      navigationOptions: {
+        tabBarLabel: "Preferences",
+        tabBarIcon: ({ focused }) => (
+          <TabBarIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
           />
         )
       }
@@ -49,7 +77,7 @@ export default createBottomTabNavigator(
       activeTintColor: "lightblue",
       inactiveTintColor: "gray"
     },
-    order: ["CameraTab"],
+    order: ["CameraTab", "PreferencesTab"],
     animationEnabled: true
   }
 );
