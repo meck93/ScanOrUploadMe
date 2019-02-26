@@ -3,6 +3,14 @@ import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { AppLoading, Asset, Font, Icon } from "expo";
 import AppNavigator from "./src/navigation/AppNavigator";
 
+// Redux
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import calendarReducer from "./src/reducers/calendarReducer";
+
+// global store
+const store = createStore(calendarReducer);
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -23,8 +31,10 @@ export default class App extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <Provider store={store}>
+            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </Provider>
         </View>
       );
     }
