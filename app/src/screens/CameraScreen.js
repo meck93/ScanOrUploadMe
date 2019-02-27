@@ -28,7 +28,7 @@ class CameraScreen extends React.Component {
   }
 
   static navigationOptions = {
-    headerRight: (
+    /*headerRight: (
       <Button
         onPress={() =>
           Alert.alert(
@@ -38,7 +38,7 @@ class CameraScreen extends React.Component {
         }
         title="To Event"
       />
-    )
+    )*/
   };
 
   async componentDidMount() {
@@ -61,8 +61,7 @@ class CameraScreen extends React.Component {
           flex: 1,
           alignItems: "center",
           justifyContent: "flex-end"
-        }}
-      >
+        }} >
         <StatusBar barStyle="default" />
 
         {this._maybeRenderImage()}
