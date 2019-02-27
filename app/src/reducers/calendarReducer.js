@@ -3,25 +3,48 @@
 import { combineReducers } from "redux";
 
 const INITIAL_STATE = {
-  defaultId: "1",
-  currentId: ""
+  activeCalendarId: null,
+  currentEventId: null,
+  currentEvent: null,
+  events: []
 };
 
 const calendarReducer = (state = INITIAL_STATE, action) => {
+  const { events } = state;
   switch (action.type) {
     case "SET_DEFAULT_CALENDAR":
-      // Retrieves the current default calendarId
-      let { defaultId, currentId } = state;
-
       // retrieve the calendarId from the action payload
       const calendarId = action.payload;
 
-      // set the new calendarId
-      currentId = calendarId;
+      // Return the new state (don't update the old state)
+      return Object.assign({}, state, {
+        activeCalendarId: calendarId
+      });
 
-      // Update the redux state
-      const newState = { currentId, defaultId };
-      return newState;
+    case "SET_CURRENT_EVENT":
+      // retrieve the eventId from the action payload
+      const eventId = action.payload;
+
+      // select the event for which the ID matches
+      const [currentEvent] = events.filter(event => event.id === eventId);
+
+      // Return the new state (don't update the old state)
+      return Object.assign({}, state, {
+        currentEvent: currentEvent,
+        currentEventId: eventId
+      });
+
+    case "ADD_EVENT":
+      // retrieve the eventId from the action payload
+      const event = action.payload;
+
+      // add the event to the list of events
+      const newEvents = [...events, ...[event]];
+
+      // Return the new state (don't update the old state)
+      return Object.assign({}, state, {
+        events: newEvents
+      });
 
     default:
       return state;
