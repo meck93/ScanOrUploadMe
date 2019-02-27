@@ -15,7 +15,10 @@ import { ImagePicker, Permissions } from "expo";
 import { uploadImageAsync } from "../../api/uploadImage";
 import { withNavigation } from "react-navigation";
 
-import { _storeData, _retrieveData } from "../helpers/localStorage";
+// redux
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { addEvent, setCurrentEvent } from "../actions/calendarActions";
 
 class CameraScreen extends React.Component {
   constructor(props) {
@@ -27,18 +30,15 @@ class CameraScreen extends React.Component {
     };
   }
 
-  static navigationOptions = {
-    headerRight: (
-      <Button
-        onPress={() =>
-          Alert.alert(
-            "Dummy Button",
-            "I should help to navigate to the created calendar event once an event has been created. Currently, I don't do much. The goal would be to only be active when the user has created an event (i.e. uploaded an image) and then to navigate back to the screen with the calendar event displayed."
-          )
-        }
-        title="To Event"
-      />
-    )
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerRight: (
+        <Button
+          title="To Event"
+          onPress={navigation.getParam("calEventNavigation")}
+        />
+      )
+    };
   };
 
   async componentDidMount() {
@@ -47,12 +47,21 @@ class CameraScreen extends React.Component {
       await Permissions.askAsync(Permissions.CAMERA);
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
       await Permissions.askAsync(Permissions.CALENDAR);
+
+      // static navigation buttons
+      this.props.navigation.setParams({
+        calEventNavigation: this._navigateToCalendarEventScreen
+      });
     } catch (error) {
       // display the error to the user
       Alert.alert(error);
       console.log({ error });
     }
   }
+
+  _navigateToCalendarEventScreen = () => {
+    this.props.navigation.navigate("Calendar");
+  };
 
   render() {
     return (
@@ -225,16 +234,15 @@ class CameraScreen extends React.Component {
           });
 
           console.log(this.state.calendarEvent);
-          // Currently stores the received event locally
-          // TODO: decide what we store and how
-          // TODO: forwarding the key: "event" to the Calendar screen
-          _storeData("event", uploadResult.calendarEvent).then(
-            // navigate to the new screen as last action
-            this.props.navigation.navigate("Calendar", {
-              photoUri: uploadResult.location,
-              eventName: "event"
-            })
-          );
+
+          // add the event to the global event store
+          this.props.addEvent(uploadResult.calendarEvent);
+
+          // set the event as the current event
+          this.props.setCurrentEvent(uploadResult.calendarEvent.id);
+
+          // navigate to the calendarEvent screen
+          this.props.navigation.navigate("Calendar");
         }
       }
     } catch (error) {
@@ -250,7 +258,24 @@ class CameraScreen extends React.Component {
   };
 }
 
-export default withNavigation(CameraScreen);
+const mapStateToProps = state => {
+  const { calendar } = state;
+  return { calendar };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addEvent,
+      setCurrentEvent
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(CameraScreen));
 
 const styles = StyleSheet.create({
   imageContainer: {
