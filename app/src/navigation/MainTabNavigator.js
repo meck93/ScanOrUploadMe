@@ -36,7 +36,7 @@ const PreferencesStack = createStackNavigator(
     Preferences: {
       screen: PreferencesScreen,
       navigationOptions: {
-        title: "My Preferences"
+        title: "Settings"
       }
     }
   },
@@ -62,7 +62,7 @@ export default createBottomTabNavigator(
     PreferencesTab: {
       screen: PreferencesStack,
       navigationOptions: {
-        tabBarLabel: "Preferences",
+        tabBarLabel: "Settings",
         tabBarIcon: ({ focused }) => (
           <TabBarIcon
             focused={focused}
