@@ -12,7 +12,7 @@ import {
   Alert
 } from "react-native";
 import { ImagePicker, Permissions } from "expo";
-import { uploadImageAsync } from "../../api/uploadImage";
+import { uploadBase64 } from "../../api/uploadImage";
 import { withNavigation } from "react-navigation";
 
 // redux
@@ -175,24 +175,25 @@ class CameraScreen extends React.Component {
   _takePhoto = async () => {
     const pickerResult = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      quality: 1
+      quality: 1,
+      base64: true
     });
 
-    this._handleImagePicked(pickerResult);
+    this._handleImagePickedBase64(pickerResult);
   };
 
   // choose photo from camera roll
   _pickImage = async () => {
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      quality: 1
+      quality: 1,
+      base64: true
     });
 
-    this._handleImagePicked(pickerResult);
+    this._handleImagePickedBase64(pickerResult);
   };
 
-  // handle the chosen image
-  _handleImagePicked = async pickerResult => {
+  _handleImagePickedBase64 = async pickerResult => {
     let uploadResponse;
     let uploadResult;
     let responseJson;
@@ -202,24 +203,16 @@ class CameraScreen extends React.Component {
 
       if (!pickerResult.cancelled) {
         // upload the image to server
-        uploadResponse = await uploadImageAsync(pickerResult.uri);
+        uploadResponse = await uploadBase64(pickerResult);
         uploadResult = await uploadResponse.json();
 
         if (!uploadResult.uploaded) {
           console.log("Uploaded to server failed.");
-          this.setState({
-            image: null,
-            calendarEvent: null
-          });
           Alert.alert("Image Upload Failed!", "Uploaded to server failed.");
         } else if (!uploadResult.success) {
           console.log(
             "Uploaded to server successfull but no result from Google Cloud."
           );
-          this.setState({
-            image: null,
-            calendarEvent: null
-          });
           Alert.alert(
             "No Feedback from Google Cloud",
             "Uploaded to server successfull but no result from Google Cloud."
@@ -232,8 +225,6 @@ class CameraScreen extends React.Component {
             // set process result of Google Cloud
             calendarEvent: uploadResult
           });
-
-          console.log(this.state.calendarEvent);
 
           // add the event to the global event store
           this.props.addEvent(uploadResult.calendarEvent);
