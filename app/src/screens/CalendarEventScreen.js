@@ -1,8 +1,13 @@
 import React from "react";
 import { Button, Text, TextInput, View, StyleSheet, Alert } from "react-native";
 import { withNavigation } from "react-navigation";
-import { Calendar, Permissions } from "expo";
+import { Calendar } from "expo";
 import { _storeData, _retrieveData } from "../helpers/localStorage";
+
+// redux
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { addEvent, setCurrentEvent } from "../actions/calendarActions";
 
 class CalendarEventScreen extends React.Component {
   constructor(props) {
@@ -36,6 +41,23 @@ class CalendarEventScreen extends React.Component {
         <Text style={styles.textContainer}>
           Image URL: {this.props.navigation.getParam("photoUri")}
         </Text>
+        <Text style={styles.textContainer}>
+          CalendarId: {this.props.calendar.activeCalendarId}
+        </Text>
+        <Text style={styles.textContainer}>
+          Current Event:
+          {JSON.stringify(this.props.calendar.currentEvent)}
+        </Text>
+
+        <View style={styles.buttonContainer}>
+          {this.props.calendar.events.map(event => (
+            <Button
+              key={event.id}
+              title={`Set current event to: ${event.description}`}
+              onPress={() => this.props.setCurrentEvent(event.id)}
+            />
+          ))}
+        </View>
 
         <Text style={styles.textContainer}>
           Calendar Event:{" "}
@@ -51,42 +73,36 @@ class CalendarEventScreen extends React.Component {
             " END: " +
             this.state.endTime}
         </Text>
-
         <TextInput
           style={{ height: 40 }}
           placeholder={"SUMMARY"}
           value={this.state.summary}
           onChangeText={text => this.setState({ summary: text })}
         />
-
         <TextInput
           style={{ height: 40 }}
           placeholder={"DESCRIPTION"}
           value={this.state.description}
           onChangeText={text => this.setState({ description: text })}
         />
-
         <TextInput
           style={{ height: 40 }}
           placeholder={"LOCATION:"}
           value={this.state.location}
           onChangeText={text => this.setState({ location: text })}
         />
-
         <TextInput
           style={{ height: 40 }}
           placeholder={"START_TIME"}
           value={this.state.startTime}
           onChangeText={text => this.setState({ startTime: text })}
         />
-
         <TextInput
           style={{ height: 40 }}
           placeholder={"END_TIME"}
           value={this.state.endTime}
           onChangeText={text => this.setState({ endTime: text })}
         />
-
         <View style={styles.container}>
           <View style={styles.buttonContainer}>
             <Button onPress={this._addToCalendar} title="Add to Calendar" />
@@ -102,23 +118,32 @@ class CalendarEventScreen extends React.Component {
 
   _findEvent = async eventName => {
     // TODO: Change which event is fetched maybe using a property passed from the CameraScreen using navigation properties
+    console.log(this.state);
 
     // load the data for the event from the local storage
-    _retrieveData(eventName).then(data => {
-      // create the initial state
-      const event = JSON.parse(data);
-      const stateUpdate = {
-        id: event.id,
-        description: event.description,
-        summary: event.summary,
-        location: event.location,
-        startTime: event.startTime,
-        endTime: event.endTime
-      };
+    _retrieveData(eventName)
+      .then(data => {
+        // create the initial state
+        const event = JSON.parse(data);
+        const stateUpdate = {
+          id: event.description,
+          description: event.description,
+          summary: event.summary,
+          location: event.location,
+          startTime: event.startTime,
+          endTime: event.endTime
+        };
 
-      // set the initial state
-      this.setState(stateUpdate);
-    });
+        // set the initial state
+        this.setState(stateUpdate);
+        this.props.addEvent(stateUpdate);
+      })
+      .catch(error => {
+        console.log(
+          "Error: Unable to retrieve element - CALENDAR EVENT SCREEN"
+        );
+        console.log({ error });
+      });
   };
 
   // TODO: Make it work on Android as well
@@ -145,8 +170,8 @@ class CalendarEventScreen extends React.Component {
     //create dummy event
     let eventDetails = {
       title: "I am your new event", //
-      startDate: "2019-02-19T15:00:00.000Z", ///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
-      endDate: "2019-02-19T16:00:00.000Z",
+      startDate: "2019-02-27T15:00:00.000Z", ///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
+      endDate: "2019-02-27T16:00:00.000Z",
       allDay: false,
       location: this.state.location,
       notes: "Testing add to Calendar",
@@ -179,7 +204,9 @@ class CalendarEventScreen extends React.Component {
       }
       //add event to default calendar
       const eventId = await Calendar.createEventAsync(
-        Calendar.DEFAULT,
+        // uses the calendarId from redux global store
+        // this is the calendarId that is set in the preferences tab
+        this.props.calendar.activeCalendarId,
         eventDetails
       );
 
@@ -193,7 +220,24 @@ class CalendarEventScreen extends React.Component {
   };
 }
 
-export default withNavigation(CalendarEventScreen);
+const mapStateToProps = state => {
+  const { calendar } = state;
+  return { calendar };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addEvent,
+      setCurrentEvent
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(CalendarEventScreen));
 
 const styles = StyleSheet.create({
   textContainer: {
