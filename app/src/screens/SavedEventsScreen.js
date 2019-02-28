@@ -1,9 +1,9 @@
 import React from 'react';
-import { AsyncStorage, Button, Text,  ScrollView, ListView, TextInput, View, StyleSheet, Alert } from 'react-native';
+import { AsyncStorage, Button, Text,  ScrollView, FlatList, ListView, TextInput, View, StyleSheet, Alert } from 'react-native';
 //import Row from './Row';
 import Row from '../helpers/Row';
 
-
+import TESTevents from "../data/db"
 
 
 let now = new Date();
@@ -41,6 +41,21 @@ let calendarEvent2 = {
     },
     updated: Date()
 };
+let calendarEvent3 = {
+    description: 'Confetti Party',
+    id: 5050,
+    picUri:"https://t2.rbxcdn.com/34e222a0bf98d0a46de65de2ece139eb",
+    summary:
+        'Hi ho, hi,ho \nI would like to invite you to my Puppy Petting Party!\nBest James',
+    location: 'Klostergatan, Uppsala, Sweden',
+    startTime: start,
+    endTime: end,
+    reminders: {
+        overrides: [{ method: 'popup', minutes: 15 }],
+        useDefault: false
+    },
+    updated: Date()
+};
 
 export default class SavedEventsScreen extends React.Component {
     static navigationOptions = {
@@ -65,13 +80,24 @@ export default class SavedEventsScreen extends React.Component {
 
     render() {
         return (
+            <View style={styles.container} >
+                <Text style={styles.h2text}>
+                    Upcoming Events
+                </Text>
+                <FlatList
+                    data={[calendarEvent2,calendarEvent,calendarEvent3]}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({item}) =>
+                        <View style={styles.flatview}>
+                            <Text style={styles.name}>{item.description}</Text>
+                            <Text style={styles.email}>{item.startTime}</Text>
+                        </View>
+                    }
+                    keyExtractor={item => item.summary}
+                />
+            </View>
 
 
-            <ListView
-        style={styles.container}
-        dataSource={this.state.dataSource}
-        renderRow={(data) => <View><Text>{data}</Text></View>}
-        />
 
     );
     }
@@ -119,5 +145,23 @@ const styles = StyleSheet.create({
         marginLeft: 12,
 
     },
+    h2text: {
+        marginTop: 10,
+        fontFamily: 'Helvetica',
+        fontSize: 28,
+        fontWeight: 'bold',
+    },
+    flatview: {
+        justifyContent: 'center',
+        paddingTop: 30,
+        borderRadius: 2,
+    },
+    name: {
+        fontFamily: 'Verdana',
+        fontSize: 18
+    },
+    email: {
+        color: 'red'
+    }
 
 });
