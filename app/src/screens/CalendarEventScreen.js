@@ -156,7 +156,7 @@ class CalendarEventScreen extends React.Component {
           method: Calendar.AlarmMethod.DEFAULT
         }
       ],
-        this piece of code adds event to every second day after the start date(because of the inteval 2)
+        //this piece of code adds event to every second day after the start date(because of the inteval 2)
       recurrenceRule: {
         frequency: Calendar.Frequency.DAILY,
         interval: 2,
