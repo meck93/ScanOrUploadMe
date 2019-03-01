@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   ActivityIndicator,
   Button,
@@ -47,6 +48,7 @@ class CameraScreen extends React.Component {
       await Permissions.askAsync(Permissions.CAMERA);
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
       await Permissions.askAsync(Permissions.CALENDAR);
+      await Permissions.askAsync(Permissions.NOTIFICATIONS);
 
       // static navigation buttons
       this.props.navigation.setParams({

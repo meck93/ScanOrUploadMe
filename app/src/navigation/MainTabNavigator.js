@@ -10,6 +10,7 @@ import TabBarIcon from "../components/TabBarIcon";
 import CameraScreen from "../screens/CameraScreen";
 import CalendarEventScreen from "../screens/CalendarEventScreen";
 import PreferencesScreen from "../screens/PreferencesScreen";
+import SavedEventScreen from "../screens/SavedEventsScreen";
 
 const CameraStack = createStackNavigator(
   {
@@ -45,6 +46,20 @@ const PreferencesStack = createStackNavigator(
   }
 );
 
+const SavedStack = createStackNavigator(
+  {
+    Saved: {
+      screen: SavedEventScreen,
+      navigationOptions: {
+        title: "Created Events"
+      }
+    }
+  },
+  {
+    initialRouteName: "Saved"
+  }
+);
+
 export default createBottomTabNavigator(
   {
     CameraTab: {
@@ -70,6 +85,18 @@ export default createBottomTabNavigator(
           />
         )
       }
+    },
+    SavedTab: {
+      screen: SavedStack,
+      navigationOptions: {
+        tabBarLabel: "Saved",
+        tabBarIcon: ({ focused }) => (
+          <TabBarIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+          />
+        )
+      }
     }
   },
   {
@@ -77,7 +104,7 @@ export default createBottomTabNavigator(
       activeTintColor: "lightblue",
       inactiveTintColor: "gray"
     },
-    order: ["CameraTab", "PreferencesTab"],
+    order: ["CameraTab", "SavedStack", "PreferencesTab"],
     animationEnabled: true
   }
 );

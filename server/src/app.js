@@ -30,11 +30,15 @@ app.use(cors());
 
 // Add session middleware layer
 const sesh = {
+  name: 'SESS_ID',
   secret: process.env.SECURITY_KEY,
-  name: "sessionId",
-  cookie: {},
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    maxAge: 1800000 // 30 mins
+  }
 };
 
 // ensure cookies are secure when used in production
