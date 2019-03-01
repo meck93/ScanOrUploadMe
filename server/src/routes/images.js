@@ -56,8 +56,8 @@ router.post("/", upload.single("photo"), (req, res) => {
 
     // create imageUrl with which the img can be viewed
     const imageUrl = `http://${
-        req.headers.host
-        }/uploads/${req.file.path.substring(req.file.path.lastIndexOf("\\") + 1)}`;
+      req.headers.host
+    }/uploads/${req.file.path.substring(req.file.path.lastIndexOf("\\") + 1)}`;
 
     // log the endpoint to which the request was sent to
     console.log(
@@ -75,7 +75,7 @@ router.post("/", upload.single("photo"), (req, res) => {
     calendarEvent = {
       description: "Birthday Party",
       summary:
-          "Hi John\nI would like to invite you to my birthday party!\nBest James",
+        "Hi John\nI would like to invite you to my birthday party!\nBest James",
       location: "Klostergatan, Uppsala, Sweden",
       startTime: start,
       endTime: end,

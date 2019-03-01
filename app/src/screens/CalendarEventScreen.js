@@ -239,6 +239,7 @@ class CalendarEventScreen extends React.Component {
           method: Calendar.AlarmMethod.DEFAULT
         }
       ],
+        //this piece of code adds event to every second day after the start date(because of the inteval 2)
       recurrenceRule: {
         frequency: Calendar.Frequency.DAILY,
         interval: 2,
@@ -269,10 +270,24 @@ class CalendarEventScreen extends React.Component {
       this.setState({ eventId: eventId });
       console.log("Event Id", eventId);
 
+
       Alert.alert(`The event ${eventId} is added to your calendar!`);
     } catch (error) {
       console.log("Error", error);
     }
+
+    let notificationId = Notifications.scheduleLocalNotificationAsync(
+    {
+      title: eventDetails.title,
+      body: 'Do not forget about your event on ' +eventDetails.startDate,
+    },
+    {
+      //repeat: 'minute',
+      time: new Date().getTime() + 10000,
+    },
+  );
+  console.log(notificationId);
+  //Notifications.cancelAllScheduledNotificationsAsync()
   };
 }
 
