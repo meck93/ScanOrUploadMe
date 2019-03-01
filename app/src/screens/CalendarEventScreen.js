@@ -199,7 +199,7 @@ class CalendarEventScreen extends React.Component {
       body: 'Do not forget about your event on ' +eventDetails.startDate,
     },
     {
-      repeat: 'minute',
+      //repeat: 'minute',
       time: new Date().getTime() + 10000,
     },
   );
