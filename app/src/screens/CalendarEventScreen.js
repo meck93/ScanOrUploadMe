@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Text, TextInput, View, StyleSheet, Alert } from "react-native";
+import { Button, Text, TextInput, View, StyleSheet, Alert, AsyncStorage } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Calendar, Permissions } from "expo";
 import { _storeData, _retrieveData } from "../helpers/localStorage";
@@ -38,18 +38,8 @@ class CalendarEventScreen extends React.Component {
         </Text>
 
         <Text style={styles.textContainer}>
-          Calendar Event:{" "}
-          {"\n" +
-            " DESCRIPTION: " +
-            this.state.description +
-            " SUMMARY: " +
-            this.state.summary +
-            " LOCATION: " +
-            this.state.location +
-            " START: " +
-            this.state.startTime +
-            " END: " +
-            this.state.endTime}
+          CALENDAR EVENT {" "}
+          {"\n" + " SUMMARY: " }
         </Text>
 
         <TextInput
@@ -58,7 +48,9 @@ class CalendarEventScreen extends React.Component {
           value={this.state.summary}
           onChangeText={text => this.setState({ summary: text })}
         />
-
+        <Text style={styles.textContainer}>
+        {" DESCRIPTION: " }
+        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"DESCRIPTION"}
@@ -66,6 +58,9 @@ class CalendarEventScreen extends React.Component {
           onChangeText={text => this.setState({ description: text })}
         />
 
+        <Text style={styles.textContainer}>
+        {" LOCATION: " }
+        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"LOCATION:"}
@@ -73,6 +68,9 @@ class CalendarEventScreen extends React.Component {
           onChangeText={text => this.setState({ location: text })}
         />
 
+        <Text style={styles.textContainer}>
+        {"STARTS AT: " }
+        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"START_TIME"}
@@ -80,6 +78,9 @@ class CalendarEventScreen extends React.Component {
           onChangeText={text => this.setState({ startTime: text })}
         />
 
+        <Text style={styles.textContainer}>
+        {"ENDS AT: " }
+        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"END_TIME"}
@@ -95,6 +96,9 @@ class CalendarEventScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <Button onPress={this._deleteEvent} title="Remove Event" />
           </View>
+        <View style={styles.buttonContainer}>
+        <Button onPress={this._saveEvent} title="Save" />
+        </View>
         </View>
       </View>
     );
@@ -138,6 +142,85 @@ class CalendarEventScreen extends React.Component {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  _saveEvent = async () => {
+    const userId = '8ba790f3-5acd-4a08-bc6a-97a36c124f29';
+    /*const saveUserId = async userId => {
+      try {
+        await AsyncStorage.setItem('userId', userId);
+        console.log('*****************Success!*****************');
+      } catch (error) {
+        // Error retrieving data
+        console.log(error.message);
+      }
+    };*/
+    /*try {
+      await AsyncStorage.setItem('userId', JSON.stringify(userId));
+      console.log('*****************Success!*****************');
+    } catch (error) {
+      // Error saving data
+      console.log({ error });
+      console.error(error);
+    }*/
+    //create dummy event
+    let eventDetails = {
+      title: "I am your new event", //
+      startDate: "2019-02-19T15:00:00.000Z", ///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
+      endDate: "2019-02-19T16:00:00.000Z",
+      allDay: false,
+      location: this.state.location,
+      notes: "Testing add to Calendar",
+      alarms: [
+        {
+          relativeOffset: -15,
+          method: Calendar.AlarmMethod.DEFAULT
+        }
+      ],
+      recurrenceRule: {
+        frequency: Calendar.Frequency.DAILY,
+        interval: 2,
+        endDate: "2019-02-22T16:00:00.000Z",
+        occurrence: 4
+      },
+      availability: "busy",
+      // TODO: check if the timezone still works on Android
+      timeZone: "GMT+1",
+      url: "http://www..."
+    };
+
+    try {
+      if (this.state.startTime) {
+        eventDetails.title = this.state.description;
+        eventDetails.location = this.state.location;
+        eventDetails.startDate = new Date(this.state.startTime);
+        eventDetails.endDate = new Date(this.state.endTime);
+        eventDetails.recurrenceRule.endDate = new Date(this.state.endTime);
+        eventDetails.notes = this.state.summary;
+      }
+      //add event to default calendar
+      /*const eventId = await Calendar.createEventAsync(
+          Calendar.DEFAULT,
+          eventDetails
+      );*/
+      try {
+        //TODO: generate a proper key not, just 'userId' all the time
+        await AsyncStorage.setItem('userId', JSON.stringify(eventDetails));
+        console.log('*****************Success!*****************');
+      } catch (error) {
+        // Error saving data
+        console.log({ error });
+        console.error(error);
+      }
+      //if (this.state.eventId) {
+       // const id = this.state.eventId;}
+      //this.setState({ eventId: eventId });
+      //console.log("Event Id", eventId);
+
+      Alert.alert(`The ${eventDetails.title} was saved to this app!`);
+    } catch (error) {
+      console.log("Error", error);
     }
   };
 
@@ -206,6 +289,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   buttonContainer: {
+    marginTop:50,
     marginHorizontal: 5
   }
 });
