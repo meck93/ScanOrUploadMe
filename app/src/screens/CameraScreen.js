@@ -286,6 +286,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   buttonContainer: {
+    marginBottom: 5,
     marginHorizontal: 5
   },
   textContainer: {

@@ -45,39 +45,34 @@ class CalendarEventScreen extends React.Component {
         <Text style={styles.textContainer}>
           CalendarId: {this.props.calendar.activeCalendarId}
         </Text>
+
         <Text style={styles.textContainer}>
           All Events:
-          {JSON.stringify(this.props.calendar.events)}
+          {this.props.calendar.events.map(event => (
+            <Text key={event.id} style={styles.textContainer}>
+              Event: {JSON.stringify(event.id)} - Description:{" "}
+              {JSON.stringify(event.description)}
+            </Text>
+          ))}
         </Text>
+
         <Text style={styles.textContainer}>
           Current Event:
-          {JSON.stringify(this.props.calendar.currentEvent)}
+          {JSON.stringify(this.props.calendar.currentEvent.description)}
         </Text>
 
-        <View style={styles.buttonContainer}>
-          {this.props.calendar.events.map(event => (
-            <Button
-              key={event.id}
-              title={`Set current event to: ${event.id}`}
-              onPress={() => this.props.setCurrentEvent(event.id)}
-            />
-          ))}
+        <View style={styles.container}>
+          <View style={styles.buttonContainer}>
+            {this.props.calendar.events.map(event => (
+              <Button
+                key={event.id}
+                title={`Set current event to: ${event.id}`}
+                onPress={() => this.props.setCurrentEvent(event.id)}
+              />
+            ))}
+          </View>
         </View>
 
-        <Text style={styles.textContainer}>
-          Calendar Event:{" "}
-          {"\n" +
-            "DESCRIPTION: " +
-            this.state.description +
-            "\nSUMMARY: " +
-            this.state.summary +
-            "\nLOCATION: " +
-            this.state.location +
-            "\nSTART: " +
-            this.state.startTime +
-            "\nEND: " +
-            this.state.endTime}
-        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"SUMMARY"}
@@ -168,6 +163,8 @@ class CalendarEventScreen extends React.Component {
 
         this.setState({ eventCreationId: null });
         Alert.alert(`Event with ID: ${id} has been deleted.`);
+      } else {
+        console.log("No evenCreationId");
       }
     } catch (error) {
       console.error(error);
