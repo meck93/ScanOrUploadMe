@@ -1,9 +1,11 @@
 import React from 'react';
-import { AsyncStorage, Button, Text,  ScrollView, FlatList, ListView, TextInput, View, StyleSheet, Alert } from 'react-native';
-//import Row from './Row';
-import Row from '../helpers/Row';
+import { AsyncStorage, Button, Text,
+     FlatList, ListView, TextInput,
+    TouchableHighlight,
+    View, StyleSheet, Alert } from 'react-native';
+//import styled from 'styled-components';
+import "../helpers/eventsList";
 
-import TESTevents from "../data/db"
 
 
 let now = new Date();
@@ -58,8 +60,13 @@ let calendarEvent3 = {
 };
 
 export default class SavedEventsScreen extends React.Component {
+
+    _onPressButton= () => {
+        Alert.alert('Event details to come');
+        //this.props.onPressItem(this.props.id)
+    };
     static navigationOptions = {
-        title: 'Events',
+        title: 'Saved Events',
     };
     constructor(props) {
         super(props);
@@ -72,26 +79,31 @@ export default class SavedEventsScreen extends React.Component {
             endTime: ""
         };
 
+
+
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             dataSource: ds.cloneWithRows([calendarEvent.description, calendarEvent2.description, calendarEvent.description]),
         };
+
     }
 
     render() {
         return (
             <View style={styles.container} >
-                <Text style={styles.h2text}>
-                    Upcoming Events
-                </Text>
+
                 <FlatList
-                    data={[calendarEvent2,calendarEvent,calendarEvent3]}
+                    data={[calendarEvent2,calendarEvent,calendarEvent3]}//,calendarEvent2,calendarEvent,calendarEvent3,calendarEvent2,calendarEvent,calendarEvent3
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
+                        <TouchableHighlight onPress={this._onPressButton} underlayColor="white">
                         <View style={styles.flatview}>
+
                             <Text style={styles.name}>{item.description}</Text>
-                            <Text style={styles.email}>{item.startTime}</Text>
+                            <Text style={styles.brief}>{item.startTime}</Text>
+
                         </View>
+                        </TouchableHighlight>
                     }
                     keyExtractor={item => item.summary}
                 />
@@ -107,6 +119,7 @@ export default class SavedEventsScreen extends React.Component {
                         <Button onPress={this._retrieveEvent} title="Retrieve" />
                     </View>
                 </View>*/
+
     _retrieveEvent = async () =>{
         try { //userId
             let key='userId';
@@ -154,14 +167,15 @@ const styles = StyleSheet.create({
     flatview: {
         justifyContent: 'center',
         paddingTop: 30,
-        borderRadius: 2,
+        borderRadius: 2
+        //backgroundColor:'blue'
     },
     name: {
         fontFamily: 'Verdana',
         fontSize: 18
     },
-    email: {
-        color: 'red'
+    brief: {
+        color: 'gray'
     }
 
 });
