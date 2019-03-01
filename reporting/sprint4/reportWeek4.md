@@ -86,7 +86,7 @@ The following issues have been selected as the targets for next weeks sprint. Th
 
 ## Video Update - ScanOrUploadMe Week 4
 
-The video for sprint 4 can be found here: 
+The video for sprint 4 can be found here: https://www.youtube.com/watch?v=gyAHXAjEEic
 
 ## Project Burndown Chart
 
