@@ -7,6 +7,7 @@ export default function mrChrono(text) {
   const desc = text.toString().replace(/(\r\n|\n|\r)/gm, "");
 
   const results = chrono.parse(desc);
+<<<<<<< HEAD
   const startTime = results[0].start.date();
   const endTime = results[0].end.date();
 
@@ -17,3 +18,29 @@ export default function mrChrono(text) {
     end: endTime
   };
 }
+=======
+
+  try{
+    const startTime = results[0].start.date();
+    const endTime = results[0].end.date();
+
+    return {
+      text:desc,
+      start:startTime,
+      end:endTime
+    }
+  } catch {
+    const startTime = new Date();
+    const endTime = new Date();
+
+    return {
+      text:desc,
+      start:startTime,
+      end:endTime
+    }
+  }
+}
+
+
+// export { mrChrono };
+>>>>>>> ad741bb... jes.us.js encryption

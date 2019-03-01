@@ -111,5 +111,5 @@ const nlpResponse = {
     ],
     language: "en"
   }
-
+  
   export default nlpResponse;
