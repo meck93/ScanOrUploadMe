@@ -80,9 +80,6 @@ class CameraScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <Button onPress={this._pickImage} title="Select Image" />
           </View>
-        <View style = {styles.headerLeft}>
-        <Button onPress={this._addToCalendar} title="Add to Calendar" />
-        </View>
           <View style={styles.buttonContainer}>
             <Button onPress={this._takePhoto} title="Take a photo" />
           </View>
