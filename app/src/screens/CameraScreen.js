@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   ActivityIndicator,
   Button,
@@ -11,7 +12,7 @@ import {
   View,
   Alert
 } from "react-native";
-import { ImagePicker, Permissions } from "expo";
+import { ImagePicker, Permissions, Calendar, Notifications } from "expo";
 import { uploadImageAsync } from "../../api/uploadImage";
 import { withNavigation } from "react-navigation";
 
@@ -47,6 +48,7 @@ class CameraScreen extends React.Component {
       await Permissions.askAsync(Permissions.CAMERA);
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
       await Permissions.askAsync(Permissions.CALENDAR);
+      await Permissions.askAsync(Permissions.NOTIFICATIONS);
     } catch (error) {
       // display the error to the user
       Alert.alert(error);
@@ -78,6 +80,9 @@ class CameraScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <Button onPress={this._pickImage} title="Select Image" />
           </View>
+        <View style = {styles.headerLeft}>
+        <Button onPress={this._addToCalendar} title="Add to Calendar" />
+        </View>
           <View style={styles.buttonContainer}>
             <Button onPress={this._takePhoto} title="Take a photo" />
           </View>
@@ -171,6 +176,11 @@ class CameraScreen extends React.Component {
 
     this._handleImagePicked(pickerResult);
   };
+
+
+  
+
+
 
   // choose photo from camera roll
   _pickImage = async () => {
