@@ -1,8 +1,20 @@
 import React from "react";
-import { Button, Text, TextInput, View, StyleSheet, Alert, AsyncStorage } from "react-native";
+import {
+  Button,
+  Text,
+  TextInput,
+  ScrollView,
+  View,
+  StyleSheet,
+  Alert
+} from "react-native";
 import { withNavigation } from "react-navigation";
-import { Calendar, Permissions } from "expo";
-import { _storeData, _retrieveData } from "../helpers/localStorage";
+import { Calendar, Notifications } from "expo";
+
+// redux
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { addEvent, setCurrentEvent } from "../actions/calendarActions";
 
 class CalendarEventScreen extends React.Component {
   constructor(props) {
@@ -17,13 +29,10 @@ class CalendarEventScreen extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     try {
-      // get event name from navigation prop (passed from camera screen)
-      const createdEventName = this.props.navigation.getParam("eventName");
-
-      // TODO: decide what and when an event is fetched
-      this._findEvent(createdEventName);
+      // get event name from global state using redux
+      this._findEvent();
     } catch (error) {
       Alert.alert(error);
       console.log({ error });
@@ -32,14 +41,14 @@ class CalendarEventScreen extends React.Component {
 
   render() {
     return (
-      <View>
+      <ScrollView>
         <Text style={styles.textContainer}>
-          Image URL: {this.props.navigation.getParam("photoUri")}
+          CalendarId: {this.props.calendar.activeCalendarId}
         </Text>
 
         <Text style={styles.textContainer}>
-          CALENDAR EVENT {" "}
-          {"\n" + " SUMMARY: " }
+          Current Event:
+          {JSON.stringify(this.props.calendar.currentEvent)}
         </Text>
 
         <TextInput
@@ -48,9 +57,7 @@ class CalendarEventScreen extends React.Component {
           value={this.state.summary}
           onChangeText={text => this.setState({ summary: text })}
         />
-        <Text style={styles.textContainer}>
-        {" DESCRIPTION: " }
-        </Text>
+
         <TextInput
           style={{ height: 40 }}
           placeholder={"DESCRIPTION"}
@@ -58,9 +65,6 @@ class CalendarEventScreen extends React.Component {
           onChangeText={text => this.setState({ description: text })}
         />
 
-        <Text style={styles.textContainer}>
-        {" LOCATION: " }
-        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"LOCATION:"}
@@ -68,9 +72,6 @@ class CalendarEventScreen extends React.Component {
           onChangeText={text => this.setState({ location: text })}
         />
 
-        <Text style={styles.textContainer}>
-        {"STARTS AT: " }
-        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"START_TIME"}
@@ -78,9 +79,6 @@ class CalendarEventScreen extends React.Component {
           onChangeText={text => this.setState({ startTime: text })}
         />
 
-        <Text style={styles.textContainer}>
-        {"ENDS AT: " }
-        </Text>
         <TextInput
           style={{ height: 40 }}
           placeholder={"END_TIME"}
@@ -96,40 +94,49 @@ class CalendarEventScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <Button onPress={this._deleteEvent} title="Remove Event" />
           </View>
-        <View style={styles.buttonContainer}>
-        <Button onPress={this._saveEvent} title="Save" />
         </View>
-        </View>
-      </View>
+      </ScrollView>
     );
   }
 
-  _findEvent = async eventName => {
-    // TODO: Change which event is fetched maybe using a property passed from the CameraScreen using navigation properties
+  _findEvent = () => {
+    // retrieve all events from the global store
+    const events = this.props.calendar.events;
+    console.log("Events Retrieved from Global State:", events);
 
-    // load the data for the event from the local storage
-    _retrieveData(eventName).then(data => {
-      // create the initial state
-      const event = JSON.parse(data);
-      const stateUpdate = {
-        id: event.id,
-        description: event.description,
-        summary: event.summary,
-        location: event.location,
-        startTime: event.startTime,
-        endTime: event.endTime
+    if (events.length === 0) {
+      const newState = {
+        id: 12312312,
+        description: "DummyTitle",
+        summary: "DummyText",
+        location: "DummyLocation",
+        startTime: "2019-02-27T16:00:00.000Z",
+        endTime: "2019-02-27T18:00:00.000Z"
       };
 
-      // set the initial state
+      this.setState(newState);
+    } else {
+      // retrieve the current event
+      const currentEvent = this.props.calendar.currentEvent;
+
+      const stateUpdate = {
+        id: currentEvent.id,
+        description: currentEvent.description,
+        summary: currentEvent.summary,
+        location: currentEvent.location,
+        startTime: currentEvent.startTime,
+        endTime: currentEvent.endTime
+      };
+
       this.setState(stateUpdate);
-    });
+    }
   };
 
   // TODO: Make it work on Android as well
   _deleteEvent = async () => {
     try {
-      if (this.state.eventId) {
-        const id = this.state.eventId;
+      if (this.state.eventCreationId) {
+        const id = this.state.eventCreationId;
 
         // TODO: Fix - Event is not deleted!
         await Calendar.deleteEventAsync(`${id}`, {
@@ -137,99 +144,22 @@ class CalendarEventScreen extends React.Component {
           futureEvents: true
         });
 
-        this.setState({ eventId: null });
+        this.setState({ eventCreationId: null });
         Alert.alert(`Event with ID: ${id} has been deleted.`);
+      } else {
+        console.log("No evenCreationId");
       }
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  _saveEvent = async () => {
-    const userId = '8ba790f3-5acd-4a08-bc6a-97a36c124f29';
-    /*const saveUserId = async userId => {
-      try {
-        await AsyncStorage.setItem('userId', userId);
-        console.log('*****************Success!*****************');
-      } catch (error) {
-        // Error retrieving data
-        console.log(error.message);
-      }
-    };*/
-    /*try {
-      await AsyncStorage.setItem('userId', JSON.stringify(userId));
-      console.log('*****************Success!*****************');
-    } catch (error) {
-      // Error saving data
-      console.log({ error });
-      console.error(error);
-    }*/
-    //create dummy event
-    let eventDetails = {
-      title: "I am your new event", //
-      startDate: "2019-02-19T15:00:00.000Z", ///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
-      endDate: "2019-02-19T16:00:00.000Z",
-      allDay: false,
-      location: this.state.location,
-      notes: "Testing add to Calendar",
-      alarms: [
-        {
-          relativeOffset: -15,
-          method: Calendar.AlarmMethod.DEFAULT
-        }
-      ],
-      recurrenceRule: {
-        frequency: Calendar.Frequency.DAILY,
-        interval: 2,
-        endDate: "2019-02-22T16:00:00.000Z",
-        occurrence: 4
-      },
-      availability: "busy",
-      // TODO: check if the timezone still works on Android
-      timeZone: "GMT+1",
-      url: "http://www..."
-    };
-
-    try {
-      if (this.state.startTime) {
-        eventDetails.title = this.state.description;
-        eventDetails.location = this.state.location;
-        eventDetails.startDate = new Date(this.state.startTime);
-        eventDetails.endDate = new Date(this.state.endTime);
-        eventDetails.recurrenceRule.endDate = new Date(this.state.endTime);
-        eventDetails.notes = this.state.summary;
-      }
-      //add event to default calendar
-      /*const eventId = await Calendar.createEventAsync(
-          Calendar.DEFAULT,
-          eventDetails
-      );*/
-      try {
-        //TODO: generate a proper key not, just 'userId' all the time
-        await AsyncStorage.setItem('userId', JSON.stringify(eventDetails));
-        console.log('*****************Success!*****************');
-      } catch (error) {
-        // Error saving data
-        console.log({ error });
-        console.error(error);
-      }
-      //if (this.state.eventId) {
-       // const id = this.state.eventId;}
-      //this.setState({ eventId: eventId });
-      //console.log("Event Id", eventId);
-
-      Alert.alert(`The ${eventDetails.title} was saved to this app!`);
-    } catch (error) {
-      console.log("Error", error);
     }
   };
 
   _addToCalendar = async () => {
     //create dummy event
     let eventDetails = {
-      title: "I am your new event", //
-      startDate: "2019-02-19T15:00:00.000Z", ///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
-      endDate: "2019-02-19T16:00:00.000Z",
+      title: "I am your new event",
+      startDate: "2019-02-27T15:00:00.000Z", ///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
+      endDate: "2019-02-27T16:00:00.000Z",
       allDay: false,
       location: this.state.location,
       notes: "Testing add to Calendar",
@@ -239,7 +169,7 @@ class CalendarEventScreen extends React.Component {
           method: Calendar.AlarmMethod.DEFAULT
         }
       ],
-        //this piece of code adds event to every second day after the start date(because of the inteval 2)
+      //this piece of code adds event to every second day after the start date (because of the inteval 2)
       recurrenceRule: {
         frequency: Calendar.Frequency.DAILY,
         interval: 2,
@@ -261,37 +191,58 @@ class CalendarEventScreen extends React.Component {
         eventDetails.recurrenceRule.endDate = new Date(this.state.endTime);
         eventDetails.notes = this.state.summary;
       }
+
       //add event to default calendar
-      const eventId = await Calendar.createEventAsync(
-        Calendar.DEFAULT,
+      const eventCreationId = await Calendar.createEventAsync(
+        // uses the calendarId from redux global store
+        // this is the calendarId that is set in the preferences tab
+        this.props.calendar.activeCalendarId,
+
+        // the event content
         eventDetails
       );
 
-      this.setState({ eventId: eventId });
-      console.log("Event Id", eventId);
+      this.setState({ eventCreationId: eventCreationId });
+      console.log("Event Id", eventCreationId);
 
-
-      Alert.alert(`The event ${eventId} is added to your calendar!`);
+      Alert.alert(`The event ${eventCreationId} is added to your calendar!`);
     } catch (error) {
       console.log("Error", error);
     }
 
     let notificationId = Notifications.scheduleLocalNotificationAsync(
-    {
-      title: eventDetails.title,
-      body: 'Do not forget about your event on ' +eventDetails.startDate,
-    },
-    {
-      //repeat: 'minute',
-      time: new Date().getTime() + 10000,
-    },
-  );
-  console.log(notificationId);
-  //Notifications.cancelAllScheduledNotificationsAsync()
+      {
+        title: eventDetails.title,
+        body: "Do not forget about your event on " + eventDetails.startDate
+      },
+      {
+        //repeat: 'minute',
+        time: new Date().getTime() + 10000
+      }
+    );
+    console.log(notificationId);
+    //Notifications.cancelAllScheduledNotificationsAsync()
   };
 }
 
-export default withNavigation(CalendarEventScreen);
+const mapStateToProps = state => {
+  const { calendar } = state;
+  return { calendar };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addEvent,
+      setCurrentEvent
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(CalendarEventScreen));
 
 const styles = StyleSheet.create({
   textContainer: {
@@ -304,7 +255,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   buttonContainer: {
-    marginTop:50,
+    marginTop: 50,
     marginHorizontal: 5
   }
 });

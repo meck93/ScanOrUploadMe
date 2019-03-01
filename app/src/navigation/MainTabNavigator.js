@@ -6,8 +6,10 @@ import {
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
+
 import CameraScreen from "../screens/CameraScreen";
 import CalendarEventScreen from "../screens/CalendarEventScreen";
+import PreferencesScreen from "../screens/PreferencesScreen";
 import SavedEventScreen from "../screens/SavedEventsScreen";
 
 const CameraStack = createStackNavigator(
@@ -30,19 +32,39 @@ const CameraStack = createStackNavigator(
   }
 );
 
-const SavedStack = createStackNavigator({
-    Saved: SavedEventScreen,
-});
+const PreferencesStack = createStackNavigator(
+  {
+    Preferences: {
+      screen: PreferencesScreen,
+      navigationOptions: {
+        title: "Settings"
+      }
+    }
+  },
+  {
+    initialRouteName: "Preferences"
+  }
+);
 
-SavedStack.navigationOptions = {
-    tabBarLabel: 'Saved',
-    tabBarIcon: ({ focused }) => (
-        <TabBarIcon
-    focused={focused}
-    name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-/>
-),
-};
+const SavedStack = createStackNavigator(
+  {
+    Saved: {
+      screen: SavedEventScreen,
+      navigationOptions: {
+        title: "Created Events"
+      }
+    },
+    Calendar: {
+      screen: CalendarEventScreen,
+      navigationOptions: {
+        title: "The created calendar event!"
+      }
+    }
+  },
+  {
+    initialRouteName: "Saved"
+  }
+);
 
 export default createBottomTabNavigator(
   {
@@ -58,14 +80,37 @@ export default createBottomTabNavigator(
         )
       }
     },
-    SavedStack,
+    PreferencesTab: {
+      screen: PreferencesStack,
+      navigationOptions: {
+        tabBarLabel: "Settings",
+        tabBarIcon: ({ focused }) => (
+          <TabBarIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
+          />
+        )
+      }
+    },
+    SavedTab: {
+      screen: SavedStack,
+      navigationOptions: {
+        tabBarLabel: "Saved",
+        tabBarIcon: ({ focused }) => (
+          <TabBarIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+          />
+        )
+      }
+    }
   },
   {
     tabBarOptions: {
       activeTintColor: "lightblue",
       inactiveTintColor: "gray"
     },
-    order: ["CameraTab","SavedStack"],
+    order: ["CameraTab", "SavedTab", "PreferencesTab"],
     animationEnabled: true
   }
 );

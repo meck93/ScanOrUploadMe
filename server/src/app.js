@@ -54,10 +54,10 @@ app.use("/uploads", express.static("uploads"));
 app.use(session(sesh));
 
 // for parsing application/json
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "10mb", extended: true }));
 
 // for parsing application/xwww-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 // enable different routes
 app.use("/images", images);
