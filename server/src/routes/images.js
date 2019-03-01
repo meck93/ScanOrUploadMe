@@ -11,13 +11,13 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     // extract the file extension
     const fileExtension = file.originalname.substring(
-      file.originalname.lastIndexOf(".") + 1
+        file.originalname.lastIndexOf(".") + 1
     );
 
     // create a unique ID (timestamp) from the current date and time
     const date = new Date(Date.now());
     const timestamp = `${date.getDate()}0${date.getMonth() +
-      1}19_${date.getHours()}${date.getMinutes()}`;
+    1}19_${date.getHours()}${date.getMinutes()}`;
 
     // create the filename
     const filename = file.fieldname + "-" + timestamp + `.${fileExtension}`;
@@ -61,9 +61,9 @@ router.post("/", upload.single("photo"), (req, res) => {
 
     // log the endpoint to which the request was sent to
     console.log(
-      `Current Endpoint: ${
-        req.headers.host
-      }.\nPublic URL to current Image: ${imageUrl}`
+        `Current Endpoint: ${
+            req.headers.host
+            }.\nPublic URL to current Image: ${imageUrl}`
     );
 
     // 4. Send calendarEvent (like the fake one created below) to the client
