@@ -53,6 +53,12 @@ const SavedStack = createStackNavigator(
       navigationOptions: {
         title: "Created Events"
       }
+    },
+    Calendar: {
+      screen: CalendarEventScreen,
+      navigationOptions: {
+        title: "The created calendar event!"
+      }
     }
   },
   {
@@ -104,7 +110,7 @@ export default createBottomTabNavigator(
       activeTintColor: "lightblue",
       inactiveTintColor: "gray"
     },
-    order: ["CameraTab", "SavedStack", "PreferencesTab"],
+    order: ["CameraTab", "SavedTab", "PreferencesTab"],
     animationEnabled: true
   }
 );
