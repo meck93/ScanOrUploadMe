@@ -6,10 +6,10 @@ import AppNavigator from "./src/navigation/AppNavigator";
 // Redux
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import calendarReducer from "./src/reducers/calendarReducer";
+import reducers from "./src/reducers/index";
 
 // global store
-const store = createStore(calendarReducer);
+const store = createStore(reducers);
 
 export default class App extends React.Component {
   constructor(props) {
