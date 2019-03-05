@@ -136,16 +136,16 @@ class CameraScreen extends React.Component {
             overflow: "hidden"
           }}
         >
-          <Image source={{ uri: image }} style={{ width: 300, height: 300 }} />
+          <Image
+            source={{ uri: image }}
+            style={{ height: "90%", width: "100%", resizeMode: "contain" }}
+          />
         </View>
 
         <Text
           onPress={this._copyToClipboard}
           onLongPress={this._share}
-          style={{
-            paddingVertical: 10,
-            paddingHorizontal: 10
-          }}
+          style={{ paddingTop: 5 }}
         >
           {image}
         </Text>
@@ -228,8 +228,12 @@ class CameraScreen extends React.Component {
             calendarEvent: uploadResult
           });
 
-          // add the event to the global event store
-          this.props.addEvent(uploadResult.calendarEvent);
+          // add the local URI of the image to the event
+          let event = uploadResult.calendarEvent;
+          event.uri = uploadResult.location;
+
+          // the event to the global event store
+          this.props.addEvent(event);
 
           // set the event as the current event
           this.props.setCurrentEvent(uploadResult.calendarEvent.id);
@@ -274,7 +278,9 @@ const styles = StyleSheet.create({
   imageContainer: {
     marginTop: 10,
     marginBottom: 10,
+    padding: 5,
     width: 300,
+    height: 500,
     borderRadius: 3,
     elevation: 2,
     shadowColor: "rgba(0,0,0,1)",

@@ -97,7 +97,11 @@ async function uploadBase64(data) {
       : `scanoruploadme.herokuapp.com`;
 
   // create target REST endpoint
-  let apiUrl = `http://${api}/images/test`;
+  let apiUrl = `http://${api}/images`;
+
+  // ensure that there are no line breaks inside the base64 encoded image string
+  let base64image = data.base64.replace(/(?:\r\n|\r|\n)/g, "");
+  data.base64 = base64image;
 
   // log URL to verify correct endpoint
   console.log(apiUrl);
