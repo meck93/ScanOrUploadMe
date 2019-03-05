@@ -14,7 +14,7 @@ import { Calendar, Notifications } from "expo";
 // redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addEvent, setCurrentEvent } from "../actions/calendarActions";
+import { modifyEvent } from "../actions/eventActions";
 
 class CalendarEventScreen extends React.Component {
   constructor(props) {
@@ -42,49 +42,42 @@ class CalendarEventScreen extends React.Component {
   render() {
     return (
       <ScrollView>
-        <Text style={styles.textContainer}>
-          CalendarId: {this.props.calendar.activeCalendarId}
-        </Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.inputItem}
+            placeholder={"SUMMARY"}
+            value={this.state.summary}
+            onChangeText={text => this.setState({ summary: text })}
+          />
 
-        <Text style={styles.textContainer}>
-          Current Event:
-          {JSON.stringify(this.props.calendar.currentEvent)}
-        </Text>
+          <TextInput
+            style={styles.inputItem}
+            placeholder={"DESCRIPTION"}
+            value={this.state.description}
+            onChangeText={text => this.setState({ description: text })}
+          />
 
-        <TextInput
-          style={{ height: 40 }}
-          placeholder={"SUMMARY"}
-          value={this.state.summary}
-          onChangeText={text => this.setState({ summary: text })}
-        />
+          <TextInput
+            style={styles.inputItem}
+            placeholder={"LOCATION:"}
+            value={this.state.location}
+            onChangeText={text => this.setState({ location: text })}
+          />
 
-        <TextInput
-          style={{ height: 40 }}
-          placeholder={"DESCRIPTION"}
-          value={this.state.description}
-          onChangeText={text => this.setState({ description: text })}
-        />
+          <TextInput
+            style={styles.inputItem}
+            placeholder={"START_TIME"}
+            value={this.state.startTime}
+            onChangeText={text => this.setState({ startTime: text })}
+          />
 
-        <TextInput
-          style={{ height: 40 }}
-          placeholder={"LOCATION:"}
-          value={this.state.location}
-          onChangeText={text => this.setState({ location: text })}
-        />
-
-        <TextInput
-          style={{ height: 40 }}
-          placeholder={"START_TIME"}
-          value={this.state.startTime}
-          onChangeText={text => this.setState({ startTime: text })}
-        />
-
-        <TextInput
-          style={{ height: 40 }}
-          placeholder={"END_TIME"}
-          value={this.state.endTime}
-          onChangeText={text => this.setState({ endTime: text })}
-        />
+          <TextInput
+            style={styles.inputItem}
+            placeholder={"END_TIME"}
+            value={this.state.endTime}
+            onChangeText={text => this.setState({ endTime: text })}
+          />
+        </View>
 
         <View style={styles.container}>
           <View style={styles.buttonContainer}>
@@ -94,15 +87,32 @@ class CalendarEventScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <Button onPress={this._deleteEvent} title="Remove Event" />
           </View>
+
+          <View style={styles.buttonContainer}>
+            <Button onPress={this._updateEventDetails} title="Update Event" />
+          </View>
         </View>
       </ScrollView>
     );
   }
 
+  _updateEventDetails = () => {
+    let oldEvent = this.props.events.currentEvent;
+
+    // update all fields of the event
+    oldEvent.description = this.state.description;
+    oldEvent.summary = this.state.summary;
+    oldEvent.location = this.state.location;
+    oldEvent.startTime = this.state.startTime;
+    oldEvent.endTime = this.state.endTime;
+
+    // update the currentEvent
+    this.props.modifyEvent(oldEvent);
+  };
+
   _findEvent = () => {
     // retrieve all events from the global store
-    const events = this.props.calendar.events;
-    console.log("Events Retrieved from Global State:", events);
+    const events = this.props.events.events;
 
     if (events.length === 0) {
       const newState = {
@@ -117,7 +127,7 @@ class CalendarEventScreen extends React.Component {
       this.setState(newState);
     } else {
       // retrieve the current event
-      const currentEvent = this.props.calendar.currentEvent;
+      const currentEvent = this.props.events.currentEvent;
 
       const stateUpdate = {
         id: currentEvent.id,
@@ -155,14 +165,14 @@ class CalendarEventScreen extends React.Component {
   };
 
   _addToCalendar = async () => {
-    //create dummy event
+    //create empty event
     let eventDetails = {
-      title: "I am your new event",
-      startDate: "2019-02-27T15:00:00.000Z", ///this.state.start, //got error saying saying it expected date to end in Z so edited: "2019-02-19T15:00:00.000Z+01:00",
-      endDate: "2019-02-27T16:00:00.000Z",
+      title: "",
+      startDate: "",
+      endDate: "",
       allDay: false,
-      location: this.state.location,
-      notes: "Testing add to Calendar",
+      location: "",
+      notes: "",
       alarms: [
         {
           relativeOffset: -15,
@@ -178,8 +188,7 @@ class CalendarEventScreen extends React.Component {
       },
       availability: "busy",
       // TODO: check if the timezone still works on Android
-      timeZone: "GMT+1",
-      url: "http://www..."
+      timeZone: "GMT+1"
     };
 
     try {
@@ -226,15 +235,14 @@ class CalendarEventScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { calendar } = state;
-  return { calendar };
+  const { calendar, events } = state;
+  return { calendar, events };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      addEvent,
-      setCurrentEvent
+      modifyEvent
     },
     dispatch
   );
@@ -248,6 +256,15 @@ const styles = StyleSheet.create({
   textContainer: {
     margin: 5,
     padding: 5
+  },
+  inputContainer: {
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    margin: 5,
+    padding: 5
+  },
+  inputItem: {
+    height: 40
   },
   container: {
     alignItems: "center",

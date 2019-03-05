@@ -11,7 +11,7 @@ import { withNavigation } from "react-navigation";
 // redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { setCurrentEvent } from "../actions/calendarActions";
+import { setCurrentEvent } from "../actions/eventActions";
 
 let now = new Date();
 let start = new Date(now.setHours(now.getHours() + 1)).toString();
@@ -75,7 +75,7 @@ class SavedEventsScreen extends React.Component {
     return (
       // check if there exist real events (if not display the dummy events from above)
       <View style={styles.container}>
-        {this.props.calendar.events.length === 0 ? (
+        {this.props.events.events.length === 0 ? (
           <FlatList
             data={this.state.data}
             showsVerticalScrollIndicator={false}
@@ -94,7 +94,7 @@ class SavedEventsScreen extends React.Component {
           />
         ) : (
           <FlatList
-            data={this.props.calendar.events}
+            data={this.props.events.events}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <TouchableHighlight
@@ -124,8 +124,8 @@ class SavedEventsScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { calendar } = state;
-  return { calendar };
+  const { events } = state;
+  return { events };
 };
 
 const mapDispatchToProps = dispatch =>

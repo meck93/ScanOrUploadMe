@@ -19,7 +19,7 @@ import { withNavigation } from "react-navigation";
 // redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addEvent, setCurrentEvent } from "../actions/calendarActions";
+import { addEvent, setCurrentEvent } from "../actions/eventActions";
 
 class CameraScreen extends React.Component {
   constructor(props) {
@@ -252,8 +252,8 @@ class CameraScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { calendar } = state;
-  return { calendar };
+  const { events } = state;
+  return { events };
 };
 
 const mapDispatchToProps = dispatch =>
