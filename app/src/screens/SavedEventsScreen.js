@@ -1,6 +1,8 @@
 import React from "react";
 import {
   Text,
+  Alert,
+  Image,
   FlatList,
   TouchableHighlight,
   View,
@@ -68,58 +70,96 @@ let calendarEvent3 = {
 class SavedEventsScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [calendarEvent, calendarEvent2, calendarEvent3] };
+    this.state = {
+      data: [calendarEvent, calendarEvent2, calendarEvent3],
+      imageUri: null,
+      imageId: null,
+      displayImage: false
+    };
   }
 
   render() {
     return (
       // check if there exist real events (if not display the dummy events from above)
       <View style={styles.container}>
-        {this.props.events.events.length === 0 ? (
-          <FlatList
-            data={this.state.data}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <TouchableHighlight
-                onPress={() => this._onPressButton(item)}
-                underlayColor="white"
-              >
-                <View style={styles.flatview}>
-                  <Text style={styles.name}>{item.description}</Text>
-                  <Text style={styles.brief}>{item.startTime}</Text>
-                </View>
-              </TouchableHighlight>
-            )}
-            keyExtractor={item => `${item.id}`}
-          />
-        ) : (
-          <FlatList
-            data={this.props.events.events}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <TouchableHighlight
-                onPress={() => this._onPressButton(item)}
-                underlayColor="white"
-              >
-                <View style={styles.flatview}>
-                  <Text style={styles.name}>{item.description}</Text>
-                  <Text style={styles.brief}>{item.startTime}</Text>
-                </View>
-              </TouchableHighlight>
-            )}
-            keyExtractor={item => `${item.id}`}
-          />
-        )}
+        <FlatList
+          data={
+            this.props.events.events.length === 0
+              ? this.state.data
+              : this.props.events.events
+          }
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <TouchableHighlight
+              onPress={() => this._navigateToEvent(item)}
+              onLongPress={() => this._setImageUriAndDisplay(item)}
+              underlayColor="white"
+            >
+              <View style={styles.flatview}>
+                <Text style={styles.name}>{item.description}</Text>
+                <Text style={styles.brief}>{item.startTime}</Text>
+              </View>
+            </TouchableHighlight>
+          )}
+          keyExtractor={item => `${item.id}`}
+        />
+        {this._maybeRenderImage()}
       </View>
     );
   }
 
-  _onPressButton = event => {
+  _navigateToEvent = event => {
     // set the event as the current event
     this.props.setCurrentEvent(event.id);
 
     // navigate to the calendarEvent screen
     this.props.navigation.navigate("Calendar");
+  };
+
+  _setImageUriAndDisplay = event => {
+    if (event.uri) {
+      this.setState({
+        imageUri: event.uri,
+        imageId: event.id,
+        displayImage: true
+      });
+    } else {
+      Alert.alert(
+        "No Saved Image!",
+        "We cannot display the original image since it hasn't been stored."
+      );
+    }
+  };
+
+  _cancelDisplay = () => {
+    this.setState({ imageUri: null, imageId: null, displayImage: false });
+  };
+
+  _maybeRenderImage = () => {
+    const { displayImage, imageUri } = this.state;
+
+    // if there is no image assigned yet don't render
+    if (!displayImage && (imageUri !== null || imageUri !== undefined)) {
+      return;
+    }
+
+    return (
+      <View style={styles.imageContainer}>
+        <Text>
+          The saved image for calender event: {`${this.state.imageId}`}
+        </Text>
+        <TouchableHighlight
+          onPress={() => this._cancelDisplay()}
+          style={{
+            borderTopRightRadius: 3,
+            borderTopLeftRadius: 3,
+            overflow: "hidden"
+          }}
+        >
+          <Image source={{ uri: imageUri }} style={styles.image} />
+        </TouchableHighlight>
+      </View>
+    );
   };
 }
 
@@ -142,16 +182,20 @@ export default connect(
 )(withNavigation(SavedEventsScreen));
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    marginHorizontal: 5,
-    padding: 20
-  },
   container: {
     backgroundColor: "#fff",
     flex: 1,
-    marginTop: 20,
     padding: 20,
-    paddingTop: 20
+    paddingTop: 5
+  },
+  imageContainer: {
+    elevation: 2
+  },
+  image: {
+    resizeMode: "contain",
+    borderRadius: 3,
+    width: "100%",
+    height: "100%"
   },
   photo: {
     borderRadius: 20,
