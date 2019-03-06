@@ -2,8 +2,9 @@ import express from "express";
 const router = express.Router();
 const fs = require("fs");
 
-import { getEntitiesFromText } from "../services/gcnlp";
-import { getTextFromImageBase64 } from "../services/gcvocr";
+import { getEntitiesFromText } from "../services/nlp/entityRecognitionService";
+import { getTextFromImageBase64 } from "../services/vision/OCRService";
+import { createCalendarEvent } from "../services/calendar/calendarService";
 
 router.post("/test", (req, res) => {
   if (!req.body || req.body.base64 === null) {
@@ -15,9 +16,7 @@ router.post("/test", (req, res) => {
       success: false
     });
   } else {
-    // file upload was sucessfull
-    let calendarEvent;
-
+    // IMAGE has successfully been received
     // set the response object
     res.contentType("image/jpeg");
 
@@ -36,51 +35,30 @@ router.post("/test", (req, res) => {
     const encoded = Buffer.from(imageFile).toString("base64");
 
     getTextFromImageBase64(encoded, "en")
-      .then(result => {
-        if (typeof result === "undefined") {
+      .then(ocrResult => {
+        if (typeof ocrResult === "undefined") {
           throw new Error("Failed! No result from GC Vision!");
-        } else if (typeof result.error !== "undefined") {
-          console.log(result.error);
+        } else if (typeof ocrResult.error !== "undefined") {
+          console.log(ocrResult.error);
           throw new Error(
             "GC Vision was unable to access the image URL or no feedback!"
           );
         } else {
-          // do something with the text
-          let docText = result;
-          console.log("GC-VISION-RESULT:", JSON.stringify(docText));
+          console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
 
-          getEntitiesFromText(docText.description)
-            .then(result => {
-              if (typeof result === "undefined") {
+          getEntitiesFromText(ocrResult.description)
+            .then(nlpResult => {
+              if (typeof nlpResult === "undefined") {
                 throw new Error("Failed! No result from GC NLP!");
-              } else if (typeof result.error !== "undefined") {
-                console.log(result.error);
+              } else if (typeof nlpResult.error !== "undefined") {
+                console.log(nlpResult.error);
                 throw new Error("Failed! GC NLP result contains error!");
               } else {
-                let entities = result;
-                console.log("GC-NLP-ENTITIES:", JSON.stringify(entities));
+                console.log("GC-NLP-ENTITIES:", JSON.stringify(nlpResult));
 
-                // 3. Process the result
-                let entitiesText;
-                entities.forEach(entity => {
-                  entitiesText += `${entity.name}-${entity.type}__`;
-                });
-
-                // 4. Send calendarEvent (like the fake one created below) to the client
-                // dummy calendar event with some real data
-                calendarEvent = {
-                  id: Math.random() * 100000,
-                  description: docText.description,
-                  summary: entitiesText,
-                  location: "",
-                  startTime: Date(),
-                  endTime: Date(),
-                  reminders: {
-                    overrides: [{ method: "popup", minutes: 15 }],
-                    useDefault: false
-                  },
-                  updated: Date()
-                };
+                // create the calendarEvent
+                const calendarEvent = createCalendarEvent(nlpResult, ocrResult);
+                console.log(calendarEvent);
 
                 // send success response
                 return res.json({
