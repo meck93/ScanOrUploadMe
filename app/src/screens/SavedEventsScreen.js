@@ -79,7 +79,9 @@ class SavedEventsScreen extends React.Component {
   }
 
   render() {
-    return (
+    // check if display image is called with a valid imageUri otherwise display all saved events
+    return !this.state.displayImage &&
+      (this.state.imageUri !== null || this.state.imageUri !== undefined) ? (
       // check if there exist real events (if not display the dummy events from above)
       <View style={styles.container}>
         <FlatList
@@ -103,7 +105,19 @@ class SavedEventsScreen extends React.Component {
           )}
           keyExtractor={item => `${item.id}`}
         />
-        {this._maybeRenderImage()}
+      </View>
+    ) : (
+      <View style={styles.container}>
+        <Text>
+          The saved image for calender event: {`${this.state.imageId}`}
+        </Text>
+
+        <TouchableHighlight
+          onPress={() => this._cancelDisplay()}
+          style={styles.imageCancelButton}
+        >
+          <Image source={{ uri: this.state.imageUri }} style={styles.image} />
+        </TouchableHighlight>
       </View>
     );
   }
@@ -134,33 +148,6 @@ class SavedEventsScreen extends React.Component {
   _cancelDisplay = () => {
     this.setState({ imageUri: null, imageId: null, displayImage: false });
   };
-
-  _maybeRenderImage = () => {
-    const { displayImage, imageUri } = this.state;
-
-    // if there is no image assigned yet don't render
-    if (!displayImage && (imageUri !== null || imageUri !== undefined)) {
-      return;
-    }
-
-    return (
-      <View style={styles.imageContainer}>
-        <Text>
-          The saved image for calender event: {`${this.state.imageId}`}
-        </Text>
-        <TouchableHighlight
-          onPress={() => this._cancelDisplay()}
-          style={{
-            borderTopRightRadius: 3,
-            borderTopLeftRadius: 3,
-            overflow: "hidden"
-          }}
-        >
-          <Image source={{ uri: imageUri }} style={styles.image} />
-        </TouchableHighlight>
-      </View>
-    );
-  };
 }
 
 const mapStateToProps = state => {
@@ -188,19 +175,16 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 5
   },
-  imageContainer: {
-    elevation: 2
-  },
   image: {
     resizeMode: "contain",
     borderRadius: 3,
     width: "100%",
     height: "100%"
   },
-  photo: {
-    borderRadius: 20,
-    height: 40,
-    width: 40
+  imageCancelButton: {
+    borderTopRightRadius: 3,
+    borderTopLeftRadius: 3,
+    overflow: "hidden"
   },
   text: {
     fontSize: 16,
