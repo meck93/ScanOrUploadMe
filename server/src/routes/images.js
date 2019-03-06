@@ -6,7 +6,10 @@ import { getEntitiesFromText } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64 } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
 
-router.post("/test", (req, res) => {
+router.post("/", (req, res) => {
+  // log the endpoint to which the request was sent to
+  console.log(`Current Endpoint: ${req.headers.host}.`);
+
   if (!req.body || req.body.base64 === null) {
     // if no body is contained in the request send a upload failure response
     return res.json({
@@ -17,24 +20,7 @@ router.post("/test", (req, res) => {
     });
   } else {
     // IMAGE has successfully been received
-    // set the response object
-    res.contentType("image/jpeg");
-
-    // log the endpoint to which the request was sent to
-    console.log(`Current Endpoint: ${req.headers.host}.`);
-
-    // write base64 to image
-    fs.writeFileSync("./uploads/image.png", req.body.base64, {
-      encoding: "base64"
-    });
-
-    // read image
-    const imageFile = fs.readFileSync("./uploads/image.png");
-
-    // Convert the image data to a Buffer and base64 encode it.
-    const encoded = Buffer.from(imageFile).toString("base64");
-
-    getTextFromImageBase64(encoded, "en")
+    getTextFromImageBase64(req.body.base64, "en")
       .then(ocrResult => {
         if (typeof ocrResult === "undefined") {
           throw new Error("Failed! No result from GC Vision!");
