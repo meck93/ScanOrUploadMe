@@ -2,7 +2,6 @@ import React from "react";
 
 import {
   ActivityIndicator,
-  Button,
   Clipboard,
   Image,
   Share,
@@ -10,11 +9,16 @@ import {
   StyleSheet,
   Text,
   View,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 import { ImagePicker, Permissions } from "expo";
 import { uploadBase64 } from "../../api/uploadImage";
 import { withNavigation } from "react-navigation";
+
+// Actionbuttons
+import ActionButton from "react-native-action-button";
+import { Ionicons } from "@expo/vector-icons";
 
 // redux
 import { connect } from "react-redux";
@@ -31,17 +35,6 @@ class CameraScreen extends React.Component {
     };
   }
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerRight: (
-        <Button
-          title="To Event"
-          onPress={navigation.getParam("calEventNavigation")}
-        />
-      )
-    };
-  };
-
   async componentDidMount() {
     try {
       // get camera, camera roll and storage permission
@@ -49,11 +42,6 @@ class CameraScreen extends React.Component {
       await Permissions.askAsync(Permissions.CAMERA_ROLL);
       await Permissions.askAsync(Permissions.CALENDAR);
       await Permissions.askAsync(Permissions.NOTIFICATIONS);
-
-      // static navigation buttons
-      this.props.navigation.setParams({
-        calEventNavigation: this._navigateToCalendarEventScreen
-      });
     } catch (error) {
       // display the error to the user
       Alert.alert(error);
@@ -61,23 +49,10 @@ class CameraScreen extends React.Component {
     }
   }
 
-  _navigateToCalendarEventScreen = () => {
-    this.props.navigation.navigate("Calendar");
-  };
-
   render() {
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "flex-end"
-        }}
-      >
+      <View style={styles.mainContainer}>
         <StatusBar barStyle="default" />
-
-        {this._maybeRenderImage()}
-        {this._maybeRenderUploadingOverlay()}
 
         <View style={styles.textContainer}>
           <Text style={styles.mainText}>
@@ -85,17 +60,43 @@ class CameraScreen extends React.Component {
           </Text>
         </View>
 
-        <View style={styles.container}>
-          <View style={styles.buttonContainer}>
-            <Button onPress={this._pickImage} title="Select Image" />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button onPress={this._takePhoto} title="Take a photo" />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button onPress={this._reset} title="Reset" />
-          </View>
-        </View>
+        {this._maybeRenderImage()}
+        {this._maybeRenderUploadingOverlay()}
+
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+          <ActionButton.Item
+            buttonColor="#9b59b6"
+            title="Take a picture"
+            onPress={this._takePhoto}
+          >
+            <Ionicons
+              name={Platform.OS === "ios" ? "ios-camera" : "md-camera"}
+              style={styles.actionButtonIcon}
+            />
+          </ActionButton.Item>
+
+          <ActionButton.Item
+            buttonColor="#3498db"
+            title="Select an image"
+            onPress={this._pickImage}
+          >
+            <Ionicons
+              name={Platform.OS === "ios" ? "ios-image" : "md-image"}
+              style={styles.actionButtonIcon}
+            />
+          </ActionButton.Item>
+
+          <ActionButton.Item
+            buttonColor="#1abc9c"
+            title="Reset Homescreen"
+            onPress={this._reset}
+          >
+            <Ionicons
+              name={Platform.OS === "ios" ? "ios-close" : "md-close"}
+              style={styles.actionButtonIcon}
+            />
+          </ActionButton.Item>
+        </ActionButton>
       </View>
     );
   }
@@ -138,17 +139,9 @@ class CameraScreen extends React.Component {
         >
           <Image
             source={{ uri: image }}
-            style={{ height: "90%", width: "100%", resizeMode: "contain" }}
+            style={{ height: "100%", width: "100%", resizeMode: "contain" }}
           />
         </View>
-
-        <Text
-          onPress={this._copyToClipboard}
-          onLongPress={this._share}
-          style={{ paddingTop: 5 }}
-        >
-          {image}
-        </Text>
       </View>
     );
   };
@@ -278,11 +271,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     marginTop: 10,
     marginBottom: 10,
+    marginHorizontal: 5,
     padding: 5,
     width: 300,
-    height: 500,
+    height: 475,
     borderRadius: 3,
-    elevation: 2,
     shadowColor: "rgba(0,0,0,1)",
     shadowOpacity: 0.2,
     shadowOffset: { width: 4, height: 4 },
@@ -293,19 +286,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 20
   },
-  buttonContainer: {
-    marginBottom: 5,
-    marginHorizontal: 5
-  },
   textContainer: {
     alignItems: "center",
     marginHorizontal: 10,
-    marginBottom: 10
+    marginTop: 10
   },
   mainText: {
     fontSize: 16,
     color: "rgba(96,100,109, 1)",
     lineHeight: 24,
     textAlign: "center"
+  },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: "white"
+  },
+  mainContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start"
   }
 });

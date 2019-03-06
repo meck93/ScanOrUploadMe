@@ -1,5 +1,13 @@
 import React from "react";
-import { Text, View, StyleSheet, Picker, Platform, Alert } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Picker,
+  Platform,
+  Alert,
+  TouchableOpacity
+} from "react-native";
 import { withNavigation } from "react-navigation";
 import { Calendar, Permissions } from "expo";
 
@@ -9,28 +17,38 @@ import { bindActionCreators } from "redux";
 import { setDefaultCalendar } from "../actions/calendarActions";
 import { setDefaultScanLanguage } from "../actions/settingsActions";
 
+import ModalPicker from "../components/ModalPicker";
+
 class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       calendarEvent: null,
-      calendars: []
+      calendars: [],
+      data: [
+        { name: "English", value: "EN", id: 1 },
+        { name: "Swedish", value: "SE", id: 2 }
+      ]
     };
   }
 
   async componentDidMount() {
     // check the necessary permissions
-    const permission = this._checkPermissions();
-
-    if (permission) {
-      // retrieve all local calendars which are modifiable
-      this._findCalendars();
-    } else {
-      Alert.alert(
-        "Permission Error",
-        "We could not retrieve the local calendars because we're missing the necessary permissions to access the local calendars."
-      );
-    }
+    this._checkPermissions()
+      .then(permission => {
+        if (permission) {
+          // retrieve all local calendars which are modifiable
+          this._findCalendars();
+        } else {
+          Alert.alert(
+            "Permission Error",
+            "We could not retrieve the local calendars because we're missing the necessary permissions to access the local calendars."
+          );
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   _checkPermissions = async () => {
@@ -118,6 +136,28 @@ class PreferencesScreen extends React.Component {
             <Picker.Item label="German" value={"DE"} />
           </Picker>
         </View>
+
+        <View>
+          <ModalPicker
+            ref={instance => (this.dropDownPicker = instance)}
+            data={this.state.data}
+            label={"name"}
+            value={"value"}
+            onValueChange={(itemValue, itemIndex) => {
+              this.props.setDefaultScanLanguage(itemValue);
+            }}
+          />
+          <View style={styles.subContainer}>
+            <TouchableOpacity
+              style={styles.dropDownContainer}
+              onPress={() => this.dropDownPicker.setModalVisible(true)}
+            >
+              <Text style={styles.dropDownText}>
+                {this.props.settings.scanLanguage}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }
@@ -162,5 +202,16 @@ const styles = StyleSheet.create({
     height: 50,
     width: 150
   },
-  textContainer: {}
+  subContainer: {
+    margin: 8
+  },
+  dropDownContainer: {
+    borderWidth: 0.5,
+    borderRadius: 4,
+    padding: 8
+  },
+  dropDownText: {
+    fontSize: 20,
+    margin: 8
+  }
 });
