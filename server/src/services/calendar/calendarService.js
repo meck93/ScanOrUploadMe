@@ -34,6 +34,10 @@ function nlpToEvent(nlpObject) {
     description = "EVENT CREATION RESULT";
   }
 
+  if (location == undefined) {
+    location = "UNSPECIFIED";
+  }
+
   // Calendar event to be returned
   return {
     description: description,
@@ -42,6 +46,9 @@ function nlpToEvent(nlpObject) {
 }
 
 function createCalendarEvent(nlpRepsonse, ocrResult) {
+  if ( nlpRepsonse == undefined || ocrResult == undefined){
+    throw new TypeError();
+  }
   let calendarEvent;
 
   // transform the OCR output to calendar content
@@ -71,7 +78,8 @@ function createCalendarEvent(nlpRepsonse, ocrResult) {
       useDefault: false
     },
     // TODO: fix wrong time being returned => currently returns UTC time
-    updated: new Date()
+    // TODONE?!
+    updated: new Date() + new Date().getTimezoneOffset()
   };
 
   return calendarEvent;
