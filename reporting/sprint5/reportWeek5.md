@@ -10,7 +10,7 @@ We had **29 story points** planned for sprint 5 but the current velocity is high
 
 The issues listed below are the tickets we have closed this sprint and can be found in the project's closed column:
 
-** Planned and finished:**
+**Planned and finished:**
 
 - Encryption: Implementation Mobile App <-> ExpressJS Server [Backend] #31 (9).
 - Attach the image/pdf to the created event [Frontend] #20 (3)
@@ -37,7 +37,7 @@ The issues listed below are the tickets we have closed this sprint and can be fo
 ## Number of tickets created and the sum of their story points
 
 We have added an additional **1 ticket** at the end of sprint 5:
-- Frontend Testing #68 (20)
+- **Frontend Testing**: #68 (20)
 
 
 - **Sum of story points**: 219 story points
@@ -77,3 +77,4 @@ The following issues have been selected as the targets for next weeks sprint. Th
 The video for sprint 5 can be found here:https://www.youtube.com/watch?v=gyAHXAjEEic
 
 ## Project Burndown Chart
+See the picture stored here: ![Burndown Chart Sprint 5](./sprint_numero_cinco.png) and the original chart can be found here: [Live Burndown Chart](https://docs.google.com/spreadsheets/d/12GmSHIXMWHx2LpgqF7Fsc416dBMk8yJf_pnBWDaJ7bY/edit?usp=sharing)
