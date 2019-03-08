@@ -41,7 +41,7 @@ We have added an additional **1 ticket** at the end of sprint 5:
 
 
 - **Sum of story points**: 219 story points
-- **Size of backlog**: 31 story points
+- **Size of backlog**: 44 story points + 20 points in sprint backlog
 - **Completed**: 165.5 story points (sprint 1-4)
 ## Pull Requests
 
