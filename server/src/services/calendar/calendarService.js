@@ -7,13 +7,13 @@ function nlpToEvent(nlpObject) {
   // TODO: Support multiple people/organizations/etc
   // TODO: Select the entity with the highest confidence value
   nlpObject.forEach(entity => {
-    if (entity.type === "LOCATION") {
+    if (entity.type === "LOCATION" && location === undefined) {
       location = entity.name;
-    } else if (entity.type === "PERSON") {
+    } else if (entity.type === "PERSON" && person === undefined) {
       person = entity.name;
-    } else if (entity.type === "EVENT") {
+    } else if (entity.type === "EVENT" && event === undefined) {
       event = entity.name;
-    } else if (entity.type === "ORGANIZATION") {
+    } else if (entity.type === "ORGANIZATION" && organization === undefined) {
       organization = entity.name;
     }
   });
