@@ -77,4 +77,4 @@ The following issues have been selected as the targets for next weeks sprint. Th
 The video for sprint 5 can be found here:https://www.youtube.com/watch?v=gyAHXAjEEic
 
 ## Project Burndown Chart
-See the picture stored here: ![Burndown Chart Sprint 5](./sprint_numero_cinco.png) and the original chart can be found here: [Live Burndown Chart](https://docs.google.com/spreadsheets/d/12GmSHIXMWHx2LpgqF7Fsc416dBMk8yJf_pnBWDaJ7bY/edit?usp=sharing)
+See the picture stored here: ![Burndown Chart Sprint 5](./burndown_chart_numero_cinco.png) and the original chart can be found here: [Live Burndown Chart](https://docs.google.com/spreadsheets/d/12GmSHIXMWHx2LpgqF7Fsc416dBMk8yJf_pnBWDaJ7bY/edit?usp=sharing)
