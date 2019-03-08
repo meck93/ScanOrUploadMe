@@ -10,7 +10,8 @@
     "eslint": "./node_modules/.bin/eslint src/",
     "eslint:fix": "./node_modules/.bin/eslint --fix src/",
     "test": "jest",
-    "test:coverage": "jest --coverage ./__tests__/src"
+    "test:coverage": "jest --coverage",
+    "test:clearCache": "jest --clearCache"
   },
   "directories": {
     "test": "__tests__"

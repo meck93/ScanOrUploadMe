@@ -17,8 +17,6 @@ import { bindActionCreators } from "redux";
 import { setDefaultCalendar } from "../actions/calendarActions";
 import { setDefaultScanLanguage } from "../actions/settingsActions";
 
-import ModalPicker from "../components/ModalPicker";
-
 class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -135,28 +133,6 @@ class PreferencesScreen extends React.Component {
             <Picker.Item label="Swedish" value={"SE"} />
             <Picker.Item label="German" value={"DE"} />
           </Picker>
-        </View>
-
-        <View>
-          <ModalPicker
-            ref={instance => (this.dropDownPicker = instance)}
-            data={this.state.data}
-            label={"name"}
-            value={"value"}
-            onValueChange={(itemValue, itemIndex) => {
-              this.props.setDefaultScanLanguage(itemValue);
-            }}
-          />
-          <View style={styles.subContainer}>
-            <TouchableOpacity
-              style={styles.dropDownContainer}
-              onPress={() => this.dropDownPicker.setModalVisible(true)}
-            >
-              <Text style={styles.dropDownText}>
-                {this.props.settings.scanLanguage}
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     );

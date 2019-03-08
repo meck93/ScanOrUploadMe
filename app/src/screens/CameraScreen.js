@@ -205,13 +205,8 @@ class CameraScreen extends React.Component {
           console.log("Uploaded to server failed.");
           Alert.alert("Image Upload Failed!", "Uploaded to server failed.");
         } else if (!uploadResult.success) {
-          console.log(
-            "Uploaded to server successfull but no result from Google Cloud."
-          );
-          Alert.alert(
-            "No Feedback from Google Cloud",
-            "Uploaded to server successfull but no result from Google Cloud."
-          );
+          console.log("Text Extraction Error!", uploadResult.msg);
+          Alert.alert("Text Extraction Error!", uploadResult.msg);
         } else {
           // Upload was sucessfull and got result from Google Cloud
           this.setState({

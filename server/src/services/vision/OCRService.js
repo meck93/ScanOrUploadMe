@@ -30,13 +30,22 @@ async function getTextFromImage(pathToImage, lang) {
           // request was successfull and contains no error object
         } else {
           // extract the relevant information to be returned
-          const res = {
-            locations: response.textAnnotations[0].locations,
-            description: response.textAnnotations[0].description,
-            locale: response.textAnnotations[0].locale,
-            confidence: response.textAnnotations[0].confidence
-          };
-          resolve(res);
+          if (response.textAnnotations.length === 0) {
+            reject(
+              new Error(
+                "No text detected in the uploaded image. Please make sure that the image you upload contains text."
+              )
+            );
+          } else {
+            // extract the relevant information to be returned
+            const res = {
+              locations: response.textAnnotations[0].locations,
+              description: response.textAnnotations[0].description,
+              locale: response.textAnnotations[0].locale,
+              confidence: response.textAnnotations[0].confidence
+            };
+            resolve(res);
+          }
         }
       })
       .catch(err => {
@@ -75,14 +84,22 @@ async function getTextFromImageBase64(data, lang) {
           resolve(response);
           // request was successfull and contains no error object
         } else {
-          // extract the relevant information to be returned
-          const res = {
-            locations: response.textAnnotations[0].locations,
-            description: response.textAnnotations[0].description,
-            locale: response.textAnnotations[0].locale,
-            confidence: response.textAnnotations[0].confidence
-          };
-          resolve(res);
+          if (response.textAnnotations.length === 0) {
+            reject(
+              new Error(
+                "No text detected in the uploaded image. Please make sure that the image you upload contains text."
+              )
+            );
+          } else {
+            // extract the relevant information to be returned
+            const res = {
+              locations: response.textAnnotations[0].locations,
+              description: response.textAnnotations[0].description,
+              locale: response.textAnnotations[0].locale,
+              confidence: response.textAnnotations[0].confidence
+            };
+            resolve(res);
+          }
         }
       })
       .catch(err => {
