@@ -1,6 +1,6 @@
 // Imports the Google Cloud client library
 const vision = require("@google-cloud/vision").v1p1beta1;
-
+const regeneratorRuntime = require("regenerator-runtime");
 // google cloud vision ocr
 async function getTextFromImage(pathToImage, lang) {
   // create a client and authenticate
@@ -86,7 +86,7 @@ async function getTextFromImageBase64(data, lang) {
         }
       })
       .catch(err => {
-        // request was unsuccessfull
+        // request was unsuccessful
         console.error("ERROR:", err);
         reject(err);
       });
