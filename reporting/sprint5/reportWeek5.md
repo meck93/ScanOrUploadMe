@@ -74,6 +74,6 @@ Total: 30.5 story points
 
 Video Update - ScanOrUploadMe Week 5
 
-The video for sprint 5 can be found here: https://www.youtube.com/watch?v=gyAHXAjEEic
+The video for sprint 5 can be found here: https://www.youtube.com/watch?v=g4JX__AZHEw
 
 Project Burndown Chart
