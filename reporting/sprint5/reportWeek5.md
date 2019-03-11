@@ -4,7 +4,7 @@ This is the weekly progress report for week/sprint 5 for the "ScanOrUploadMe" pr
 
 ## Current Team Velocity
 
-We had **29 story points** planned for sprint 5 but the current velocity is higher: **33.5 story points**
+We had **29 story points** planned for sprint 5 but the current velocity is lower: **23.5 story points**
 
 ## Tickets finished and the sum of their story points
 
@@ -16,7 +16,7 @@ The issues listed below are the tickets we have closed this sprint and can be fo
 - Attach the image/pdf to the created event [Frontend] #20 (3)
 - Make app available in Swedish [Frontend] #15 (2.5)
 - Selecting the language of a scan [Frontend] #11 (5)
-- Functionality for Swedish Input/Scan [Backend] #13 (10)
+
 
 
 
@@ -33,6 +33,7 @@ The issues listed below are the tickets we have closed this sprint and can be fo
 
 - Encryption: Implementation Mobile App <-> ExpressJS Server #31 (2)
 - Make app available in Swedish [Frontend] #15 (0.5)
+- Functionality for Swedish Input/Scan [Backend] #13 (10)
 
 ## Number of tickets created and the sum of their story points
 
@@ -41,8 +42,8 @@ We have added an additional **1 ticket** at the end of sprint 5:
 
 
 - **Sum of story points**: 219 story points
-- **Size of backlog**: 44 story points + 20 points in sprint backlog
-- **Completed**: 165.5 story points (sprint 1-4)
+- **Size of backlog**: 54 story points + 20 points in sprint backlog
+- **Completed**: 155.5 story points (sprint 1-4)
 ## Pull Requests
 
 This week we have successfully created/merged the following number of pull requests.
@@ -52,12 +53,13 @@ This week we have successfully created/merged the following number of pull reque
 We have not merfed any branches into master this week, because the work on individual branches is still ongoing 
 ## Summary: Were all sprint goals met?
 
-We initially planned to do **29 story points** but we managed to implement 31.5 instead, although some of the tickets still have issues we are working on. For example
+We initially planned to do **29 story points** but we managed to implement 21.5 instead, although some of the tickets still have issues we are working on. For example
 **Still in progress:**
 
 - Encryption: Implementation Mobile App <-> ExpressJS Server #31 (2)
 - Make app available in Swedish [Frontend] #15 (0.5)
 - Backend Testing #67(8)
+- Functionality for Swedish Input/Scan [Backend] #13 (10)
 
 **The sprint goals which were not completed:**
 
