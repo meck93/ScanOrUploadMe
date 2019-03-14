@@ -35,7 +35,7 @@ router.post("/test", (req, res) => {
     // Convert the image data to a Buffer and base64 encode it.
     const encoded = Buffer.from(imageFile).toString("base64");
 
-    getTextFromImageBase64(encoded, "en")
+    getTextFromImageBase64(encoded)
       .then(ocrResult => {
         if (typeof ocrResult === "undefined") {
           throw new Error("Failed! No result from GC Vision!");
@@ -47,7 +47,7 @@ router.post("/test", (req, res) => {
         } else {
           console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
 
-          const description_after_ocr;
+          let description_after_ocr;
           const language_before_translation = ocrResult.locale;
 
           if(language_before_translation === "sv"){
@@ -55,7 +55,7 @@ router.post("/test", (req, res) => {
           }else{
             description_after_ocr = ocrResult.description;
           }
-          
+
           getEntitiesFromText(description_after_ocr)
             .then(nlpResult => {
               if (typeof nlpResult === "undefined") {
@@ -67,7 +67,7 @@ router.post("/test", (req, res) => {
                 console.log("GC-NLP-ENTITIES:", JSON.stringify(nlpResult));
 
                 // create the calendarEvent
-                const calendarEvent = createCalendarEvent(nlpResult, ocrResult);
+                const calendarEvent = createCalendarEvent(nlpResult, description_after_ocr);
                 console.log(calendarEvent);
 
                 // send success response
