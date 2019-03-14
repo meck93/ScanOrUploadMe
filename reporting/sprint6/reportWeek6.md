@@ -1,8 +1,8 @@
 # Weekly Progress Report
 
-This is the weekly progress report for week/sprint 5 for the "ScanOrUploadMe" project.
+This is the weekly progress report for week/sprint 6 for the "ScanOrUploadMe" project.
 
-## Current Team Velocity
+## Current Team Velocity EDIT EVERYTHING BELOW THIS LINE
 
 We had **29 story points** planned for sprint 5 but the current velocity is lower: **23.5 story points**
 
