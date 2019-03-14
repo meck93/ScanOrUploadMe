@@ -33,7 +33,4 @@ async function translateFunc(ocrOutput){
   });
 }
 
-const test = "Hey du är bäst";
-translateFunc(test).then(function(result){
-  console.log(result);
-});
+export { translateFunc };

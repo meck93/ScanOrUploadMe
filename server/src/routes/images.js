@@ -5,6 +5,7 @@ const fs = require("fs");
 import { getEntitiesFromText } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64 } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
+import { translateFunc } from "../services/translation/translate_text";
 
 router.post("/test", (req, res) => {
   if (!req.body || req.body.base64 === null) {
@@ -46,7 +47,16 @@ router.post("/test", (req, res) => {
         } else {
           console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
 
-          getEntitiesFromText(ocrResult.description)
+          const description_after_ocr;
+          const language_before_translation = ocrResult.locale;
+
+          if(language_before_translation === "sv"){
+            description_after_ocr = translateFunc(ocrResult.description);
+          }else{
+            description_after_ocr = ocrResult.description;
+          }
+          
+          getEntitiesFromText(description_after_ocr)
             .then(nlpResult => {
               if (typeof nlpResult === "undefined") {
                 throw new Error("Failed! No result from GC NLP!");
