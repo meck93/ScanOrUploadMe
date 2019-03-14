@@ -1,4 +1,4 @@
-import { equal } from "assert";
+/*import { equal } from "assert";
 
 describe("Array", function() {
   describe("#indexOf()", function() {
@@ -15,4 +15,4 @@ describe("Array", function() {
       equal(length1 + 1, list.length);
     });
   });
-});
+});*/
