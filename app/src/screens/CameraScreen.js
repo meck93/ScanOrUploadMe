@@ -197,6 +197,9 @@ class CameraScreen extends React.Component {
       this.setState({ uploading: true });
 
       if (!pickerResult.cancelled) {
+        // create object to send to server
+        pickerResult["lang"] = this.props.settings.scanLanguage;
+
         // upload the image to server
         uploadResponse = await uploadBase64(pickerResult);
         uploadResult = await uploadResponse.json();
@@ -244,8 +247,8 @@ class CameraScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { events } = state;
-  return { events };
+  const { events, settings } = state;
+  return { events, settings };
 };
 
 const mapDispatchToProps = dispatch =>
