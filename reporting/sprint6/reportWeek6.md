@@ -90,7 +90,7 @@ The following issues are from last week's sprint and are going to be finished th
 
 ## Video Update - ScanOrUploadMe Week 6
 
-The video for sprint 6 can be found here: 
+The video for sprint 6 can be found here: https://www.youtube.com/watch?v=zC-hbXZ8OYg
 
 
 ## Project Burndown Chart
