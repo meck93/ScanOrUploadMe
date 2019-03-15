@@ -17,7 +17,7 @@ import { bindActionCreators } from "redux";
 import { setDefaultCalendar } from "../actions/calendarActions";
 import { setDefaultScanLanguage } from "../actions/settingsActions";
 
-class PreferencesScreen extends React.Component {
+export class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

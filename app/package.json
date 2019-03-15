@@ -9,9 +9,9 @@
     "eject": "expo eject",
     "eslint": "./node_modules/.bin/eslint src/",
     "eslint:fix": "./node_modules/.bin/eslint --fix src/",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:clearCache": "jest --clearCache"
+    "test:watch": "node ./node_modules/jest/bin/jest.js --watch --no-cache",
+    "test:coverage": "node ./node_modules/jest/bin/jest.js --coverage --no-cache",
+    "test": "node ./node_modules/jest/bin/jest.js --no-cache"
   },
   "directories": {
     "test": "__tests__"
@@ -20,13 +20,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/IOOPM-UU/ScanOrUploadMe.git"
-  },
-  "jest": {
-    "preset": "jest-expo",
-    "automock": false,
-    "setupFiles": [
-      "./setupJest.js"
-    ]
   },
   "dependencies": {
     "expo": "^32.0.4",
@@ -41,6 +34,9 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
     "babel-preset-expo": "^5.0.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.11.2",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "^5.13.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
@@ -51,9 +47,13 @@
     "eslint-plugin-react-native": "^3.6.0",
     "jest": "^24.1.0",
     "jest-cli": "^24.0.0",
+    "jest-enzyme": "^7.0.2",
     "jest-expo": "^32.0.0",
     "jest-fetch-mock": "^2.1.1",
-    "prettier": "^1.16.4"
+    "jsdom": "^14.0.0",
+    "prettier": "^1.16.4",
+    "react-dom": "^16.8.4",
+    "react-test-renderer": "^16.8.4"
   },
   "private": true
 }
