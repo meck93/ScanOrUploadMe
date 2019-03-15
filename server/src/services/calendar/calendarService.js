@@ -47,7 +47,7 @@ function nlpToEvent(nlpObject) {
 
 function createCalendarEvent(nlpRepsonse, ocrResult) {
   if ( nlpRepsonse == undefined || ocrResult == undefined){
-    throw new TypeError();
+    throw new TypeError("Undefined input");
   }
   let calendarEvent;
 

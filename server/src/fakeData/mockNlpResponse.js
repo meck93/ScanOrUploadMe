@@ -1,4 +1,4 @@
-const nlpResponse = {
+const nlpResponse = [{
     entities: [
       {
         name: "Lawrence of Arabia",
@@ -123,7 +123,7 @@ const nlpResponse = {
         ]
       },
       {
-        name: "Peter O'Toole",
+        name: "Peter O Toole",
         type: "ORGANIZATION",
         metadata: {
           mid: "/m/0h0jz",
@@ -142,6 +142,9 @@ const nlpResponse = {
       }
     ],
     language: "en"
-  }
+  },
+  undefined,
+  undefined
+];
   
   export default nlpResponse;

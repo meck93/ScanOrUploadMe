@@ -12,13 +12,15 @@ const ocrRes = {
 };
 
 // Prepare fake NLP response from the fakeData folder
-let nlpObject = nlpResponse.default.entities;
+let nlpObject = nlpResponse.default[0].entities;
 
 describe('calendarService', function() {
     
     describe('Undefined arguments', function() {
         it('should throw TypeError for undefined nlpResponse', function() {
-            expect(createCalendarEvent).to.throw(TypeError);
+            expect(() => {
+                createCalendarEvent(undefined);
+            }).to.throw(TypeError, "Undefined input");
         });
     });
     
@@ -32,7 +34,7 @@ describe('calendarService', function() {
     describe('Complete summary', function(){
         it('optimal description should consist of: event, organization, person', function(){
             
-            assert.equal(createCalendarEvent(nlpObject, ocrRes).description, "Dentist appointment, Peter O'Toole, T.E. Lawrence");
+            assert.equal(createCalendarEvent(nlpObject, ocrRes).description, "Dentist appointment, Peter O Toole, T.E. Lawrence");
         });
     });
 
@@ -53,7 +55,7 @@ describe('calendarService', function() {
     describe('No Person', function(){
         it('no person in the NLP object should result in description: event, organization', function(){
             let noPerson = [nlpObject[0], nlpObject[3], nlpObject[4], nlpObject[5]];
-            assert.equal(createCalendarEvent(noPerson, ocrRes).description, "Dentist appointment, Peter O'Toole");
+            assert.equal(createCalendarEvent(noPerson, ocrRes).description, "Dentist appointment, Peter O Toole");
         });
     });
 
