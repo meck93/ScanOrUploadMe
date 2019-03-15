@@ -2,9 +2,9 @@
 
 This is the weekly progress report for week/sprint 6 for the "ScanOrUploadMe" project.
 
-## Current Team Velocity EDIT EVERYTHING BELOW THIS LINE
+## Current Team Velocity
 
-We had **29 story points** planned for sprint 5 but the current velocity is lower: **23.5 story points**
+We had **30.5 story points** planned for sprint 6 but the current velocity is lower: **23.5 story points**
 
 ## Tickets finished and the sum of their story points
 
@@ -12,71 +12,90 @@ The issues listed below are the tickets we have closed this sprint and can be fo
 
 **Planned and finished:**
 
-- Encryption: Implementation Mobile App <-> ExpressJS Server [Backend] #31 (9).
-- Attach the image/pdf to the created event [Frontend] #20 (3)
-- Make app available in Swedish [Frontend] #15 (2.5)
-- Selecting the language of a scan [Frontend] #11 (5)
-
-
-
+- Make app available in Swedish [Frontend] #15 (2.5) => see explanation in the weekly progress video.
+- Frontend Testing #68 (5)
+- Backend Testing #67 (10)
+- Backend Testing Stubbing #71 (5)
 
 **Not planned but finished:**
-- Backend Testing #67(2)
+
+- Nothing
 
 **Not done this sprint even though planned:**
 
-- Nothing 
+- Nothing
 
-#####  Sum of finished story points: 33.5
+#####  Sum of finished story points: 23.5
+
+
 
 **Not finished but currently in progress:**
 
-- Encryption: Implementation Mobile App <-> ExpressJS Server #31 (2)
-- Make app available in Swedish [Frontend] #15 (0.5)
-- Functionality for Swedish Input/Scan [Backend] #13 (10)
+- Encryption: Implementation Mobile App <-> ExpressJS Server [Backend] #31 (2)
+- Frontend Testing #68 (15)
+- Backend Testing Stubbing #71 (5)
+- Backend Integration Tests #70 (5)
 
 ## Number of tickets created and the sum of their story points
 
-We have added an additional **1 ticket** at the end of sprint 5:
-- **Frontend Testing**: #68 (20)
+We have added an additional **2 ticket** at the end of sprint 6:
 
+- Backend Testing Stubbing #71 (10)
+- Backend Integration Tests #70 (5)
 
-- **Sum of story points**: 219 story points
-- **Size of backlog**: 54 story points + 20 points in sprint backlog
-- **Completed**: 155.5 story points (sprint 1-4)
+**Sum of story points**: 234 story points
+
+**Size of backlog**: 61.5 story points 
+
+**Completed**: 192.5 story points (sprint 1-6)
+
 ## Pull Requests
 
 This week we have successfully created/merged the following number of pull requests.
 
-- Created: 0
-- Merged: 0
-We have not merfed any branches into master this week, because the work on individual branches is still ongoing 
+- Created: 3
+- Merged: 3
 ## Summary: Were all sprint goals met?
 
-We initially planned to do **29 story points** but we managed to implement 21.5 instead, although some of the tickets still have issues we are working on. For example
+We initially planned to do **30.5 story points** but we managed to implement instead, although some of the tickets still have issues we are working on. 
+
 **Still in progress:**
 
-- Encryption: Implementation Mobile App <-> ExpressJS Server #31 (2)
-- Make app available in Swedish [Frontend] #15 (0.5)
-- Backend Testing #67(8)
-- Functionality for Swedish Input/Scan [Backend] #13 (10)
+- Encryption: Implementation Mobile App <-> ExpressJS Server [Backend] #31 (2)
+    - Encrypting the base64 image string
+- Frontend Testing #68 (15)
+- Backend Testing Stubbing #71 (5)
+- Backend Integration Tests #70 (5)
 
 **The sprint goals which were not completed:**
 
 - None
-## Sprint Goals for the following week (sprint 5)
+
+## Sprint Goals for the following week (Sprint 7)
 
 The following issues have been selected as the targets for next weeks sprint. The issue for each ticket can be found in the project's sprint backlog column:
 
-- Encryption: Implementation Mobile App <-> ExpressJS Server [Backend] #31 (2).
-- Make app available in Swedish [Frontend] #15 (0.5)
-- Frontend Testing #68 (20)
-- Backend Testing #87(8)
-**Total: 30.5 story points**
+- Sending created calendar event via e-mail #5 (3)
 
-## Video Update - ScanOrUploadMe Week 5
+The following issues are from last week's sprint and are going to be finished this week:
 
-The video for sprint 5 can be found here:https://youtu.be/g4JX__AZHEw
+- Encryption: Implementation Mobile App <-> ExpressJS Server [Backend] #31 (2)
+    - Encrypting the base64 image string
+- Frontend Testing #68 (15)
+- Backend Testing Stubbing #71 (5)
+- Backend Integration Tests #70 (5)
+- Functionality for Swedish Input/Scan [Backend] (5)
+
+**Total: 35 story points **+ 8h of writing project review essay 
+
+## Video Update - ScanOrUploadMe Week 6
+
+The video for sprint 6 can be found here: 
+
 
 ## Project Burndown Chart
-See the picture stored here: ![Burndown Chart Sprint 5](./burndown_chart_numero_cinco.png) and the original chart can be found here: [Live Burndown Chart](https://docs.google.com/spreadsheets/d/12GmSHIXMWHx2LpgqF7Fsc416dBMk8yJf_pnBWDaJ7bY/edit?usp=sharing)
+See the picture stored here:
+
+ ![Burndown Chart Sprint 5](C:\Users\meck\code\uzh\03_fs19\ScanOrUploadMe\reporting\sprint6\burndown_chart_numero_seis.png) 
+
+and the original chart can be found here: [Live Burndown Chart](https://docs.google.com/spreadsheets/d/12GmSHIXMWHx2LpgqF7Fsc416dBMk8yJf_pnBWDaJ7bY/edit?usp=sharing)
