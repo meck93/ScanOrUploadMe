@@ -1,4 +1,6 @@
+require('dotenv').config();
 const {Translate} = require('@google-cloud/translate');
+const regeneratorRuntime = require("regenerator-runtime");
 const delay = require('delay');
 // receives target language and translates text to english
 async function translateFunc(ocrOutput){
@@ -27,13 +29,15 @@ async function translateFunc(ocrOutput){
           }
         })
         .catch(err=>{
-          console.log("ERROR", err);
+          //console.log("ERROR", err);
           reject(err);
         });
   });
 }
+export { translateFunc };
 
+/*
 const test = "Hey du är bäst";
 translateFunc(test).then(function(result){
   console.log(result);
-});
+});*/
