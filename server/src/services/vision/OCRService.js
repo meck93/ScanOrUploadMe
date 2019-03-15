@@ -3,7 +3,7 @@ require('dotenv').config();
 const vision = require("@google-cloud/vision").v1p1beta1;
 const regeneratorRuntime = require("regenerator-runtime");
 // google cloud vision ocr
-async function getTextFromImage(pathToImage, lang) {
+async function getTextFromImage(pathToImage) {
   // create a client and authenticate
   const client = new vision.ImageAnnotatorClient({
     keyFilename: process.env.PATH_TO_CREDENTIALS
@@ -12,9 +12,6 @@ async function getTextFromImage(pathToImage, lang) {
   const request = {
     image: {
       source: { imageUri: pathToImage }
-    },
-    imageContext: {
-      languageHints: [lang]
     }
   };
 
@@ -49,7 +46,7 @@ async function getTextFromImage(pathToImage, lang) {
 }
 
 // google cloud vision ocr
-async function getTextFromImageBase64(data, lang) {
+async function getTextFromImageBase64(data) {
   // create a client and authenticate
   const client = new vision.ImageAnnotatorClient({
     keyFilename: process.env.PATH_TO_CREDENTIALS
@@ -58,9 +55,6 @@ async function getTextFromImageBase64(data, lang) {
   const request = {
     image: {
       content: data
-    },
-    imageContext: {
-      languageHints: [lang]
     }
   };
 
