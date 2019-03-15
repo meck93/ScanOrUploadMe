@@ -7,8 +7,8 @@ chai.use(require('chai-string'));
 
 // correct input
 const text = 'time is on March 26 14.00 to 15.00';
-const startTime = new Date('March 26, 2019 13:00:00 UTC');
-const endTime = new Date('March 26, 2019 14:00:00 UTC');
+const startTime = new Date('March 26, 2019 14:00:00 UTC');
+const endTime = new Date('March 26, 2019 15:00:00 UTC');
 describe('extractDate using correct input', function(){
   // make sure function returns description, start and endTime, given correct input
   it('should return a description, start and end times', function(){

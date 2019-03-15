@@ -1,4 +1,4 @@
-import {getTextFromImage, getTextFromImageBase64} from "../src/services/vision/OCRService";
+/*import {getTextFromImage, getTextFromImageBase64} from "../src/services/vision/OCRService";
 require('dotenv').config();
 const regeneratorRuntime = require("regenerator-runtime");
 const fs = require('fs');
@@ -68,3 +68,5 @@ describe('OCRService using base64 using incorrect input', function(){
     done();
   });
 });
+
+*/
