@@ -15,8 +15,23 @@ export default function extractDate(text) {
 
     // try to extract a date
     if (results.length) {
-      startTime = results[0].start.date();
-      endTime = results[0].end.date();
+      try {
+        startTime = results[0].start.date();
+        endTime = results[0].end.date();
+
+        return {
+          text: desc,
+          startTime: startTime,
+          endTime: endTime
+        };
+      } catch (error) {
+        // otherwise just return the current date
+        let now = new Date();
+        // start time to one hour in the future
+        startTime = new Date(now.setHours(now.getHours() + 1)).toString();
+        // end time two hours in the future
+        endTime = new Date(now.setHours(now.getHours() + 2)).toString();
+      }
     } else {
       // otherwise just return the current date
       let now = new Date();
