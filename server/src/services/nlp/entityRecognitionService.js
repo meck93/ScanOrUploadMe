@@ -1,11 +1,20 @@
 // Imports the Google Cloud client library
 import { LanguageServiceClient } from "@google-cloud/language";
 
-async function getEntitiesFromText(text) {
-  // Creates a client
+const regeneratorRuntime = require("regenerator-runtime");
+require('dotenv').load();
+
+function createClient() {
   const client = new LanguageServiceClient({
     keyFilename: process.env.PATH_TO_CREDENTIALS
   });
+
+  return client;
+}
+
+async function getEntitiesFromText(text, client) {
+  // Creates a client
+  if(text === undefined) { throw new Error("Undefined input"); }
 
   // Prepares a document, representing the provided text
   const document = {
@@ -45,4 +54,4 @@ async function getEntitiesFromText(text) {
   });
 }
 
-export { getEntitiesFromText };
+export { getEntitiesFromText, createClient };

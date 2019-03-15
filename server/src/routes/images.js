@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 const fs = require("fs");
 
-import { getEntitiesFromText } from "../services/nlp/entityRecognitionService";
+import { getEntitiesFromText, createClient } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64 } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
 
@@ -32,7 +32,8 @@ router.post("/", (req, res) => {
         } else {
           console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
 
-          getEntitiesFromText(ocrResult.description)
+          const gClient = createClient();
+          getEntitiesFromText(ocrResult.description,  gClient)
             .then(nlpResult => {
               if (typeof nlpResult === "undefined") {
                 throw new Error("Failed! No result from GC NLP!");
