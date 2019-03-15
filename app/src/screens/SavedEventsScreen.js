@@ -1,6 +1,8 @@
 import React from "react";
 import {
   Text,
+  Alert,
+  Image,
   FlatList,
   TouchableHighlight,
   View,
@@ -11,7 +13,7 @@ import { withNavigation } from "react-navigation";
 // redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { setCurrentEvent } from "../actions/calendarActions";
+import { setCurrentEvent } from "../actions/eventActions";
 
 let now = new Date();
 let start = new Date(now.setHours(now.getHours() + 1)).toString();
@@ -68,64 +70,89 @@ let calendarEvent3 = {
 class SavedEventsScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [calendarEvent, calendarEvent2, calendarEvent3] };
+    this.state = {
+      data: [calendarEvent, calendarEvent2, calendarEvent3],
+      imageUri: null,
+      imageId: null,
+      displayImage: false
+    };
   }
 
   render() {
-    return (
+    // check if display image is called with a valid imageUri otherwise display all saved events
+    return !this.state.displayImage &&
+      (this.state.imageUri !== null || this.state.imageUri !== undefined) ? (
       // check if there exist real events (if not display the dummy events from above)
       <View style={styles.container}>
-        {this.props.calendar.events.length === 0 ? (
-          <FlatList
-            data={this.state.data}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <TouchableHighlight
-                onPress={() => this._onPressButton(item)}
-                underlayColor="white"
-              >
-                <View style={styles.flatview}>
-                  <Text style={styles.name}>{item.description}</Text>
-                  <Text style={styles.brief}>{item.startTime}</Text>
-                </View>
-              </TouchableHighlight>
-            )}
-            keyExtractor={item => `${item.id}`}
-          />
-        ) : (
-          <FlatList
-            data={this.props.calendar.events}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <TouchableHighlight
-                onPress={() => this._onPressButton(item)}
-                underlayColor="white"
-              >
-                <View style={styles.flatview}>
-                  <Text style={styles.name}>{item.description}</Text>
-                  <Text style={styles.brief}>{item.startTime}</Text>
-                </View>
-              </TouchableHighlight>
-            )}
-            keyExtractor={item => `${item.id}`}
-          />
-        )}
+        <FlatList
+          data={
+            this.props.events.events.length === 0
+              ? this.state.data
+              : this.props.events.events
+          }
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <TouchableHighlight
+              onPress={() => this._navigateToEvent(item)}
+              onLongPress={() => this._setImageUriAndDisplay(item)}
+              underlayColor="white"
+            >
+              <View style={styles.flatview}>
+                <Text style={styles.name}>{item.description}</Text>
+                <Text style={styles.brief}>{item.startTime}</Text>
+              </View>
+            </TouchableHighlight>
+          )}
+          keyExtractor={item => `${item.id}`}
+        />
+      </View>
+    ) : (
+      <View style={styles.container}>
+        <Text>
+          The saved image for calender event: {`${this.state.imageId}`}
+        </Text>
+
+        <TouchableHighlight
+          onPress={() => this._cancelDisplay()}
+          style={styles.imageCancelButton}
+        >
+          <Image source={{ uri: this.state.imageUri }} style={styles.image} />
+        </TouchableHighlight>
       </View>
     );
   }
 
-  _onPressButton = event => {
+  _navigateToEvent = event => {
     // set the event as the current event
     this.props.setCurrentEvent(event.id);
 
     // navigate to the calendarEvent screen
     this.props.navigation.navigate("Calendar");
   };
+
+  _setImageUriAndDisplay = event => {
+    if (event.uri) {
+      this.setState({
+        imageUri: event.uri,
+        imageId: event.id,
+        displayImage: true
+      });
+    } else {
+      Alert.alert(
+        "No Saved Image!",
+        "We cannot display the original image since it hasn't been stored."
+      );
+    }
+  };
+
+  _cancelDisplay = () => {
+    this.setState({ imageUri: null, imageId: null, displayImage: false });
+  };
 }
 
 const mapStateToProps = state => {
-  const { calendar } = state;
-  return { calendar };
+  const { events } = state;
+  return { events };
 };
 
 const mapDispatchToProps = dispatch =>
@@ -142,21 +169,22 @@ export default connect(
 )(withNavigation(SavedEventsScreen));
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    marginHorizontal: 5,
-    padding: 20
-  },
   container: {
     backgroundColor: "#fff",
     flex: 1,
-    marginTop: 20,
     padding: 20,
-    paddingTop: 20
+    paddingTop: 5
   },
-  photo: {
-    borderRadius: 20,
-    height: 40,
-    width: 40
+  image: {
+    resizeMode: "contain",
+    borderRadius: 3,
+    width: "100%",
+    height: "100%"
+  },
+  imageCancelButton: {
+    borderTopRightRadius: 3,
+    borderTopLeftRadius: 3,
+    overflow: "hidden"
   },
   text: {
     fontSize: 16,

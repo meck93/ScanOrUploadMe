@@ -1,6 +1,7 @@
 import { Constants } from "expo";
 
 function makeRequest(apiEndpoint, options) {
+  // timeout interval 15 seconds
   const FETCH_TIMEOUT = 15000;
   let didTimeOut = false;
 
@@ -42,7 +43,7 @@ function makeRequest(apiEndpoint, options) {
   });
 }
 
-async function uploadImageAsync(uri) {
+async function uploadBase64(data) {
   // load default URL depending if development or productive
   let { manifest } = Constants;
 
@@ -57,51 +58,11 @@ async function uploadImageAsync(uri) {
   // create target REST endpoint
   let apiUrl = `http://${api}/images`;
 
-  // log URL to verify correct endpoint
-  console.log(apiUrl);
+  // ensure that there are no line breaks inside the base64 encoded image string
+  let base64image = data.base64.replace(/(?:\r\n|\r|\n)/g, "");
+  data.base64 = base64image;
 
-  // extract the filetype
-  let fileType = uri.substring(uri.lastIndexOf(".") + 1);
-
-  let formData = new FormData();
-
-  formData.append("photo", {
-    uri,
-    name: `photo.${fileType}`,
-    type: `image/${fileType}`,
-    fileExtension: fileType
-  });
-
-  let options = {
-    method: "POST",
-    body: formData,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "multipart/form-data"
-    }
-  };
-
-  return makeRequest(apiUrl, options);
-}
-
-async function uploadBase64(data) {
-  // load default URL depending if development or productive
-  let { manifest } = Constants;
-
-  const api =
-    typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-      ? manifest.debuggerHost
-          .split(`:`)
-          .shift()
-          .concat(`:3000`)
-      : `scanoruploadme.herokuapp.com`;
-
-  // create target REST endpoint
-  let apiUrl = `http://${api}/images/test`;
-
-  // log URL to verify correct endpoint
-  console.log(apiUrl);
-
+  // create http POST request options
   let options = {
     method: "POST",
     body: JSON.stringify(data),
@@ -114,4 +75,4 @@ async function uploadBase64(data) {
   return makeRequest(apiUrl, options);
 }
 
-export { uploadImageAsync, uploadBase64 };
+export { uploadBase64, makeRequest };

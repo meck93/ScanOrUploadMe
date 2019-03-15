@@ -30,7 +30,7 @@ app.use(cors());
 
 // Add session middleware layer
 const sesh = {
-  name: 'SESS_ID',
+  name: "SESS_ID",
   secret: process.env.SECURITY_KEY,
   resave: false,
   saveUninitialized: true,

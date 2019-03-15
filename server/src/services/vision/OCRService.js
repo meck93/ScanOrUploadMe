@@ -1,7 +1,6 @@
 // Imports the Google Cloud client library
-require('dotenv').config();
 const vision = require("@google-cloud/vision").v1p1beta1;
-const regeneratorRuntime = require("regenerator-runtime");
+
 // google cloud vision ocr
 async function getTextFromImage(pathToImage) {
   // create a client and authenticate
@@ -28,18 +27,27 @@ async function getTextFromImage(pathToImage) {
           // request was successfull and contains no error object
         } else {
           // extract the relevant information to be returned
-          const res = {
-            locations: response.textAnnotations[0].locations,
-            description: response.textAnnotations[0].description,
-            locale: response.textAnnotations[0].locale,
-            confidence: response.textAnnotations[0].confidence
-          };
-          resolve(res);
+          if (response.textAnnotations.length === 0) {
+            reject(
+              new Error(
+                "No text detected in the uploaded image. Please make sure that the image you upload contains text."
+              )
+            );
+          } else {
+            // extract the relevant information to be returned
+            const res = {
+              locations: response.textAnnotations[0].locations,
+              description: response.textAnnotations[0].description,
+              locale: response.textAnnotations[0].locale,
+              confidence: response.textAnnotations[0].confidence
+            };
+            resolve(res);
+          }
         }
       })
       .catch(err => {
         // request was unsuccessfull
-        //console.error("ERROR:", err);
+        console.error("ERROR:", err);
         reject(err);
       });
   });
@@ -70,19 +78,27 @@ async function getTextFromImageBase64(data) {
           resolve(response);
           // request was successfull and contains no error object
         } else {
-          // extract the relevant information to be returned
-          const res = {
-            locations: response.textAnnotations[0].locations,
-            description: response.textAnnotations[0].description,
-            locale: response.textAnnotations[0].locale,
-            confidence: response.textAnnotations[0].confidence
-          };
-          resolve(res);
+          if (response.textAnnotations.length === 0) {
+            reject(
+              new Error(
+                "No text detected in the uploaded image. Please make sure that the image you upload contains text."
+              )
+            );
+          } else {
+            // extract the relevant information to be returned
+            const res = {
+              locations: response.textAnnotations[0].locations,
+              description: response.textAnnotations[0].description,
+              locale: response.textAnnotations[0].locale,
+              confidence: response.textAnnotations[0].confidence
+            };
+            resolve(res);
+          }
         }
       })
       .catch(err => {
-        // request was unsuccessful
-        //console.error("ERROR:", err);
+        // request was unsuccessfull
+        console.error("ERROR:", err);
         reject(err);
       });
   });

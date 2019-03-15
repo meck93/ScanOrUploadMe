@@ -24,7 +24,7 @@ export default function extractDate(text) {
           startTime: startTime,
           endTime: endTime
         };
-      } catch(error){
+      } catch (error) {
         // otherwise just return the current date
         let now = new Date();
         // start time to one hour in the future
@@ -32,7 +32,6 @@ export default function extractDate(text) {
         // end time two hours in the future
         endTime = new Date(now.setHours(now.getHours() + 2)).toString();
       }
-
     } else {
       // otherwise just return the current date
       let now = new Date();
@@ -47,7 +46,6 @@ export default function extractDate(text) {
       startTime: startTime,
       endTime: endTime
     };
-
   } catch (error) {
     console.log(error);
   }

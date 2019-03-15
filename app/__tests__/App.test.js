@@ -20,12 +20,4 @@ describe("App Snapshot", () => {
     const tree = renderer.create(<App skipLoadingScreen />).toJSON();
     expect(tree).toMatchSnapshot();
   });
-
-  test("two plus two is four", () => {
-    expect(2 + 2).toBe(4);
-  });
-
-  it("works", () => {
-    expect(1).toBe(1);
-  });
 });
