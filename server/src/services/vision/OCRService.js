@@ -1,4 +1,5 @@
 // Imports the Google Cloud client library
+require('dotenv').config();
 const vision = require("@google-cloud/vision").v1p1beta1;
 const regeneratorRuntime = require("regenerator-runtime");
 // google cloud vision ocr
@@ -41,7 +42,7 @@ async function getTextFromImage(pathToImage, lang) {
       })
       .catch(err => {
         // request was unsuccessfull
-        console.error("ERROR:", err);
+        //console.error("ERROR:", err);
         reject(err);
       });
   });
@@ -87,7 +88,7 @@ async function getTextFromImageBase64(data, lang) {
       })
       .catch(err => {
         // request was unsuccessful
-        console.error("ERROR:", err);
+        //console.error("ERROR:", err);
         reject(err);
       });
   });
