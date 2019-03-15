@@ -1,10 +1,10 @@
 import express from "express";
 const router = express.Router();
-const fs = require("fs");
 
 import { getEntitiesFromText } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64 } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
+import { translateFunc } from "../services/translation/translate_text";
 
 router.post("/", (req, res) => {
   // log the endpoint to which the request was sent to
@@ -32,7 +32,16 @@ router.post("/", (req, res) => {
         } else {
           console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
 
-          getEntitiesFromText(ocrResult.description)
+          let description_after_ocr;
+          const language_before_translation = ocrResult.locale;
+
+          if(language_before_translation === "sv"){
+            description_after_ocr = translateFunc(ocrResult.description);
+          }else{
+            description_after_ocr = ocrResult.description;
+          }
+
+          getEntitiesFromText(description_after_ocr)
             .then(nlpResult => {
               if (typeof nlpResult === "undefined") {
                 throw new Error("Failed! No result from GC NLP!");
@@ -43,7 +52,7 @@ router.post("/", (req, res) => {
                 console.log("GC-NLP-ENTITIES:", JSON.stringify(nlpResult));
 
                 // create the calendarEvent
-                const calendarEvent = createCalendarEvent(nlpResult, ocrResult);
+                const calendarEvent = createCalendarEvent(nlpResult, description_after_ocr);
                 console.log(calendarEvent);
 
                 // send success response
