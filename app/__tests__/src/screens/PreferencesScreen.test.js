@@ -1,11 +1,11 @@
-import { PreferencesScreen } from "../../../src/screens/PreferencesScreen";
-
-import React from "react";
-import Adapter from "enzyme-adapter-react-16";
-
 import Enzyme from "enzyme";
 import { shallow, mount } from "enzyme";
 import toJson from "enzyme-to-json";
+import Adapter from "enzyme-adapter-react-16";
+
+import { PreferencesScreen } from "../../../src/screens/PreferencesScreen";
+
+import React from "react";
 
 // Setup Enzyme Adapter
 Enzyme.configure({ adapter: new Adapter() });

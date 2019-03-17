@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Button,
-  Text,
   TextInput,
   ScrollView,
   View,
@@ -16,7 +15,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { modifyEvent } from "../actions/eventActions";
 
-class CalendarEventScreen extends React.Component {
+export class CalendarEventScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,6 +26,7 @@ class CalendarEventScreen extends React.Component {
       startTime: "",
       endTime: ""
     };
+    this._updateSingleStateValue = this._updateSingleStateValue.bind(this);
   }
 
   componentDidMount() {
@@ -45,37 +45,45 @@ class CalendarEventScreen extends React.Component {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputItem}
+            multiline={true}
             placeholder={"SUMMARY"}
             value={this.state.summary}
-            onChangeText={text => this.setState({ summary: text })}
+            onChangeText={text => this._updateSingleStateValue("summary", text)}
           />
 
           <TextInput
             style={styles.inputItem}
+            multiline={true}
             placeholder={"DESCRIPTION"}
             value={this.state.description}
-            onChangeText={text => this.setState({ description: text })}
+            onChangeText={text =>
+              this._updateSingleStateValue("description", text)
+            }
           />
 
           <TextInput
             style={styles.inputItem}
             placeholder={"LOCATION:"}
             value={this.state.location}
-            onChangeText={text => this.setState({ location: text })}
+            onChangeText={text =>
+              this._updateSingleStateValue("location", text)
+            }
           />
 
           <TextInput
             style={styles.inputItem}
             placeholder={"START_TIME"}
             value={this.state.startTime}
-            onChangeText={text => this.setState({ startTime: text })}
+            onChangeText={text =>
+              this._updateSingleStateValue("startTime", text)
+            }
           />
 
           <TextInput
             style={styles.inputItem}
             placeholder={"END_TIME"}
             value={this.state.endTime}
-            onChangeText={text => this.setState({ endTime: text })}
+            onChangeText={text => this._updateSingleStateValue("endTime", text)}
           />
         </View>
 
@@ -95,6 +103,12 @@ class CalendarEventScreen extends React.Component {
       </ScrollView>
     );
   }
+
+  _updateSingleStateValue = async (_key, _val) => {
+    let stateUpdate = {};
+    stateUpdate[_key] = _val;
+    await this.setState(stateUpdate);
+  };
 
   _updateEventDetails = () => {
     let oldEvent = this.props.events.currentEvent;
