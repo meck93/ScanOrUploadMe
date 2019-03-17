@@ -1,6 +1,7 @@
 import React from "react";
 import { Platform } from "react-native";
 import {
+  createAppContainer,
   createStackNavigator,
   createBottomTabNavigator
 } from "react-navigation";
@@ -66,7 +67,7 @@ const SavedStack = createStackNavigator(
   }
 );
 
-export default createBottomTabNavigator(
+const TabNavigator = createBottomTabNavigator(
   {
     CameraTab: {
       screen: CameraStack,
@@ -114,3 +115,5 @@ export default createBottomTabNavigator(
     animationEnabled: true
   }
 );
+
+export default createAppContainer(TabNavigator);
