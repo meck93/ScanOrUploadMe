@@ -1,4 +1,4 @@
-const nlpResponse = {
+const nlpResponse = [{
     entities: [
       {
         name: "Lawrence of Arabia",
@@ -58,6 +58,38 @@ const nlpResponse = {
         ]
       },
       {
+        name: "Less credible T.E. Lawrence",
+        type: "PERSON",
+        metadata: {
+          mid: "/m/0bx5v",
+          wikipedia_url: "http://en.wikipedia.org/wiki/T._E._Lawrence"
+        },
+        salience: 0.10430617,
+        mentions: [
+          {
+            text: {
+              content: "T. E. Lawrence",
+              beginOffset: 94
+            },
+            type: "PROPER"
+          },
+          {
+            text: {
+              content: "Lieutenant",
+              beginOffset: 83
+            },
+            type: "COMMON"
+          },
+          {
+            text: {
+              content: "Lawrence",
+              beginOffset: 145
+            },
+            type: "PROPER"
+          }
+        ]
+      },
+      {
         name: "British",
         type: "LOCATION",
         metadata: {
@@ -91,7 +123,7 @@ const nlpResponse = {
         ]
       },
       {
-        name: "Peter O'Toole",
+        name: "Peter O Toole",
         type: "ORGANIZATION",
         metadata: {
           mid: "/m/0h0jz",
@@ -110,6 +142,9 @@ const nlpResponse = {
       }
     ],
     language: "en"
-  }
+  },
+  undefined,
+  undefined
+];
   
   export default nlpResponse;
