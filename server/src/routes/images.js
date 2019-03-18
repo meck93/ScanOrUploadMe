@@ -7,7 +7,7 @@ import { createCalendarEvent } from "../services/calendar/calendarService";
 import { translateText } from "../services/translation/translationService";
 
 router.post("/", async (req, res) => {
-  if (!req.body || req.body.base64 === null || req.body.lang === null) {
+  if (!req.body || req.body.base64 === null) {
     // if no body is contained in the request send a upload failure response
     return res.json({
       calendarEvent: null,
@@ -18,8 +18,7 @@ router.post("/", async (req, res) => {
   } else {
     try {
       const ocrResult = await getTextFromImageBase64(
-        req.body.base64,
-        req.body.lang
+        req.body.base64
       );
 
       if (typeof ocrResult === "undefined") {
