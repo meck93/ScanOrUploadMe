@@ -1,0 +1,57 @@
+const mockOcrResponse = [
+
+[ { faceAnnotations: [],
+  landmarkAnnotations: [],
+  logoAnnotations: [],
+  labelAnnotations: [],
+  textAnnotations:
+   [ { locations: [],
+       properties: [],
+       mid: '',
+       locale: 'en',
+       description: 'hello world\n',
+       score: 0,
+       confidence: 0,
+       topicality: 0,
+       boundingPoly: [Object] },
+     { locations: [],
+       properties: [],
+       mid: '',
+       locale: '',
+       description: 'hello',
+       score: 0,
+       confidence: 0,
+       topicality: 0,
+       boundingPoly: [Object] },
+     { locations: [],
+       properties: [],
+       mid: '',
+       locale: '',
+       description: 'world',
+       score: 0,
+       confidence: 0,
+       topicality: 0,
+       boundingPoly: [Object] } ],
+  safeSearchAnnotation: null,
+  imagePropertiesAnnotation: null,
+  error: null,
+  cropHintsAnnotation: null,
+  fullTextAnnotation: { pages: [ [Object] ], text: 'hello world\n' },
+  webDetection: null } ],
+  [ { faceAnnotations: [],
+    landmarkAnnotations: [],
+    logoAnnotations: [],
+    labelAnnotations: [],
+    textAnnotations:[],
+    safeSearchAnnotation: null,
+    imagePropertiesAnnotation: null,
+    error: null,
+    cropHintsAnnotation: null,
+    fullTextAnnotation: { pages: [ [Object] ], text: 'hello world\n' },
+    webDetection: null } ], []
+
+
+
+  ];
+
+export  {mockOcrResponse};
