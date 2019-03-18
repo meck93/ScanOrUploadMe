@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { getEntitiesFromText } from "../services/nlp/entityRecognitionService";
+import { getEntitiesFromText, createClient } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64 } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
 import { translateText } from "../services/translation/translationService";
@@ -53,8 +53,11 @@ router.post("/", async (req, res) => {
         translatedText = ocrText;
       }
 
+      // create google object needed by nlp
+      const gClient = createClient();
+
       // perform entity recognition on english text
-      const nlpResult = await getEntitiesFromText(translatedText);
+      const nlpResult = await getEntitiesFromText(translatedText, gClient);
 
       if (typeof nlpResult === "undefined") {
         throw new Error("Failed! No result from GC NLP!");
