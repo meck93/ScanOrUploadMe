@@ -41,14 +41,14 @@ function nlpToEvent(nlpObject) {
   };
 }
 
-function createCalendarEvent(nlpRepsonse, ocrResult) {
+function createCalendarEvent(nlpRepsonse, ocrText) {
   let calendarEvent;
 
   // transform the OCR output to calendar content
-  const summary = ocrResult.description;
+  const summary = ocrText;
 
   // extract the date information from the OCR result
-  const dateInfo = extractDate(ocrResult);
+  const dateInfo = extractDate(ocrText);
 
   // transform NLP output to calendar content
   const nlpResult = nlpToEvent(nlpRepsonse);

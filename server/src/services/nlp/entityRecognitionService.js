@@ -39,7 +39,7 @@ async function getEntitiesFromText(text) {
       })
       .catch(err => {
         // request was unsuccessfull
-        console.error("ERROR:", err);
+        console.error("ERROR - in NLP-Service:", err);
         reject(err);
       });
   });

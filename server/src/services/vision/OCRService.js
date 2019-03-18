@@ -47,7 +47,7 @@ async function getTextFromImage(pathToImage) {
       })
       .catch(err => {
         // request was unsuccessfull
-        console.error("ERROR:", err);
+        console.error("ERROR - OCR-SERVICE:", err);
         reject(err);
       });
   });
@@ -98,7 +98,7 @@ async function getTextFromImageBase64(data) {
       })
       .catch(err => {
         // request was unsuccessfull
-        console.error("ERROR:", err);
+        console.error("ERROR - OCR-SERVICE:", err);
         reject(err);
       });
   });

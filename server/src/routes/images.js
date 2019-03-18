@@ -4,12 +4,9 @@ const router = express.Router();
 import { getEntitiesFromText } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64 } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
-import { translateFunc } from "../services/translation/translate_text";
+import { translateText } from "../services/translation/translationService";
 
-router.post("/", (req, res) => {
-  // log the endpoint to which the request was sent to
-  console.log(`Current Endpoint: ${req.headers.host}.`);
-
+router.post("/", async (req, res) => {
   if (!req.body || req.body.base64 === null) {
     // if no body is contained in the request send a upload failure response
     return res.json({
@@ -19,78 +16,75 @@ router.post("/", (req, res) => {
       success: false
     });
   } else {
-    // IMAGE has successfully been received
-    getTextFromImageBase64(req.body.base64, "en")
-      .then(ocrResult => {
-        if (typeof ocrResult === "undefined") {
-          throw new Error("Failed! No result from GC Vision!");
-        } else if (typeof ocrResult.error !== "undefined") {
-          console.log(ocrResult.error);
-          throw new Error(
-            "GC Vision was unable to access the image URL or no feedback!"
-          );
-        } else {
-          console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
+    try {
+      const ocrResult = await getTextFromImageBase64(
+        req.body.base64
+      );
 
-          let description_after_ocr;
-          const language_before_translation = ocrResult.locale;
+      if (typeof ocrResult === "undefined") {
+        throw new Error("Failed! No result from GC Vision!");
+      } else if (typeof ocrResult.error !== "undefined") {
+        throw new Error(
+          "GC Vision was unable to access the image URL or no feedback!"
+        );
+      }
 
-          if(language_before_translation === "sv"){
-            description_after_ocr = translateFunc(ocrResult.description);
-          }else{
-            description_after_ocr = ocrResult.description;
-          }
+      console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
 
-          getEntitiesFromText(description_after_ocr)
-            .then(nlpResult => {
-              if (typeof nlpResult === "undefined") {
-                throw new Error("Failed! No result from GC NLP!");
-              } else if (typeof nlpResult.error !== "undefined") {
-                console.log(nlpResult.error);
-                throw new Error("Failed! GC NLP result contains error!");
-              } else {
-                console.log("GC-NLP-ENTITIES:", JSON.stringify(nlpResult));
+      // extract OCR text language
+      const langBeforeTranslation = ocrResult.locale.toUpperCase();
 
-                // create the calendarEvent
-                const calendarEvent = createCalendarEvent(nlpResult, description_after_ocr);
-                console.log(calendarEvent);
+      // extract OCR text
+      const ocrText = ocrResult.description;
 
-                // send success response
-                return res.json({
-                  location: req.body.uri,
-                  calendarEvent: calendarEvent,
-                  msg: "Success! Upload and GC processing worked!",
-                  uploaded: true,
-                  success: true
-                });
-              }
-            })
-            .catch(err => {
-              // log error
-              console.error("GC-NLP-ERROR:", err);
+      let translatedText;
 
-              // send failure response
-              return res.json({
-                calendarEvent: null,
-                msg: err.message,
-                uploaded: true,
-                success: false
-              });
-            });
+      // translate OCR text to English to perfom entity recoginition
+      if (langBeforeTranslation !== "EN") {
+        const translationResult = await translateText(ocrText);
+
+        if (typeof translationResult === "undefined") {
+          throw new Error("Failed! No result from GC Translation!");
         }
-      })
-      .catch(err => {
-        // log error
-        console.error("GC-VISION-ERROR:", err);
+        console.log("GC-TRANSLATION:", JSON.stringify(translationResult));
+        translatedText = translationResult;
+      } else {
+        // no translation is necessary since the image contained english text
+        translatedText = ocrText;
+      }
 
-        // send failure response
-        return res.json({
-          calendarEvent: null,
-          msg: err.message,
-          uploaded: true,
-          success: false
-        });
+      // perform entity recognition on english text
+      const nlpResult = await getEntitiesFromText(translatedText);
+
+      if (typeof nlpResult === "undefined") {
+        throw new Error("Failed! No result from GC NLP!");
+      } else if (typeof nlpResult.error !== "undefined") {
+        throw new Error("Failed! GC NLP result contains error!");
+      }
+      console.log("GC-NLP-ENTITIES:", JSON.stringify(nlpResult));
+
+      // create the calendarEvent
+      const calendarEvent = createCalendarEvent(nlpResult, ocrText);
+      console.log(calendarEvent);
+
+      // send success response
+      return res.json({
+        location: req.body.uri,
+        calendarEvent: calendarEvent,
+        msg: "Success! Upload and GC processing worked!",
+        uploaded: true,
+        success: true
       });
+    } catch (error) {
+      console.log("GC-ERROR:", error);
+      // send failure response
+      return res.json({
+        calendarEvent: null,
+        msg: error.message,
+        uploaded: true,
+        success: false
+      });
+    }
   }
 });
 
