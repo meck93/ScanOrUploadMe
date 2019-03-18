@@ -2,9 +2,9 @@ import express from "express";
 const router = express.Router();
 
 import { getEntitiesFromText, createClient } from "../services/nlp/entityRecognitionService";
-import { getTextFromImageBase64 } from "../services/vision/OCRService";
+import { getTextFromImageBase64, createOcrClient } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
-import { translateText } from "../services/translation/translationService";
+import { translateText, createTranslateClient } from "../services/translation/translationService";
 
 router.post("/", async (req, res) => {
   if (!req.body || req.body.base64 === null) {
@@ -17,8 +17,10 @@ router.post("/", async (req, res) => {
     });
   } else {
     try {
+      const ocrClient = createOcrClient();
       const ocrResult = await getTextFromImageBase64(
-        req.body.base64
+        req.body.base64,
+        ocrClient
       );
 
       if (typeof ocrResult === "undefined") {
@@ -38,10 +40,11 @@ router.post("/", async (req, res) => {
       const ocrText = ocrResult.description;
 
       let translatedText;
+      const translateClient = createTranslateClient();
 
       // translate OCR text to English to perfom entity recoginition
       if (langBeforeTranslation !== "EN") {
-        const translationResult = await translateText(ocrText);
+        const translationResult = await translateText(ocrText,translateClient);
 
         if (typeof translationResult === "undefined") {
           throw new Error("Failed! No result from GC Translation!");

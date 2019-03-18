@@ -1,13 +1,19 @@
 // Imports the Google Cloud client library
 const vision = require("@google-cloud/vision").v1p1beta1;
+require('dotenv').load();
+const regeneratorRuntime = require("regenerator-runtime");
 
-// google cloud vision ocr
-async function getTextFromImage(pathToImage) {
-  // create a client and authenticate
+// Creates a client
+function createOcrClient() {
   const client = new vision.ImageAnnotatorClient({
     keyFilename: process.env.PATH_TO_CREDENTIALS
   });
+  return client;
+}
 
+// google cloud vision ocr
+async function getTextFromImage(pathToImage,client){
+  // create request
   const request = {
     image: {
       source: { imageUri: pathToImage }
@@ -54,12 +60,7 @@ async function getTextFromImage(pathToImage) {
 }
 
 // google cloud vision ocr
-async function getTextFromImageBase64(data) {
-  // create a client and authenticate
-  const client = new vision.ImageAnnotatorClient({
-    keyFilename: process.env.PATH_TO_CREDENTIALS
-  });
-
+async function getTextFromImageBase64(data, client){
   const request = {
     image: {
       content: data
@@ -97,11 +98,18 @@ async function getTextFromImageBase64(data) {
         }
       })
       .catch(err => {
-        // request was unsuccessfull
+        // request was unsuccessful
         console.error("ERROR - OCR-SERVICE:", err);
         reject(err);
       });
   });
 }
 
-export { getTextFromImage, getTextFromImageBase64 };
+/*
+const path = 'https://storage.googleapis.com/test_images_vision/image.png';
+const client = createOcrClient();
+getTextFromImage(path,client).then(function(result){
+  //console.log(result);
+});*/
+
+export { getTextFromImage, getTextFromImageBase64, createOcrClient};
