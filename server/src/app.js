@@ -8,6 +8,7 @@ const rateLimit = require("express-rate-limit");
 // import routes
 import images from "./routes/images";
 import home from "./routes/home";
+import auth from "./routes/auth";
 
 // load polyfill to make it work on old browsers
 import "@babel/polyfill";
@@ -62,6 +63,7 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 // enable different routes
 app.use("/images", images);
 app.use("/", home);
+app.use("/auth", auth);
 
 // limit the number of request to the /images API
 // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
