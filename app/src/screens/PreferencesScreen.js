@@ -18,13 +18,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setDefaultCalendar } from "../actions/calendarActions";
 import { setDefaultScanLanguage } from "../actions/settingsActions";
+import { setAccessToken, clearAccessToken } from "../actions/securityActions";
 
 class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      authorizationMessage: "",
-      accessToken: null,
+      authorizationMessage: null,
       calendarEvent: null,
       calendars: [],
       data: [
@@ -32,6 +32,10 @@ class PreferencesScreen extends React.Component {
         { name: "Swedish", value: "SE", id: 2 }
       ]
     };
+  }
+
+  componentWillReceiveProps() {
+    console.log("component received props:", this.props.security);
   }
 
   async componentDidMount() {
@@ -145,9 +149,10 @@ class PreferencesScreen extends React.Component {
             services!
           </Text>
           <Button title={"Authorize"} onPress={this._authorizeAPI} />
-          <Text>Access Token: {this.state.accessToken}</Text>
+          <Text>Access Token: {this.props.security.accessToken}</Text>
           <Button title={"Test Backend"} onPress={this._testAPI} />
           <Text>Authorization Message: {this.state.authorizationMessage}</Text>
+          <Button title={"Clear Access Token"} onPress={this._clearToken} />
         </View>
       </View>
     );
@@ -155,29 +160,38 @@ class PreferencesScreen extends React.Component {
 
   _authorizeAPI = async () => {
     const accessToken = await getAccessToken();
-    this.setState({ accessToken: accessToken });
+    this.props.setAccessToken(accessToken);
+  };
+
+  _clearToken = () => {
+    if (this.props.security.accessToken) {
+      this.props.clearAccessToken();
+      this.setState({ authorizationMessage: null });
+    }
   };
 
   _testAPI = async () => {
-    if (!this.state.accessToken) {
+    if (!this.props.security.accessToken) {
       Alert.alert("No access token - authorize first!");
       return;
     }
-    const reply = await testBackendAPI(this.state.accessToken);
+    const reply = await testBackendAPI(this.props.security.accessToken);
     this.setState({ authorizationMessage: reply._bodyText });
   };
 }
 
 const mapStateToProps = state => {
-  const { calendar, settings } = state;
-  return { calendar, settings };
+  const { calendar, security, settings } = state;
+  return { calendar, security, settings };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       setDefaultCalendar,
-      setDefaultScanLanguage
+      setDefaultScanLanguage,
+      setAccessToken,
+      clearAccessToken
     },
     dispatch
   );
