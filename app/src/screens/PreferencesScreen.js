@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setDefaultCalendar } from "../actions/calendarActions";
 import { setDefaultScanLanguage } from "../actions/settingsActions";
-import { setAccessToken, clearAccessToken } from "../actions/securityActions";
+import { setTokens, clearTokens } from "../actions/securityActions";
 
 class PreferencesScreen extends React.Component {
   constructor(props) {
@@ -32,10 +32,6 @@ class PreferencesScreen extends React.Component {
         { name: "Swedish", value: "SE", id: 2 }
       ]
     };
-  }
-
-  componentWillReceiveProps() {
-    console.log("component received props:", this.props.security);
   }
 
   async componentDidMount() {
@@ -159,13 +155,13 @@ class PreferencesScreen extends React.Component {
   }
 
   _authorizeAPI = async () => {
-    const accessToken = await getAccessToken();
-    this.props.setAccessToken(accessToken);
+    const tokens = await getAccessToken();
+    this.props.setTokens(tokens);
   };
 
   _clearToken = () => {
     if (this.props.security.accessToken) {
-      this.props.clearAccessToken();
+      this.props.clearTokens();
       this.setState({ authorizationMessage: null });
     }
   };
@@ -177,6 +173,7 @@ class PreferencesScreen extends React.Component {
     }
     const reply = await testBackendAPI(this.props.security.accessToken);
     this.setState({ authorizationMessage: reply._bodyText });
+    console.log(this.props.security);
   };
 }
 
@@ -190,8 +187,8 @@ const mapDispatchToProps = dispatch =>
     {
       setDefaultCalendar,
       setDefaultScanLanguage,
-      setAccessToken,
-      clearAccessToken
+      setTokens,
+      clearTokens
     },
     dispatch
   );

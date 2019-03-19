@@ -43,7 +43,6 @@ async function generateChallengeAndVerifier() {
     const responseJson = await response.json();
     return responseJson;
   } catch (error) {
-    console.log(error);
     throw new Error(
       `Unsuccessfull Challenge Generation Request: ${JSON.stringify(error)}`
     );
@@ -56,7 +55,7 @@ async function sendAuthChallenge(challenge) {
     response_type: "code",
     code_challenge: challenge,
     code_challenge_method: "S256",
-    scope: "openid profile email",
+    scope: "openid profile email offline_access",
     redirect_uri: REDIRECT_URL,
     audience: "https://scanoruploadme.herokuapp.com/",
     state: "ABC123"
@@ -73,9 +72,8 @@ async function sendAuthChallenge(challenge) {
   if (result.type === "success" && result.params.state === params.state) {
     return result;
   } else {
-    console.log("Unsuccessfull challenge request:", result);
     throw new Error(
-      `Unsuccessfull challenge request: ${JSON.stringify(result)}`
+      `Unsuccessfull Challenge Request: ${JSON.stringify(result)}`
     );
   }
 }
@@ -102,15 +100,68 @@ async function sendAuthCodeAndVerifier(authCode, verifier) {
     const responseJson = await response.json();
 
     if (responseJson.access_token) {
-      return responseJson.access_token;
+      // return full response object with (access_token, id_token, refresh_token)
+      return responseJson;
     } else {
       throw new Error("No Access Token Received!");
     }
   } catch (error) {
-    console.log(error);
     throw new Error(
       `Unsuccessfull Verification Request: ${JSON.stringify(error)}`
     );
+  }
+}
+
+async function refreshAccessToken(refreshToken) {
+  let body = {
+    grant_type: "refresh_token",
+    client_id: AUTH0_CLIENT_ID,
+    refresh_token: refreshToken
+  };
+
+  let options = {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body)
+  };
+
+  let apiUrl = `${AUTH0_DOMAIN}/oauth/token`;
+
+  try {
+    const response = await makeRequest(apiUrl, options);
+    const responseJson = await response.json();
+
+    if (responseJson.access_token) {
+      // return full response object with (access_token, id_token)
+      return responseJson;
+    } else {
+      throw new Error("No Access Token Received!");
+    }
+  } catch (error) {
+    throw new Error(
+      `Unsuccessfull Token Refresh Request Request: ${JSON.stringify(error)}`
+    );
+  }
+}
+
+async function getAccessToken() {
+  try {
+    // generate code challenge and verifier
+    const generationResponse = await generateChallengeAndVerifier();
+    const challenge = generationResponse.code_challenge;
+    const verifier = generationResponse.verifier;
+
+    // send auth challenge
+    const authResponse = await sendAuthChallenge(challenge);
+    const authCode = authResponse.params.code;
+
+    // send auth verification
+    const tokens = await sendAuthCodeAndVerifier(authCode, verifier);
+
+    // return retrieved tokens (access_token, id_token, refresh_token)
+    return tokens;
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -129,25 +180,6 @@ async function testBackendAPI(accessToken) {
   try {
     const response = await makeRequest(apiUrl, options);
     return response;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getAccessToken() {
-  try {
-    // generate code challenge and verifier
-    const generationResponse = await generateChallengeAndVerifier();
-    const challenge = generationResponse.code_challenge;
-    const verifier = generationResponse.verifier;
-
-    // send auth challenge
-    const authResponse = await sendAuthChallenge(challenge);
-    const authCode = authResponse.params.code;
-
-    // send auth verification
-    const accessToken = await sendAuthCodeAndVerifier(authCode, verifier);
-    return accessToken;
   } catch (error) {
     console.log(error);
   }
