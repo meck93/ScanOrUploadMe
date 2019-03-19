@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-
+const regeneratorRuntime = require("regenerator-runtime");
 import { getEntitiesFromText, createClient } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64, createOcrClient } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
