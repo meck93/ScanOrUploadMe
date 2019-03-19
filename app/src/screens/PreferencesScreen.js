@@ -6,10 +6,12 @@ import {
   Picker,
   Platform,
   Alert,
-  TouchableOpacity
+  Button
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Calendar, Permissions } from "expo";
+
+import { testBackendAPI, getAccessToken } from "../../api/authorise";
 
 // redux
 import { connect } from "react-redux";
@@ -21,6 +23,8 @@ class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      authorizationMessage: "",
+      accessToken: null,
       calendarEvent: null,
       calendars: [],
       data: [
@@ -134,9 +138,34 @@ class PreferencesScreen extends React.Component {
             <Picker.Item label="German" value={"DE"} />
           </Picker>
         </View>
+
+        <View style={styles.defaultSettingContainer}>
+          <Text style={styles.textContainer}>
+            Authorization: Authorize yourself in order to use our backend
+            services!
+          </Text>
+          <Button title={"Authorize"} onPress={this._authorizeAPI} />
+          <Text>Access Token: {this.state.accessToken}</Text>
+          <Button title={"Test Backend"} onPress={this._testAPI} />
+          <Text>Authorization Message: {this.state.authorizationMessage}</Text>
+        </View>
       </View>
     );
   }
+
+  _authorizeAPI = async () => {
+    const accessToken = await getAccessToken();
+    this.setState({ accessToken: accessToken });
+  };
+
+  _testAPI = async () => {
+    if (!this.state.accessToken) {
+      Alert.alert("No access token - authorize first!");
+      return;
+    }
+    const reply = await testBackendAPI(this.state.accessToken);
+    this.setState({ authorizationMessage: reply._bodyText });
+  };
 }
 
 const mapStateToProps = state => {
