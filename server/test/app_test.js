@@ -1,9 +1,11 @@
+process.env.NODE_ENV ='test';
 const app = require('../src/app');
 const httpMocks = require('node-mocks-http');
 const chai = require('chai');
 const expect = chai.expect;
 const assert = chai.assert;
 chai.use(require('chai-string'));
+
 
 
 

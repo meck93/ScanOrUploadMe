@@ -41,6 +41,11 @@ const sesh = {
   }
 };
 
+// really shady?
+if(app.get("env") === "test"){
+  sesh.secret = "test";
+}
+
 // ensure cookies are secure when used in production
 if (app.get("env") === "production") {
   // serve secure cookies
