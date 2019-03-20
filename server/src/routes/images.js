@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-
+const regeneratorRuntime = require("regenerator-runtime");
 import { getEntitiesFromText, createClient } from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64, createOcrClient } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
         );
       }
 
-      console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
+      //console.log("GC-VISION-RESULT:", JSON.stringify(ocrResult));
 
       // extract OCR text language
       const langBeforeTranslation = ocrResult.locale.toUpperCase();
@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
         if (typeof translationResult === "undefined") {
           throw new Error("Failed! No result from GC Translation!");
         }
-        console.log("GC-TRANSLATION:", JSON.stringify(translationResult));
+        //console.log("GC-TRANSLATION:", JSON.stringify(translationResult));
         translatedText = translationResult;
       } else {
         // no translation is necessary since the image contained english text
@@ -67,11 +67,11 @@ router.post("/", async (req, res) => {
       } else if (typeof nlpResult.error !== "undefined") {
         throw new Error("Failed! GC NLP result contains error!");
       }
-      console.log("GC-NLP-ENTITIES:", JSON.stringify(nlpResult));
+      //console.log("GC-NLP-ENTITIES:", JSON.stringify(nlpResult));
 
       // create the calendarEvent
       const calendarEvent = createCalendarEvent(nlpResult, ocrText);
-      console.log(calendarEvent);
+      //console.log(calendarEvent);
 
       // send success response
       return res.json({
