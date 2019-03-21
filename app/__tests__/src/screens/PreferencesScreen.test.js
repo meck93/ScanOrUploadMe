@@ -17,8 +17,10 @@ describe("PreferencesScreen: Shallow Render Component", () => {
 
   const calendar = { activeCalendarId: 1 };
   const settings = { scanLanguage: "EN" };
+  const security = { accessToken: "TestToken" };
 
   const initialState = {
+    authorizationMessage: null,
     calendarEvent: null,
     calendars: [],
     data: [
@@ -29,7 +31,11 @@ describe("PreferencesScreen: Shallow Render Component", () => {
 
   beforeEach(() => {
     wrapper = shallow(
-      <PreferencesScreen calendar={calendar} settings={settings} />,
+      <PreferencesScreen
+        calendar={calendar}
+        settings={settings}
+        security={security}
+      />,
       { disableLifecycleMethods: true }
     );
   });
@@ -45,6 +51,7 @@ describe("PreferencesScreen: Shallow Render Component", () => {
     const component = wrapper.instance();
 
     const newState = {
+      authorizationMessage: null,
       calendarEvent: null,
       calendars: [{ title: "Test-1", id: 1 }, { title: "Test-2", id: 2 }],
       data: [

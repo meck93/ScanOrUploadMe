@@ -2,6 +2,8 @@
 
 exports[`App Snapshot Renders the loading screen 1`] = `null`;
 
+exports[`App Snapshot Renders the root without loading completely 1`] = `null`;
+
 exports[`App Snapshot Renders the root without loading screen 1`] = `
 <View
   style={

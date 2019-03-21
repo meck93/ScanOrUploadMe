@@ -3,7 +3,7 @@ import { AuthSession, Constants } from "expo";
 
 const AUTH0_DOMAIN = "https://dev-meck93.eu.auth0.com";
 const AUTH0_CLIENT_ID = "0X74tvmbhZVT8rCy81lzukRzx1WAZp1D";
-const REDIRECT_URL = AuthSession.getRedirectUrl();
+const REDIRECT_URL = getRedirectURL();
 const BASE_API = getBaseTargetURI();
 
 function toQueryString(params) {
@@ -16,6 +16,10 @@ function toQueryString(params) {
       )
       .join("&")
   );
+}
+
+function getRedirectURL() {
+  return AuthSession.getRedirectUrl();
 }
 
 function getBaseTargetURI() {

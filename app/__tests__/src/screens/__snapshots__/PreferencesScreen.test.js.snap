@@ -96,6 +96,44 @@ exports[`PreferencesScreen: Shallow Render Component renders the component with 
       />
     </Picker>
   </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "flex-start",
+        "borderColor": "#d6d7da",
+        "borderRadius": 4,
+        "borderWidth": 0.5,
+        "display": "flex",
+        "flexDirection": "column",
+        "marginTop": 5,
+        "padding": 5,
+        "width": "100%",
+      }
+    }
+  >
+    <Component>
+      Authorization: Authorize yourself in order to use our backend services!
+    </Component>
+    <Button
+      onPress={[Function]}
+      title="Authorize"
+    />
+    <Component>
+      Access Token: 
+      TestToken
+    </Component>
+    <Button
+      onPress={[Function]}
+      title="Test Backend"
+    />
+    <Component>
+      Authorization Message: 
+    </Component>
+    <Button
+      onPress={[Function]}
+      title="Clear Access Token"
+    />
+  </Component>
 </Component>
 `;
 
@@ -188,6 +226,44 @@ exports[`PreferencesScreen: Shallow Render Component renders the component witho
         value="DE"
       />
     </Picker>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "flex-start",
+        "borderColor": "#d6d7da",
+        "borderRadius": 4,
+        "borderWidth": 0.5,
+        "display": "flex",
+        "flexDirection": "column",
+        "marginTop": 5,
+        "padding": 5,
+        "width": "100%",
+      }
+    }
+  >
+    <Component>
+      Authorization: Authorize yourself in order to use our backend services!
+    </Component>
+    <Button
+      onPress={[Function]}
+      title="Authorize"
+    />
+    <Component>
+      Access Token: 
+      TestToken
+    </Component>
+    <Button
+      onPress={[Function]}
+      title="Test Backend"
+    />
+    <Component>
+      Authorization Message: 
+    </Component>
+    <Button
+      onPress={[Function]}
+      title="Clear Access Token"
+    />
   </Component>
 </Component>
 `;

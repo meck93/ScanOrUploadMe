@@ -45,7 +45,7 @@ export class CalendarEventScreen extends React.Component {
       <ScrollView>
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.inputItem}
+            style={styles.description}
             multiline={true}
             placeholder={"SUMMARY"}
             value={this.state.summary}
@@ -102,10 +102,10 @@ export class CalendarEventScreen extends React.Component {
           </View>
         </View>
         <View style={styles.container}>
-        <View style={styles.buttonContainer}>
-          <Button onPress={this._sendByEmail} title="Email To Friend" />
+          <View style={styles.buttonContainer}>
+            <Button onPress={this._sendByEmail} title="Email To Friend" />
           </View>
-          </View>
+        </View>
       </ScrollView>
     );
   }
@@ -132,8 +132,12 @@ export class CalendarEventScreen extends React.Component {
   _sendByEmail = () => {
     const event_title = this.state.description;
     const event_description = this.state.summary;
-    Linking.openURL('mailto:?subject= Invitation to: ' + event_title + '&body= ' + event_description)
-
+    Linking.openURL(
+      "mailto://?subject= Invitation to: " +
+        event_title +
+        "&body= " +
+        event_description
+    );
   };
 
   _findEvent = () => {
@@ -290,7 +294,20 @@ const styles = StyleSheet.create({
     padding: 5
   },
   inputItem: {
-    height: 40
+    height: 40,
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: "#d6d7da",
+    padding: 1
+  },
+  description: {
+    display: "flex",
+    height: 40,
+    maxHeight: 100,
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: "#d6d7da",
+    padding: 1
   },
   container: {
     alignItems: "center",

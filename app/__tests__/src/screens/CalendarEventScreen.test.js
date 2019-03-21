@@ -1,5 +1,7 @@
+import Enzyme from "enzyme";
 import { shallow, mount } from "enzyme";
 import toJson from "enzyme-to-json";
+import Adapter from "enzyme-adapter-react-16";
 
 import { CalendarEventScreen } from "../../../src/screens/CalendarEventScreen";
 
