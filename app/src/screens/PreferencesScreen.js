@@ -20,7 +20,7 @@ import { setDefaultCalendar } from "../actions/calendarActions";
 import { setDefaultScanLanguage } from "../actions/settingsActions";
 import { setTokens, clearTokens } from "../actions/securityActions";
 
-class PreferencesScreen extends React.Component {
+export class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

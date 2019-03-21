@@ -16,26 +16,26 @@ export default (eventReducer = (state = INITIAL_STATE, action) => {
       // select the event for which the ID matches
       const [currentEvent] = events.filter(event => event.id === eventId);
 
-      // Return the new state (don't update the old state)
+      // return the new state (don't update the old state)
       return Object.assign({}, state, {
         currentEvent: currentEvent,
         currentEventId: eventId
       });
 
     case "ADD_EVENT":
-      // retrieve the eventId from the action payload
+      // retrieve the event from the action payload
       const event = action.payload;
 
       // add the event to the list of events
       const newEvents = [...events, ...[event]];
 
-      // Return the new state (don't update the old state)
+      // return the new state (don't update the old state)
       return Object.assign({}, state, {
         events: newEvents
       });
 
     case "MODIFY_EVENT":
-      // retrieve the eventId from the action payload
+      // retrieve the event from the action payload
       const newEvent = action.payload;
 
       // extract all events that don't have the same ID as the current event
@@ -44,10 +44,32 @@ export default (eventReducer = (state = INITIAL_STATE, action) => {
       // create list using the newEvent
       otherEvents = [...otherEvents, ...[newEvent]];
 
-      // Return the new state (don't update the old state)
+      // return the new state (don't update the old state)
       return Object.assign({}, state, {
         events: otherEvents
       });
+
+    case "DELETE_EVENT":
+      // retrieve the eventId from the action payload
+      const toBeDeletedId = action.payload;
+
+      // extract all events that don't have the same ID as the to be deleted event
+      let remainingEvents = events.filter(event => event.id !== toBeDeletedId);
+
+      // reset the current event if it was deleted
+      if (state.currentEventId === toBeDeletedId) {
+        // return the new state (don't update the old state)
+        return Object.assign({}, state, {
+          currentEventId: null,
+          currentEvent: null,
+          events: remainingEvents
+        });
+      } else {
+        // return the new state (don't update the old state)
+        return Object.assign({}, state, {
+          events: remainingEvents
+        });
+      }
 
     default:
       return state;
