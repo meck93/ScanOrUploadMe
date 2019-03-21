@@ -6,21 +6,25 @@ import {
   Picker,
   Platform,
   Alert,
-  TouchableOpacity
+  Button
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Calendar, Permissions } from "expo";
+
+import { testBackendAPI, getAccessToken } from "../../api/authorise";
 
 // redux
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setDefaultCalendar } from "../actions/calendarActions";
 import { setDefaultScanLanguage } from "../actions/settingsActions";
+import { setTokens, clearTokens } from "../actions/securityActions";
 
 class PreferencesScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      authorizationMessage: null,
       calendarEvent: null,
       calendars: [],
       data: [
@@ -134,21 +138,57 @@ class PreferencesScreen extends React.Component {
             <Picker.Item label="German" value={"DE"} />
           </Picker>
         </View>
+
+        <View style={styles.defaultSettingContainer}>
+          <Text style={styles.textContainer}>
+            Authorization: Authorize yourself in order to use our backend
+            services!
+          </Text>
+          <Button title={"Authorize"} onPress={this._authorizeAPI} />
+          <Text>Access Token: {this.props.security.accessToken}</Text>
+          <Button title={"Test Backend"} onPress={this._testAPI} />
+          <Text>Authorization Message: {this.state.authorizationMessage}</Text>
+          <Button title={"Clear Access Token"} onPress={this._clearToken} />
+        </View>
       </View>
     );
   }
+
+  _authorizeAPI = async () => {
+    const tokens = await getAccessToken();
+    this.props.setTokens(tokens);
+  };
+
+  _clearToken = () => {
+    if (this.props.security.accessToken) {
+      this.props.clearTokens();
+      this.setState({ authorizationMessage: null });
+    }
+  };
+
+  _testAPI = async () => {
+    if (!this.props.security.accessToken) {
+      Alert.alert("No access token - authorize first!");
+      return;
+    }
+    const reply = await testBackendAPI(this.props.security.accessToken);
+    this.setState({ authorizationMessage: reply._bodyText });
+    console.log(this.props.security);
+  };
 }
 
 const mapStateToProps = state => {
-  const { calendar, settings } = state;
-  return { calendar, settings };
+  const { calendar, security, settings } = state;
+  return { calendar, security, settings };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       setDefaultCalendar,
-      setDefaultScanLanguage
+      setDefaultScanLanguage,
+      setTokens,
+      clearTokens
     },
     dispatch
   );

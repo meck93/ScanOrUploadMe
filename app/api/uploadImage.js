@@ -43,7 +43,7 @@ function makeRequest(apiEndpoint, options) {
   });
 }
 
-async function uploadBase64(data) {
+async function uploadBase64(data, accessToken) {
   // load default URL depending if development or productive
   let { manifest } = Constants;
 
@@ -68,7 +68,8 @@ async function uploadBase64(data) {
     body: JSON.stringify(data),
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`
     }
   };
 

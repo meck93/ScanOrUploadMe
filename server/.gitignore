@@ -6,7 +6,6 @@ npm-debug.*
 *.key
 *.mobileprovision
 .env
-config/
 dist/
 uploads/
 credentials.json
