@@ -90,12 +90,12 @@ The following issues are from last week's sprint and are going to be finished th
 
 ## Video Update - ScanOrUploadMe Week 6
 
-The video for sprint 6 can be found here: 
+The video for sprint 6 can be found here: https://www.youtube.com/watch?v=zC-hbXZ8OYg
 
 
 ## Project Burndown Chart
 See the picture stored here:
 
- ![Burndown Chart Sprint 5](C:\Users\meck\code\uzh\03_fs19\ScanOrUploadMe\reporting\sprint6\burndown_chart_numero_seis.png) 
+ ![Burndown Chart Sprint 6](./burndown_chart_numero_seis.png) 
 
 and the original chart can be found here: [Live Burndown Chart](https://docs.google.com/spreadsheets/d/12GmSHIXMWHx2LpgqF7Fsc416dBMk8yJf_pnBWDaJ7bY/edit?usp=sharing)

@@ -7,13 +7,13 @@ function nlpToEvent(nlpObject) {
   // TODO: Support multiple people/organizations/etc
   // TODO: Select the entity with the highest confidence value
   nlpObject.forEach(entity => {
-    if (entity.type === "LOCATION") {
+    if (entity.type === "LOCATION" && location === undefined) {
       location = entity.name;
-    } else if (entity.type === "PERSON") {
+    } else if (entity.type === "PERSON" && person === undefined) {
       person = entity.name;
-    } else if (entity.type === "EVENT") {
+    } else if (entity.type === "EVENT" && event === undefined) {
       event = entity.name;
-    } else if (entity.type === "ORGANIZATION") {
+    } else if (entity.type === "ORGANIZATION" && organization === undefined) {
       organization = entity.name;
     }
   });
@@ -34,6 +34,11 @@ function nlpToEvent(nlpObject) {
     description = "EVENT CREATION RESULT";
   }
 
+  // the default location is "UNSPECIFIED"
+  if (location == undefined) {
+    location = "UNSPECIFIED";
+  }
+
   // Calendar event to be returned
   return {
     description: description,
@@ -41,14 +46,17 @@ function nlpToEvent(nlpObject) {
   };
 }
 
-function createCalendarEvent(nlpRepsonse, ocrResult) {
+function createCalendarEvent(nlpRepsonse, ocrText) {
+  if ( nlpRepsonse == undefined || ocrText == undefined){
+    throw new TypeError("Undefined input");
+  }
   let calendarEvent;
 
   // transform the OCR output to calendar content
-  const summary = ocrResult.description;
+  const summary = ocrText;
 
   // extract the date information from the OCR result
-  const dateInfo = extractDate(ocrResult);
+  const dateInfo = extractDate(ocrText);
 
   // transform NLP output to calendar content
   const nlpResult = nlpToEvent(nlpRepsonse);
@@ -71,7 +79,7 @@ function createCalendarEvent(nlpRepsonse, ocrResult) {
       useDefault: false
     },
     // TODO: fix wrong time being returned => currently returns UTC time
-    updated: new Date()
+    updated: new Date() + new Date().getTimezoneOffset()
   };
 
   return calendarEvent;

@@ -5,7 +5,8 @@ import {
   ScrollView,
   View,
   StyleSheet,
-  Alert
+  Alert,
+  Linking
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Calendar, Notifications } from "expo";
@@ -100,6 +101,11 @@ export class CalendarEventScreen extends React.Component {
             <Button onPress={this._updateEventDetails} title="Update Event" />
           </View>
         </View>
+        <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <Button onPress={this._sendByEmail} title="Email To Friend" />
+          </View>
+          </View>
       </ScrollView>
     );
   }
@@ -122,6 +128,12 @@ export class CalendarEventScreen extends React.Component {
 
     // update the currentEvent
     this.props.modifyEvent(oldEvent);
+  };
+  _sendByEmail = () => {
+    const event_title = this.state.description;
+    const event_description = this.state.summary;
+    Linking.openURL('mailto:?subject= Invitation to: ' + event_title + '&body= ' + event_description)
+
   };
 
   _findEvent = () => {
