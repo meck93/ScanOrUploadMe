@@ -25,11 +25,9 @@ The issues listed below are the tickets we have closed this sprint and can be fo
 
 **Not finished but currently in progress:**
 
-- ZERO!!! WE DONE BITCH!!!
+- None
 
 ## Number of tickets created and the sum of their story points
-
-- ZERO!!! WE DONE BITCH!!!
 
 **Sum of story points**: 254 story points
 
@@ -52,8 +50,6 @@ We were able to complete all planned **33 story points** apart from:
 
   - Encrypting the base64 image string => We realised that storing keys securly on the client-side is not possible. See the discussion [here!](https://github.com/IOOPM-UU/ScanOrUploadMe/issues/31).
 
-- ZERO!!! WE DONE BITCH!!!
-
 ## Video Update - ScanOrUploadMe Week 7
 
 The video for sprint 7 can be found here:
@@ -62,6 +58,6 @@ The video for sprint 7 can be found here:
 
 See the picture stored here:
 
-![Burndown Chart Sprint 7](./burndown_chart_numero_siette.png)
+![Burndown Chart Sprint 7](./burndown_chart_numero_siete.png)
 
 and the original chart can be found here: [Live Burndown Chart](https://docs.google.com/spreadsheets/d/12GmSHIXMWHx2LpgqF7Fsc416dBMk8yJf_pnBWDaJ7bY/edit?usp=sharing)

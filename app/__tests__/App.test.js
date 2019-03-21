@@ -20,4 +20,10 @@ describe("App Snapshot", () => {
     const tree = renderer.create(<App skipLoadingScreen />).toJSON();
     expect(tree).toMatchSnapshot();
   });
+
+  it("Renders the root without loading completely", async () => {
+    const tree = renderer.create(<App isLoadingComplete />).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
 });
