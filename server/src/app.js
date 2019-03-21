@@ -65,6 +65,18 @@ app.use("/images", images);
 app.use("/", home);
 app.use("/auth", auth);
 
+// handle authentication errors
+app.use(function(err, req, res, next) {
+  if (err.name === "UnauthorizedError") {
+    return res.status(403).send({
+      msg:
+        "No API access token was provided in the request. Please authenticate first!",
+      uploaded: true,
+      success: false
+    });
+  }
+});
+
 // limit the number of request to the /images API
 // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 // app.enable("trust proxy");

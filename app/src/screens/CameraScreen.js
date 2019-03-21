@@ -201,15 +201,18 @@ class CameraScreen extends React.Component {
         pickerResult["lang"] = this.props.settings.scanLanguage;
 
         // upload the image to server
-        uploadResponse = await uploadBase64(pickerResult);
+        uploadResponse = await uploadBase64(
+          pickerResult,
+          this.props.security.accessToken
+        );
         uploadResult = await uploadResponse.json();
 
         if (!uploadResult.uploaded) {
-          console.log("Uploaded to server failed.");
-          Alert.alert("Image Upload Failed!", "Uploaded to server failed.");
+          console.log(uploadResult.msg);
+          Alert.alert("Image Upload Failed!", uploadResult.msg);
         } else if (!uploadResult.success) {
-          console.log("Text Extraction Error!", uploadResult.msg);
-          Alert.alert("Text Extraction Error!", uploadResult.msg);
+          console.log("Error: Processing Upload!", uploadResult.msg);
+          Alert.alert("Error: Processing Upload!", uploadResult.msg);
         } else {
           // Upload was sucessfull and got result from Google Cloud
           this.setState({
@@ -247,8 +250,8 @@ class CameraScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { events, settings } = state;
-  return { events, settings };
+  const { events, security, settings } = state;
+  return { events, security, settings };
 };
 
 const mapDispatchToProps = dispatch =>

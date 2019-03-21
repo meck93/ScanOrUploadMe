@@ -1,12 +1,17 @@
 import express from "express";
 const router = express.Router();
 
-import { getEntitiesFromText, createClient } from "../services/nlp/entityRecognitionService";
+import jwtCheck from "../security/jwtCheck";
+
+import {
+  getEntitiesFromText,
+  createClient
+} from "../services/nlp/entityRecognitionService";
 import { getTextFromImageBase64 } from "../services/vision/OCRService";
 import { createCalendarEvent } from "../services/calendar/calendarService";
 import { translateText } from "../services/translation/translationService";
 
-router.post("/", async (req, res) => {
+router.post("/", jwtCheck, async (req, res) => {
   if (!req.body || req.body.base64 === null) {
     // if no body is contained in the request send a upload failure response
     return res.json({
@@ -17,9 +22,7 @@ router.post("/", async (req, res) => {
     });
   } else {
     try {
-      const ocrResult = await getTextFromImageBase64(
-        req.body.base64
-      );
+      const ocrResult = await getTextFromImageBase64(req.body.base64);
 
       if (typeof ocrResult === "undefined") {
         throw new Error("Failed! No result from GC Vision!");
