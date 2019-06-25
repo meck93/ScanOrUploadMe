@@ -8,7 +8,6 @@ const rateLimit = require("express-rate-limit");
 // import routes
 import images from "./routes/images";
 import home from "./routes/home";
-import auth from "./routes/auth";
 
 // load polyfill to make it work on old browsers
 import "@babel/polyfill";
@@ -31,21 +30,21 @@ app.use(cors());
 
 // Add session middleware layer
 const sesh = {
-  name: "SESS_ID",
-  secret: process.env.SECURITY_KEY,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: true,
-    httpOnly: true,
-    maxAge: 1800000 // 30 mins
-  }
+    name: "SESS_ID",
+    secret: process.env.SECURITY_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: true,
+        httpOnly: true,
+        maxAge: 1800000 // 30 mins
+    }
 };
 
 // ensure cookies are secure when used in production
 if (app.get("env") === "production") {
-  // serve secure cookies
-  sesh.cookie.secure = true;
+    // serve secure cookies
+    sesh.cookie.secure = true;
 }
 
 // make the content of the directory /uploads static and available via the link /uploads
@@ -63,18 +62,16 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 // enable different routes
 app.use("/images", images);
 app.use("/", home);
-app.use("/auth", auth);
 
 // handle authentication errors
 app.use(function(err, req, res, next) {
-  if (err.name === "UnauthorizedError") {
-    return res.status(403).send({
-      msg:
-        "No API access token was provided in the request. Please authenticate first!",
-      uploaded: true,
-      success: false
-    });
-  }
+    if (err.name === "UnauthorizedError") {
+        return res.status(403).send({
+            msg: "No API access token was provided in the request. Please authenticate first!",
+            uploaded: true,
+            success: false
+        });
+    }
 });
 
 // limit the number of request to the /images API
@@ -83,8 +80,8 @@ app.use(function(err, req, res, next) {
 
 // limit the number of API request to 100 per 15 minutes per IP address
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100
 });
 
 // only apply to requests that begin with /images/
@@ -92,11 +89,7 @@ app.use("/images/", apiLimiter);
 
 // run the server
 app.listen(port, () => {
-  console.log(
-    `Running stuff on http://${hostname}:${port}. NODE_ENV: ${
-      process.env.NODE_ENV
-    }.`
-  );
+    console.log(`Running stuff on http://${hostname}:${port}. NODE_ENV: ${process.env.NODE_ENV}.`);
 });
 
 module.exports = app; // testing
