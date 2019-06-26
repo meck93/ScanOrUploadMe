@@ -1,7 +1,7 @@
-const jwt = require("express-jwt");
-const jwks = require("jwks-rsa");
+const jwt = require('express-jwt');
+const jwks = require('jwks-rsa');
 
-require("dotenv").load();
+require('dotenv').load();
 
 const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
@@ -12,7 +12,7 @@ const jwtCheck = jwt({
   }),
   audience: process.env.AUTH0_AUDIENCE,
   issuer: process.env.AUTH0_ISSUER,
-  algorithms: ["RS256"]
+  algorithms: ['RS256']
 });
 
 export default jwtCheck;

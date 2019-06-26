@@ -7,9 +7,9 @@ const INITIAL_STATE = {
   expires_in: null
 };
 
-export default (securityReducer = (state = INITIAL_STATE, action) => {
+export default securityReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "SET_TOKENS":
+    case 'SET_TOKENS': {
       // retrieve the access token from the action's payload
       const tokens = action.payload;
 
@@ -20,8 +20,8 @@ export default (securityReducer = (state = INITIAL_STATE, action) => {
         refreshToken: tokens.refresh_token,
         expires_in: Date.now() + tokens.expires_in
       });
-
-    case "CLEAR_TOKENS":
+    }
+    case 'CLEAR_TOKENS': {
       // remove any existing access token
       // return the new state (don't update the old state)
       return Object.assign({}, state, {
@@ -30,8 +30,8 @@ export default (securityReducer = (state = INITIAL_STATE, action) => {
         refreshToken: null,
         expires_in: null
       });
-
+    }
     default:
       return state;
   }
-});
+};

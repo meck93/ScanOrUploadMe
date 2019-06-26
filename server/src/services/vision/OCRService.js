@@ -1,5 +1,5 @@
 // Imports the Google Cloud client library
-const vision = require("@google-cloud/vision").v1p1beta1;
+const vision = require('@google-cloud/vision').v1p1beta1;
 
 // google cloud vision ocr
 async function getTextFromImage(pathToImage) {
@@ -30,7 +30,7 @@ async function getTextFromImage(pathToImage) {
           if (response.textAnnotations.length === 0) {
             reject(
               new Error(
-                "No text detected in the uploaded image. Please make sure that the image you upload contains text."
+                'No text detected in the uploaded image. Please make sure that the image you upload contains text.'
               )
             );
           } else {
@@ -47,7 +47,7 @@ async function getTextFromImage(pathToImage) {
       })
       .catch(err => {
         // request was unsuccessfull
-        console.error("ERROR - OCR-SERVICE:", err);
+        console.error('ERROR - OCR-SERVICE:', err);
         reject(err);
       });
   });
@@ -81,7 +81,7 @@ async function getTextFromImageBase64(data) {
           if (response.textAnnotations.length === 0) {
             reject(
               new Error(
-                "No text detected in the uploaded image. Please make sure that the image you upload contains text."
+                'No text detected in the uploaded image. Please make sure that the image you upload contains text.'
               )
             );
           } else {
@@ -98,7 +98,7 @@ async function getTextFromImageBase64(data) {
       })
       .catch(err => {
         // request was unsuccessfull
-        console.error("ERROR - OCR-SERVICE:", err);
+        console.error('ERROR - OCR-SERVICE:', err);
         reject(err);
       });
   });

@@ -1,20 +1,22 @@
-import { makeRequest } from "./uploadImage";
-import { AuthSession, Constants } from "expo";
+import { makeRequest } from './uploadImage';
+import { AuthSession } from 'expo';
+import * as Random from 'expo-random';
+import * as Crypto from 'expo-crypto';
+import Constants from 'expo-constants';
 
-const AUTH0_DOMAIN = "https://dev-meck93.eu.auth0.com";
-const AUTH0_CLIENT_ID = "0X74tvmbhZVT8rCy81lzukRzx1WAZp1D";
+const Buffer = require('buffer/').Buffer;
+
+const AUTH0_DOMAIN = 'https://dev-meck93.eu.auth0.com';
+const AUTH0_CLIENT_ID = '0X74tvmbhZVT8rCy81lzukRzx1WAZp1D';
 const REDIRECT_URL = getRedirectURL();
 const BASE_API = getBaseTargetURI();
 
 function toQueryString(params) {
   return (
-    "?" +
+    '?' +
     Object.entries(params)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
-      .join("&")
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&')
   );
 }
 
@@ -22,47 +24,56 @@ function getRedirectURL() {
   return AuthSession.getRedirectUrl();
 }
 
+// encoding an input as base64 string and replace all characters (+, /, =) to make the encoding URL and filename safe
+// see: https://tools.ietf.org/html/rfc4648#section-5
+function base64URLEncode(str) {
+  return str
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+}
+
 function getBaseTargetURI() {
   // load default URL depending if development or productive
   let { manifest } = Constants;
 
   const api =
-    typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+    typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
       ? manifest.debuggerHost
-          .split(`:`)
+          .split(':')
           .shift()
-          .concat(`:3000`)
-      : `scanoruploadme.herokuapp.com`;
+          .concat(':3000')
+      : 'scanoruploadme.herokuapp.com';
 
   return api;
 }
 
 async function generateChallengeAndVerifier() {
-  // create target REST endpoint
-  let apiUrl = `http://${BASE_API}/auth`;
+  // generates cryptographically strong 32 bytes of pseudo-random data => IV (initialization vector)
+  const randomBytes = await Random.getRandomBytesAsync(32);
+  const arr = Buffer.from(randomBytes);
+  const verifier = base64URLEncode(arr);
 
-  try {
-    // send get request to /auth endpoint
-    const response = await makeRequest(apiUrl, {});
-    const responseJson = await response.json();
-    return responseJson;
-  } catch (error) {
-    throw new Error(
-      `Unsuccessfull Challenge Generation Request: ${JSON.stringify(error)}`
-    );
-  }
+  // produce a SHA-256 hash of the IV (in base64 format)=> code_challenge
+  const digest = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, verifier, {
+    encoding: 'base64'
+  });
+  const challenge = base64URLEncode(digest);
+
+  return [verifier, challenge];
 }
 
 async function sendAuthChallenge(challenge) {
   const params = {
     client_id: AUTH0_CLIENT_ID,
-    response_type: "code",
+    response_type: 'code',
     code_challenge: challenge,
-    code_challenge_method: "S256",
-    scope: "openid profile email offline_access",
+    code_challenge_method: 'S256',
+    scope: 'openid profile email offline_access',
     redirect_uri: REDIRECT_URL,
-    audience: "https://scanoruploadme.herokuapp.com/",
-    state: "ABC123"
+    audience: 'https://scanoruploadme.herokuapp.com/',
+    state: 'ABC123'
   };
 
   const options = toQueryString(params);
@@ -73,18 +84,16 @@ async function sendAuthChallenge(challenge) {
     authUrl: authUrl
   });
 
-  if (result.type === "success" && result.params.state === params.state) {
+  if (result.type === 'success' && result.params.state === params.state) {
     return result;
   } else {
-    throw new Error(
-      `Unsuccessfull Challenge Request: ${JSON.stringify(result)}`
-    );
+    throw new Error(`Unsuccessfull Challenge Request: ${JSON.stringify(result)}`);
   }
 }
 
 async function sendAuthCodeAndVerifier(authCode, verifier) {
   let body = {
-    grant_type: "authorization_code",
+    grant_type: 'authorization_code',
     code_verifier: encodeURIComponent(verifier),
     code: authCode,
     client_id: AUTH0_CLIENT_ID,
@@ -92,8 +101,8 @@ async function sendAuthCodeAndVerifier(authCode, verifier) {
   };
 
   let options = {
-    method: "POST",
-    headers: { "content-type": "application/json" },
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body)
   };
 
@@ -107,25 +116,23 @@ async function sendAuthCodeAndVerifier(authCode, verifier) {
       // return full response object with (access_token, id_token, refresh_token)
       return responseJson;
     } else {
-      throw new Error("No Access Token Received!");
+      throw new Error('No Access Token Received!');
     }
   } catch (error) {
-    throw new Error(
-      `Unsuccessfull Verification Request: ${JSON.stringify(error)}`
-    );
+    throw new Error(`Unsuccessfull Verification Request: ${JSON.stringify(error)}`);
   }
 }
 
 async function refreshAccessToken(refreshToken) {
   let body = {
-    grant_type: "refresh_token",
+    grant_type: 'refresh_token',
     client_id: AUTH0_CLIENT_ID,
     refresh_token: refreshToken
   };
 
   let options = {
-    method: "POST",
-    headers: { "content-type": "application/json" },
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body)
   };
 
@@ -139,21 +146,17 @@ async function refreshAccessToken(refreshToken) {
       // return full response object with (access_token, id_token)
       return responseJson;
     } else {
-      throw new Error("No Access Token Received!");
+      throw new Error('No Access Token Received!');
     }
   } catch (error) {
-    throw new Error(
-      `Unsuccessfull Token Refresh Request Request: ${JSON.stringify(error)}`
-    );
+    throw new Error(`Unsuccessfull Token Refresh Request Request: ${JSON.stringify(error)}`);
   }
 }
 
 async function getAccessToken() {
   try {
     // generate code challenge and verifier
-    const generationResponse = await generateChallengeAndVerifier();
-    const challenge = generationResponse.code_challenge;
-    const verifier = generationResponse.verifier;
+    const [verifier, challenge] = await generateChallengeAndVerifier();
 
     // send auth challenge
     const authResponse = await sendAuthChallenge(challenge);
@@ -165,14 +168,14 @@ async function getAccessToken() {
     // return retrieved tokens (access_token, id_token, refresh_token)
     return tokens;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
 async function testBackendAPI(accessToken) {
   // create http POST request options
   let options = {
-    method: "GET",
+    method: 'GET',
     headers: {
       authorization: `Bearer ${accessToken}`
     }
@@ -185,14 +188,8 @@ async function testBackendAPI(accessToken) {
     const response = await makeRequest(apiUrl, options);
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
-export {
-  generateChallengeAndVerifier,
-  sendAuthChallenge,
-  sendAuthCodeAndVerifier,
-  getAccessToken,
-  testBackendAPI
-};
+export { generateChallengeAndVerifier, sendAuthChallenge, sendAuthCodeAndVerifier, getAccessToken, testBackendAPI };

@@ -1,7 +1,7 @@
 // Imports the Google Cloud client library
-import { LanguageServiceClient } from "@google-cloud/language";
+import { LanguageServiceClient } from '@google-cloud/language';
 
-const regeneratorRuntime = require("regenerator-runtime");
+const regeneratorRuntime = require('regenerator-runtime');
 require('dotenv').load();
 
 // Creates a client
@@ -14,13 +14,15 @@ function createClient() {
 }
 
 async function getEntitiesFromText(text, client) {
-  if(text === undefined) { throw new Error("Undefined input"); }
+  if (text === undefined) {
+    throw new Error('Undefined input');
+  }
 
   // Prepares a document, representing the provided text
   const document = {
     content: text,
-    type: "PLAIN_TEXT",
-    language: "en"
+    type: 'PLAIN_TEXT',
+    language: 'en'
   };
 
   return new Promise((resolve, reject) => {
@@ -48,7 +50,7 @@ async function getEntitiesFromText(text, client) {
       })
       .catch(err => {
         // request was unsuccessfull
-        console.error("ERROR - in NLP-Service:", err);
+        console.error('ERROR - in NLP-Service:', err);
         reject(err);
       });
   });

@@ -1,12 +1,12 @@
-import Enzyme from "enzyme";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
-import Adapter from "enzyme-adapter-react-16";
+import { shallow, mount } from Enzyme from 'enzyme';
 
-import { SavedEventsScreen } from "../../../src/screens/SavedEventsScreen";
+import toJson from 'enzyme-to-json';
+import Adapter from 'enzyme-adapter-react-16';
 
-import React from "react";
-import renderer from "react-test-renderer";
+import { SavedEventsScreen } from '../../../src/screens/SavedEventsScreen';
+
+import React from 'react';
+import renderer from 'react-test-renderer';
 // import Enzyme from "enzyme/build";
 // import Adapter from "enzyme-adapter-react-16/build";
 
@@ -15,48 +15,45 @@ let start = new Date(now.setHours(now.getHours() + 1)).toString();
 let end = new Date(now.setHours(now.getHours() + 2)).toString();
 
 let calendarEvent = {
-  description: "Guava Peeling Party",
+  description: 'Guava Peeling Party',
   id: 1234,
-  picUri: "https://t2.rbxcdn.com/34e222a0bf98d0a46de65de2ece139eb",
-  summary:
-    "Hi John\nI would like to invite you to my birthday party!\nBest James",
-  location: "Klostergatan, Uppsala, Sweden",
+  picUri: 'https://t2.rbxcdn.com/34e222a0bf98d0a46de65de2ece139eb',
+  summary: 'Hi John\nI would like to invite you to my birthday party!\nBest James',
+  location: 'Klostergatan, Uppsala, Sweden',
   startTime: start,
   endTime: end,
   reminders: {
-    overrides: [{ method: "popup", minutes: 15 }],
+    overrides: [{ method: 'popup', minutes: 15 }],
     useDefault: false
   },
   updated: Date()
 };
 
 let calendarEvent2 = {
-  description: "Puppy Petting Party",
+  description: 'Puppy Petting Party',
   id: 5555,
-  picUri: "https://t2.rbxcdn.com/34e222a0bf98d0a46de65de2ece139eb",
-  summary:
-    "Hi John\nI would like to invite you to my Puppy Petting Party!\nBest James",
-  location: "Klostergatan, Uppsala, Sweden",
+  picUri: 'https://t2.rbxcdn.com/34e222a0bf98d0a46de65de2ece139eb',
+  summary: 'Hi John\nI would like to invite you to my Puppy Petting Party!\nBest James',
+  location: 'Klostergatan, Uppsala, Sweden',
   startTime: start,
   endTime: end,
   reminders: {
-    overrides: [{ method: "popup", minutes: 15 }],
+    overrides: [{ method: 'popup', minutes: 15 }],
     useDefault: false
   },
   updated: Date()
 };
 
 let calendarEvent3 = {
-  description: "Confetti Party",
+  description: 'Confetti Party',
   id: 5050,
-  picUri: "https://t2.rbxcdn.com/34e222a0bf98d0a46de65de2ece139eb",
-  summary:
-    "Hi ho, hi,ho \nI would like to invite you to my Puppy Petting Party!\nBest James",
-  location: "Klostergatan, Uppsala, Sweden",
+  picUri: 'https://t2.rbxcdn.com/34e222a0bf98d0a46de65de2ece139eb',
+  summary: 'Hi ho, hi,ho \nI would like to invite you to my Puppy Petting Party!\nBest James',
+  location: 'Klostergatan, Uppsala, Sweden',
   startTime: start,
   endTime: end,
   reminders: {
-    overrides: [{ method: "popup", minutes: 15 }],
+    overrides: [{ method: 'popup', minutes: 15 }],
     useDefault: false
   },
   updated: Date()
@@ -72,7 +69,7 @@ let calendarEvent3 = {
             this.props.events.events
           }
 */
-describe("SavedEventsScreen: Tests", () => {
+describe('SavedEventsScreen: Tests', () => {
   const noEvents = {
     data: [],
     imageUri: null,
@@ -82,7 +79,7 @@ describe("SavedEventsScreen: Tests", () => {
 
   const someEvents = {
     data: [calendarEvent, calendarEvent2, calendarEvent3],
-    imageUri: "herehere",
+    imageUri: 'herehere',
     imageId: 1234,
     displayImage: true
   };
@@ -97,8 +94,8 @@ describe("SavedEventsScreen: Tests", () => {
     });
   });
 
-  describe("SavedEventsScreen: Shallow Render Component", () => {
-    it("Saved events: renders the component without any real events", () => {
+  describe('SavedEventsScreen: Shallow Render Component', () => {
+    it('Saved events: renders the component without any real events', () => {
       const wrapper = shallow(<SavedEventsScreen events={noEvents} />);
       //{ disableLifecycleMethods: true }
       const component = wrapper.instance();
@@ -118,7 +115,7 @@ describe("SavedEventsScreen: Tests", () => {
       expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("Saved events: renders the component with a list of events", () => {
+    it('Saved events: renders the component with a list of events', () => {
       const wrapper = shallow(<SavedEventsScreen events={noEvents} />);
       const component = wrapper.instance();
       const newState = {
@@ -129,7 +126,7 @@ describe("SavedEventsScreen: Tests", () => {
       };
       component.setState({
         data: [calendarEvent, calendarEvent2, calendarEvent3],
-        imageUri: "herehere",
+        imageUri: 'herehere',
         imageId: 1234,
         displayImage: true
       });

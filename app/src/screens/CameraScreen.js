@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   ActivityIndicator,
@@ -11,19 +11,20 @@ import {
   View,
   Alert,
   Platform
-} from "react-native";
-import { ImagePicker, Permissions } from "expo";
-import { uploadBase64 } from "../../api/uploadImage";
-import { withNavigation } from "react-navigation";
+} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import { uploadBase64 } from '../../api/uploadImage';
+import { withNavigation } from 'react-navigation';
 
 // Actionbuttons
-import ActionButton from "react-native-action-button";
-import { Ionicons } from "@expo/vector-icons";
+import ActionButton from 'react-native-action-button';
+import { Ionicons } from '@expo/vector-icons';
 
 // redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { addEvent, setCurrentEvent } from "../actions/eventActions";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { addEvent, setCurrentEvent } from '../actions/eventActions';
 
 class CameraScreen extends React.Component {
   constructor(props) {
@@ -49,58 +50,6 @@ class CameraScreen extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <View style={styles.mainContainer}>
-        <StatusBar barStyle="default" />
-
-        <View style={styles.textContainer}>
-          <Text style={styles.mainText}>
-            Choose how you are going to provide the input image.
-          </Text>
-        </View>
-
-        {this._maybeRenderImage()}
-        {this._maybeRenderUploadingOverlay()}
-
-        <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item
-            buttonColor="#9b59b6"
-            title="Take a picture"
-            onPress={this._takePhoto}
-          >
-            <Ionicons
-              name={Platform.OS === "ios" ? "ios-camera" : "md-camera"}
-              style={styles.actionButtonIcon}
-            />
-          </ActionButton.Item>
-
-          <ActionButton.Item
-            buttonColor="#3498db"
-            title="Select an image"
-            onPress={this._pickImage}
-          >
-            <Ionicons
-              name={Platform.OS === "ios" ? "ios-image" : "md-image"}
-              style={styles.actionButtonIcon}
-            />
-          </ActionButton.Item>
-
-          <ActionButton.Item
-            buttonColor="#1abc9c"
-            title="Reset Homescreen"
-            onPress={this._reset}
-          >
-            <Ionicons
-              name={Platform.OS === "ios" ? "ios-close" : "md-close"}
-              style={styles.actionButtonIcon}
-            />
-          </ActionButton.Item>
-        </ActionButton>
-      </View>
-    );
-  }
-
   _maybeRenderUploadingOverlay = () => {
     if (this.state.uploading) {
       return (
@@ -108,9 +57,9 @@ class CameraScreen extends React.Component {
           style={[
             StyleSheet.absoluteFill,
             {
-              backgroundColor: "rgba(0,0,0,0.4)",
-              alignItems: "center",
-              justifyContent: "center"
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              alignItems: 'center',
+              justifyContent: 'center'
             }
           ]}
         >
@@ -134,13 +83,10 @@ class CameraScreen extends React.Component {
           style={{
             borderTopRightRadius: 3,
             borderTopLeftRadius: 3,
-            overflow: "hidden"
+            overflow: 'hidden'
           }}
         >
-          <Image
-            source={{ uri: image }}
-            style={{ height: "100%", width: "100%", resizeMode: "contain" }}
-          />
+          <Image source={{ uri: image }} style={{ height: '100%', width: '100%', resizeMode: 'contain' }} />
         </View>
       </View>
     );
@@ -150,7 +96,7 @@ class CameraScreen extends React.Component {
   _share = () => {
     Share.share({
       message: `Check out this photo: ${this.state.image}`,
-      title: "Check out this photo!",
+      title: 'Check out this photo!',
       url: this.state.image
     });
   };
@@ -158,7 +104,7 @@ class CameraScreen extends React.Component {
   // copy link URL triggered by press on image URL
   _copyToClipboard = () => {
     Clipboard.setString(this.state.image);
-    Alert.alert("Copied URL to clipboard");
+    Alert.alert('Copied URL to clipboard');
   };
 
   // remove currently display image
@@ -198,21 +144,18 @@ class CameraScreen extends React.Component {
 
       if (!pickerResult.cancelled) {
         // create object to send to server
-        pickerResult["lang"] = this.props.settings.scanLanguage;
+        pickerResult['lang'] = this.props.settings.scanLanguage;
 
         // upload the image to server
-        uploadResponse = await uploadBase64(
-          pickerResult,
-          this.props.security.accessToken
-        );
+        uploadResponse = await uploadBase64(pickerResult, this.props.security.accessToken);
         uploadResult = await uploadResponse.json();
 
         if (!uploadResult.uploaded) {
           console.log(uploadResult.msg);
-          Alert.alert("Image Upload Failed!", uploadResult.msg);
+          Alert.alert('Image Upload Failed!', uploadResult.msg);
         } else if (!uploadResult.success) {
-          console.log("Error: Processing Upload!", uploadResult.msg);
-          Alert.alert("Error: Processing Upload!", uploadResult.msg);
+          console.log('Error: Processing Upload!', uploadResult.msg);
+          Alert.alert('Error: Processing Upload!', uploadResult.msg);
         } else {
           // Upload was sucessfull and got result from Google Cloud
           this.setState({
@@ -233,7 +176,7 @@ class CameraScreen extends React.Component {
           this.props.setCurrentEvent(uploadResult.calendarEvent.id);
 
           // navigate to the calendarEvent screen
-          this.props.navigation.navigate("Calendar");
+          this.props.navigation.navigate('Calendar');
         }
       }
     } catch (error) {
@@ -242,11 +185,40 @@ class CameraScreen extends React.Component {
       console.log({ responseJson });
       console.log({ error });
 
-      Alert.alert("Upload Failed!", error.message);
+      Alert.alert('Upload Failed!', error.message);
     } finally {
       this.setState({ uploading: false });
     }
   };
+
+  render() {
+    return (
+      <View style={styles.mainContainer}>
+        <StatusBar barStyle="default" />
+
+        <View style={styles.textContainer}>
+          <Text style={styles.mainText}>Choose how you are going to provide the input image.</Text>
+        </View>
+
+        {this._maybeRenderImage()}
+        {this._maybeRenderUploadingOverlay()}
+
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+          <ActionButton.Item buttonColor="#9b59b6" title="Take a picture" onPress={this._takePhoto}>
+            <Ionicons name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'} style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+
+          <ActionButton.Item buttonColor="#3498db" title="Select an image" onPress={this._pickImage}>
+            <Ionicons name={Platform.OS === 'ios' ? 'ios-image' : 'md-image'} style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+
+          <ActionButton.Item buttonColor="#1abc9c" title="Reset Homescreen" onPress={this._reset}>
+            <Ionicons name={Platform.OS === 'ios' ? 'ios-close' : 'md-close'} style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
+      </View>
+    );
+  }
 }
 
 const mapStateToProps = state => {
@@ -269,44 +241,44 @@ export default connect(
 )(withNavigation(CameraScreen));
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-    marginHorizontal: 5,
-    padding: 5,
-    width: 300,
-    height: 475,
-    borderRadius: 3,
-    shadowColor: "rgba(0,0,0,1)",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 4, height: 4 },
-    shadowRadius: 5
+  actionButtonIcon: {
+    color: 'white',
+    fontSize: 20,
+    height: 22
   },
   container: {
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
     marginBottom: 20
   },
-  textContainer: {
-    alignItems: "center",
-    marginHorizontal: 10,
-    marginTop: 10
-  },
-  mainText: {
-    fontSize: 16,
-    color: "rgba(96,100,109, 1)",
-    lineHeight: 24,
-    textAlign: "center"
-  },
-  actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: "white"
+  imageContainer: {
+    borderRadius: 3,
+    height: 475,
+    marginBottom: 10,
+    marginHorizontal: 5,
+    marginTop: 10,
+    padding: 5,
+    shadowColor: 'rgba(0,0,0,1)',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    width: 300
   },
   mainContainer: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "flex-start"
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  mainText: {
+    color: 'rgba(96,100,109, 1)',
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: 'center'
+  },
+  textContainer: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginTop: 10
   }
 });

@@ -3,11 +3,8 @@
     "name": "ScanOrUploadMe",
     "slug": "scanoruploadme",
     "privacy": "public",
-    "sdkVersion": "32.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "sdkVersion": "33.0.0",
+    "platforms": ["ios", "android"],
     "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,17 +16,15 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "se.uu.ioopm.pss19.scanoruploadme"
+      "bundleIdentifier": "ch.eck.scanoruploadme"
     },
     "android": {
-      "package": "se.uu.ioopm.pss19.scanoruploadme"
+      "package": "ch.eck.scanoruploadme"
     },
     "description": "",
-    "githubUrl": "https://github.com/IOOPM-UU/ScanOrUploadMe"
+    "githubUrl": "https://github.com/meck93/ScanOrUploadMe"
   }
 }

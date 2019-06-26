@@ -1,12 +1,16 @@
-import React from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
-import { AppLoading, Asset, Font, Icon } from "expo";
-import TabNavigator from "./src/navigation/TabNavigator";
+import React from 'react';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Icon from '@expo/vector-icons';
+import * as Font from 'expo-font';
+
+import TabNavigator from './src/navigation/TabNavigator';
 
 // Redux
-import { createStore } from "redux";
-import { Provider } from "react-redux";
-import reducers from "./src/reducers/index";
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import reducers from './src/reducers/index';
 
 // global store
 const store = createStore(reducers);
@@ -19,32 +23,11 @@ export default class App extends React.Component {
     };
   }
 
-  render() {
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-      return (
-        <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
-        />
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          <Provider store={store}>
-            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-            <TabNavigator />
-          </Provider>
-        </View>
-      );
-    }
-  }
-
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require("./assets/images/robot-dev.png"),
-        require("./assets/images/robot-prod.png")
+        require('./assets/images/icon.png'),
+        require('./assets/images/splash.png')
       ]),
       Font.loadAsync({
         // tab bar font
@@ -61,11 +44,32 @@ export default class App extends React.Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
+
+  render() {
+    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+      return (
+        <AppLoading
+          startAsync={this._loadResourcesAsync}
+          onError={this._handleLoadingError}
+          onFinish={this._handleFinishLoading}
+        />
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Provider store={store}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <TabNavigator />
+          </Provider>
+        </View>
+      );
+    }
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff',
+    flex: 1
   }
 });

@@ -1,6 +1,6 @@
-const { Translate } = require("@google-cloud/translate");
-const regeneratorRuntime = require("regenerator-runtime");
-const delay = require("delay");
+const { Translate } = require('@google-cloud/translate');
+const regeneratorRuntime = require('regenerator-runtime');
+const delay = require('delay');
 
 // receives target language and translates text to english
 async function translateText(textToTranslate) {
@@ -10,7 +10,7 @@ async function translateText(textToTranslate) {
   });
 
   // translate target lang = english
-  const targetLanguage = "EN";
+  const targetLanguage = 'EN';
 
   return new Promise((resolve, reject) => {
     // translate the text
@@ -23,7 +23,7 @@ async function translateText(textToTranslate) {
       })
       .catch(error => {
         // request was unsuccessfull
-        console.error("ERROR - TRANSLATION-SERVICE:", err);
+        console.error('ERROR - TRANSLATION-SERVICE:', err);
         reject(error);
       });
   });

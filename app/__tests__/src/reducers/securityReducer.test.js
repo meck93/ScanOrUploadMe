@@ -1,8 +1,8 @@
-import securityReducer from "../../../src/reducers/securityReducer";
-import { setTokens, clearTokens } from "../../../src/actions/securityActions";
+import securityReducer from '../../../src/reducers/securityReducer';
+import { setTokens, clearTokens } from '../../../src/actions/securityActions';
 
-describe("Redux: Security Reducer", () => {
-  it("should return the initial state", () => {
+describe('Redux: Security Reducer', () => {
+  it('should return the initial state', () => {
     const mockRepsonseInit = {
       accessToken: null,
       idToken: null,
@@ -13,18 +13,18 @@ describe("Redux: Security Reducer", () => {
     expect(securityReducer(undefined, {})).toEqual(mockRepsonseInit);
   });
 
-  it("should handle SET_ACCESS_TOKEN", () => {
+  it('should handle SET_ACCESS_TOKEN', () => {
     const tokens = {
-      access_token: "TEST-ACCESS",
-      id_token: "TEST-ID",
-      refresh_token: "TEST-REFRESH",
+      access_token: 'TEST-ACCESS',
+      id_token: 'TEST-ID',
+      refresh_token: 'TEST-REFRESH',
       expires_in: 86400
     };
 
     const mockResponseSet = {
-      accessToken: "TEST-ACCESS",
-      idToken: "TEST-ID",
-      refreshToken: "TEST-REFRESH",
+      accessToken: 'TEST-ACCESS',
+      idToken: 'TEST-ID',
+      refreshToken: 'TEST-REFRESH',
       expires_in: Date.now() + 86400
     };
 
@@ -34,11 +34,11 @@ describe("Redux: Security Reducer", () => {
     expect(state.refreshToken).toEqual(mockResponseSet.refreshToken);
   });
 
-  it("should handle CLEAR_ACCESS_TOKEN", () => {
+  it('should handle CLEAR_ACCESS_TOKEN', () => {
     const someState = {
-      accessToken: "TEST-ACCESS",
-      idToken: "TEST-ID",
-      refreshToken: "TEST-REFRESH",
+      accessToken: 'TEST-ACCESS',
+      idToken: 'TEST-ID',
+      refreshToken: 'TEST-REFRESH',
       expires_in: Date.now() + 86400
     };
 

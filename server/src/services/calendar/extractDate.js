@@ -1,10 +1,10 @@
 // chrono time parser
-const chrono = require("chrono-node");
+const chrono = require('chrono-node');
 
 // function that uses chrono to extract start and end times, returns description without newlines
 export default function extractDate(text) {
   // description as string, remove line breaks
-  const desc = text.toString().replace(/(\r\n|\n|\r)/gm, "");
+  const desc = text.toString().replace(/(\r\n|\n|\r)/gm, '');
 
   // parse the string and try to extract the date
   const results = chrono.parse(desc);

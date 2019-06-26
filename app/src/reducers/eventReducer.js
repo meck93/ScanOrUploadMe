@@ -6,10 +6,10 @@ const INITIAL_STATE = {
   events: []
 };
 
-export default (eventReducer = (state = INITIAL_STATE, action) => {
+export default eventReducer = (state = INITIAL_STATE, action) => {
   const { events } = state;
   switch (action.type) {
-    case "SET_CURRENT_EVENT":
+    case 'SET_CURRENT_EVENT': {
       // retrieve the eventId from the action payload
       const eventId = action.payload;
 
@@ -21,8 +21,8 @@ export default (eventReducer = (state = INITIAL_STATE, action) => {
         currentEvent: currentEvent,
         currentEventId: eventId
       });
-
-    case "ADD_EVENT":
+    }
+    case 'ADD_EVENT': {
       // retrieve the event from the action payload
       const event = action.payload;
 
@@ -33,8 +33,8 @@ export default (eventReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         events: newEvents
       });
-
-    case "MODIFY_EVENT":
+    }
+    case 'MODIFY_EVENT': {
       // retrieve the event from the action payload
       const newEvent = action.payload;
 
@@ -48,8 +48,8 @@ export default (eventReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         events: otherEvents
       });
-
-    case "DELETE_EVENT":
+    }
+    case 'DELETE_EVENT': {
       // retrieve the eventId from the action payload
       const toBeDeletedId = action.payload;
 
@@ -70,8 +70,8 @@ export default (eventReducer = (state = INITIAL_STATE, action) => {
           events: remainingEvents
         });
       }
-
+    }
     default:
       return state;
   }
-});
+};

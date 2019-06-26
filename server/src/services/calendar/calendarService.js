@@ -1,4 +1,4 @@
-import extractDate from "./extractDate";
+import extractDate from './extractDate';
 
 function nlpToEvent(nlpObject) {
   let organization, person, description, location, event;
@@ -7,13 +7,13 @@ function nlpToEvent(nlpObject) {
   // TODO: Support multiple people/organizations/etc
   // TODO: Select the entity with the highest confidence value
   nlpObject.forEach(entity => {
-    if (entity.type === "LOCATION" && location === undefined) {
+    if (entity.type === 'LOCATION' && location === undefined) {
       location = entity.name;
-    } else if (entity.type === "PERSON" && person === undefined) {
+    } else if (entity.type === 'PERSON' && person === undefined) {
       person = entity.name;
-    } else if (entity.type === "EVENT" && event === undefined) {
+    } else if (entity.type === 'EVENT' && event === undefined) {
       event = entity.name;
-    } else if (entity.type === "ORGANIZATION" && organization === undefined) {
+    } else if (entity.type === 'ORGANIZATION' && organization === undefined) {
       organization = entity.name;
     }
   });
@@ -23,20 +23,20 @@ function nlpToEvent(nlpObject) {
     description = event;
 
     if (organization !== undefined) {
-      description = description + ", " + organization;
+      description = description + ', ' + organization;
     }
 
     if (person !== undefined) {
-      description = description + ", " + person;
+      description = description + ', ' + person;
     }
   } else {
     // the default description is "EVENT CREATION RESULT"
-    description = "EVENT CREATION RESULT";
+    description = 'EVENT CREATION RESULT';
   }
 
   // the default location is "UNSPECIFIED"
   if (location == undefined) {
-    location = "UNSPECIFIED";
+    location = 'UNSPECIFIED';
   }
 
   // Calendar event to be returned
@@ -47,8 +47,8 @@ function nlpToEvent(nlpObject) {
 }
 
 function createCalendarEvent(nlpRepsonse, ocrText) {
-  if ( nlpRepsonse == undefined || ocrText == undefined){
-    throw new TypeError("Undefined input");
+  if (nlpRepsonse == undefined || ocrText == undefined) {
+    throw new TypeError('Undefined input');
   }
   let calendarEvent;
 
@@ -72,7 +72,7 @@ function createCalendarEvent(nlpRepsonse, ocrText) {
     reminders: {
       overrides: [
         {
-          method: "popup",
+          method: 'popup',
           minutes: 15
         }
       ],

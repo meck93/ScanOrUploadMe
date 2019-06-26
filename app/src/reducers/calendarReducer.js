@@ -4,9 +4,9 @@ const INITIAL_STATE = {
   activeCalendarId: null
 };
 
-export default (calendarReducer = (state = INITIAL_STATE, action) => {
+export default calendarReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "SET_DEFAULT_CALENDAR":
+    case 'SET_DEFAULT_CALENDAR': {
       // retrieve the calendarId from the action payload
       const calendarId = action.payload;
 
@@ -14,8 +14,8 @@ export default (calendarReducer = (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, {
         activeCalendarId: calendarId
       });
-
+    }
     default:
       return state;
   }
-});
+};

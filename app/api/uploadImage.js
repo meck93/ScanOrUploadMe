@@ -1,4 +1,4 @@
-import { Constants } from "expo";
+import Constants from 'expo-constants';
 
 function makeRequest(apiEndpoint, options) {
   // timeout interval 15 seconds
@@ -12,7 +12,7 @@ function makeRequest(apiEndpoint, options) {
       didTimeOut = true;
       reject(
         new Error(
-          "The request has timed out. Unfortunately, the server cannot be reached. Check if you are connected to the Internet."
+          'The request has timed out. Unfortunately, the server cannot be reached. Check if you are connected to the Internet.'
         )
       );
     }, FETCH_TIMEOUT);
@@ -29,11 +29,11 @@ function makeRequest(apiEndpoint, options) {
         }
       })
       .catch(error => {
-        console.log("Fetch Failed!", error);
+        console.log('Fetch Failed!', error);
 
         // rejection already happend with setTimeout
         if (didTimeOut) {
-          console.log("Request had already timed out");
+          console.log('Request had already timed out');
           return;
         }
 
@@ -48,27 +48,27 @@ async function uploadBase64(data, accessToken) {
   let { manifest } = Constants;
 
   const api =
-    typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
+    typeof manifest.packagerOpts === 'object' && manifest.packagerOpts.dev
       ? manifest.debuggerHost
-          .split(`:`)
+          .split(':')
           .shift()
-          .concat(`:3000`)
-      : `scanoruploadme.herokuapp.com`;
+          .concat(':3000')
+      : 'scanoruploadme.herokuapp.com';
 
   // create target REST endpoint
   let apiUrl = `http://${api}/images`;
 
   // ensure that there are no line breaks inside the base64 encoded image string
-  let base64image = data.base64.replace(/(?:\r\n|\r|\n)/g, "");
+  let base64image = data.base64.replace(/(?:\r\n|\r|\n)/g, '');
   data.base64 = base64image;
 
   // create http POST request options
   let options = {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(data),
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`
     }
   };

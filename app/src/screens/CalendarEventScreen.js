@@ -1,31 +1,24 @@
-import React from "react";
-import {
-  Button,
-  TextInput,
-  ScrollView,
-  View,
-  StyleSheet,
-  Alert,
-  Linking
-} from "react-native";
-import { withNavigation } from "react-navigation";
-import { Calendar, Notifications } from "expo";
+import React from 'react';
+import { Button, TextInput, ScrollView, View, StyleSheet, Alert, Linking } from 'react-native';
+import { withNavigation } from 'react-navigation';
+import { Notifications } from 'expo';
+import * as Calendar from 'expo-calendar';
 
 // redux
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { modifyEvent } from "../actions/eventActions";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { modifyEvent } from '../actions/eventActions';
 
 export class CalendarEventScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
-      summary: "",
-      description: "",
-      location: "",
-      startTime: "",
-      endTime: ""
+      id: '',
+      summary: '',
+      description: '',
+      location: '',
+      startTime: '',
+      endTime: ''
     };
     this._updateSingleStateValue = this._updateSingleStateValue.bind(this);
   }
@@ -38,76 +31,6 @@ export class CalendarEventScreen extends React.Component {
       Alert.alert(error);
       console.log({ error });
     }
-  }
-
-  render() {
-    return (
-      <ScrollView>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.description}
-            multiline={true}
-            placeholder={"SUMMARY"}
-            value={this.state.summary}
-            onChangeText={text => this._updateSingleStateValue("summary", text)}
-          />
-
-          <TextInput
-            style={styles.inputItem}
-            multiline={true}
-            placeholder={"DESCRIPTION"}
-            value={this.state.description}
-            onChangeText={text =>
-              this._updateSingleStateValue("description", text)
-            }
-          />
-
-          <TextInput
-            style={styles.inputItem}
-            placeholder={"LOCATION:"}
-            value={this.state.location}
-            onChangeText={text =>
-              this._updateSingleStateValue("location", text)
-            }
-          />
-
-          <TextInput
-            style={styles.inputItem}
-            placeholder={"START_TIME"}
-            value={this.state.startTime}
-            onChangeText={text =>
-              this._updateSingleStateValue("startTime", text)
-            }
-          />
-
-          <TextInput
-            style={styles.inputItem}
-            placeholder={"END_TIME"}
-            value={this.state.endTime}
-            onChangeText={text => this._updateSingleStateValue("endTime", text)}
-          />
-        </View>
-
-        <View style={styles.container}>
-          <View style={styles.buttonContainer}>
-            <Button onPress={this._addToCalendar} title="Add to Calendar" />
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <Button onPress={this._deleteEvent} title="Remove Event" />
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <Button onPress={this._updateEventDetails} title="Update Event" />
-          </View>
-        </View>
-        <View style={styles.container}>
-          <View style={styles.buttonContainer}>
-            <Button onPress={this._sendByEmail} title="Email To Friend" />
-          </View>
-        </View>
-      </ScrollView>
-    );
   }
 
   _updateSingleStateValue = async (_key, _val) => {
@@ -129,15 +52,13 @@ export class CalendarEventScreen extends React.Component {
     // update the currentEvent
     this.props.modifyEvent(oldEvent);
   };
+
   _sendByEmail = () => {
     const event_title = this.state.description;
     const event_description = this.state.summary;
-    Linking.openURL(
-      "mailto://?subject= Invitation to: " +
-        event_title +
-        "&body= " +
-        event_description
-    );
+
+    // open mailto as browser link inlcuding subject and body
+    Linking.openURL(`mailto://?subject= ${event_title}&body= ${event_description}`);
   };
 
   _findEvent = () => {
@@ -147,11 +68,11 @@ export class CalendarEventScreen extends React.Component {
     if (events.length === 0) {
       const newState = {
         id: 12312312,
-        description: "DummyTitle",
-        summary: "DummyText",
-        location: "DummyLocation",
-        startTime: "2019-02-27T16:00:00.000Z",
-        endTime: "2019-02-27T18:00:00.000Z"
+        description: 'DummyTitle',
+        summary: 'DummyText',
+        location: 'DummyLocation',
+        startTime: '2019-02-27T16:00:00.000Z',
+        endTime: '2019-02-27T18:00:00.000Z'
       };
 
       this.setState(newState);
@@ -180,14 +101,14 @@ export class CalendarEventScreen extends React.Component {
 
         // TODO: Fix - Event is not deleted!
         await Calendar.deleteEventAsync(`${id}`, {
-          instanceStartDate: "2019-02-19T15:00:00.000Z",
+          instanceStartDate: '2019-02-19T15:00:00.000Z',
           futureEvents: true
         });
 
         this.setState({ eventCreationId: null });
         Alert.alert(`Event with ID: ${id} has been deleted.`);
       } else {
-        console.log("No evenCreationId");
+        console.log('No evenCreationId');
       }
     } catch (error) {
       console.error(error);
@@ -197,12 +118,12 @@ export class CalendarEventScreen extends React.Component {
   _addToCalendar = async () => {
     //create empty event
     let eventDetails = {
-      title: "",
-      startDate: "",
-      endDate: "",
+      title: '',
+      startDate: '',
+      endDate: '',
       allDay: false,
-      location: "",
-      notes: "",
+      location: '',
+      notes: '',
       alarms: [
         {
           relativeOffset: -15,
@@ -213,12 +134,12 @@ export class CalendarEventScreen extends React.Component {
       recurrenceRule: {
         frequency: Calendar.Frequency.DAILY,
         interval: 2,
-        endDate: "2019-02-22T16:00:00.000Z",
+        endDate: '2019-02-22T16:00:00.000Z',
         occurrence: 4
       },
-      availability: "busy",
+      availability: 'busy',
       // TODO: check if the timezone still works on Android
-      timeZone: "GMT+1"
+      timeZone: 'GMT+1'
     };
 
     try {
@@ -242,17 +163,17 @@ export class CalendarEventScreen extends React.Component {
       );
 
       this.setState({ eventCreationId: eventCreationId });
-      console.log("Event Id", eventCreationId);
+      console.log('Event Id', eventCreationId);
 
       Alert.alert(`The event ${eventCreationId} is added to your calendar!`);
     } catch (error) {
-      console.log("Error", error);
+      console.log('Error', error);
     }
 
     let notificationId = Notifications.scheduleLocalNotificationAsync(
       {
         title: eventDetails.title,
-        body: "Do not forget about your event on " + eventDetails.startDate
+        body: 'Do not forget about your event on ' + eventDetails.startDate
       },
       {
         //repeat: 'minute',
@@ -262,6 +183,70 @@ export class CalendarEventScreen extends React.Component {
     console.log(notificationId);
     //Notifications.cancelAllScheduledNotificationsAsync()
   };
+
+  render() {
+    return (
+      <ScrollView>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.description}
+            multiline
+            placeholder="SUMMARY"
+            value={this.state.summary}
+            onChangeText={text => this._updateSingleStateValue('summary', text)}
+          />
+
+          <TextInput
+            style={styles.inputItem}
+            multiline
+            placeholder="DESCRIPTION"
+            value={this.state.description}
+            onChangeText={text => this._updateSingleStateValue('description', text)}
+          />
+
+          <TextInput
+            style={styles.inputItem}
+            placeholder="LOCATION:"
+            value={this.state.location}
+            onChangeText={text => this._updateSingleStateValue('location', text)}
+          />
+
+          <TextInput
+            style={styles.inputItem}
+            placeholder="START_TIME"
+            value={this.state.startTime}
+            onChangeText={text => this._updateSingleStateValue('startTime', text)}
+          />
+
+          <TextInput
+            style={styles.inputItem}
+            placeholder="END_TIME"
+            value={this.state.endTime}
+            onChangeText={text => this._updateSingleStateValue('endTime', text)}
+          />
+        </View>
+
+        <View style={styles.container}>
+          <View style={styles.buttonContainer}>
+            <Button onPress={this._addToCalendar} title="Add to Calendar" />
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Button onPress={this._deleteEvent} title="Remove Event" />
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Button onPress={this._updateEventDetails} title="Update Event" />
+          </View>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.buttonContainer}>
+            <Button onPress={this._sendByEmail} title="Email To Friend" />
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
 }
 
 const mapStateToProps = state => {
@@ -283,39 +268,39 @@ export default connect(
 )(withNavigation(CalendarEventScreen));
 
 const styles = StyleSheet.create({
-  textContainer: {
-    margin: 5,
-    padding: 5
+  buttonContainer: {
+    marginHorizontal: 5,
+    marginTop: 50
+  },
+  container: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 20
+  },
+  description: {
+    borderColor: '#d6d7da',
+    borderRadius: 4,
+    borderWidth: 0.5,
+    display: 'flex',
+    height: 40,
+    maxHeight: 100,
+    padding: 1
   },
   inputContainer: {
-    backgroundColor: "#fff",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    justifyContent: 'center',
     margin: 5,
     padding: 5
   },
   inputItem: {
-    height: 40,
+    borderColor: '#d6d7da',
     borderRadius: 4,
     borderWidth: 0.5,
-    borderColor: "#d6d7da",
-    padding: 1
-  },
-  description: {
-    display: "flex",
     height: 40,
-    maxHeight: 100,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: "#d6d7da",
     padding: 1
   },
-  container: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginBottom: 20
-  },
-  buttonContainer: {
-    marginTop: 50,
-    marginHorizontal: 5
+  textContainer: {
+    margin: 5,
+    padding: 5
   }
 });

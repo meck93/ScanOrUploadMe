@@ -1,23 +1,22 @@
-const express = require("express");
-const session = require("express-session");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 // import routes
-import images from "./routes/images";
-import home from "./routes/home";
-import auth from "./routes/auth";
+import images from './routes/images';
+import home from './routes/home';
 
 // load polyfill to make it work on old browsers
-import "@babel/polyfill";
+import '@babel/polyfill';
 
 // load node environment variables
-require("dotenv").config();
+require('dotenv').config();
 
 // basic configuration
-const hostname = "127.0.0.1";
+const hostname = '127.0.0.1';
 const port = process.env.PORT || 3000;
 
 // create express app
@@ -31,7 +30,7 @@ app.use(cors());
 
 // Add session middleware layer
 const sesh = {
-  name: "SESS_ID",
+  name: 'SESS_ID',
   secret: process.env.SECURITY_KEY,
   resave: false,
   saveUninitialized: true,
@@ -43,34 +42,32 @@ const sesh = {
 };
 
 // ensure cookies are secure when used in production
-if (app.get("env") === "production") {
+if (app.get('env') === 'production') {
   // serve secure cookies
   sesh.cookie.secure = true;
 }
 
 // make the content of the directory /uploads static and available via the link /uploads
-app.use("/uploads", express.static("uploads"));
+app.use('/uploads', express.static('uploads'));
 
 // apply session options to server
 app.use(session(sesh));
 
 // for parsing application/json
-app.use(bodyParser.json({ limit: "10mb", extended: true }));
+app.use(bodyParser.json({ limit: '10mb', extended: true }));
 
 // for parsing application/xwww-form-urlencoded
-app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // enable different routes
-app.use("/images", images);
-app.use("/", home);
-app.use("/auth", auth);
+app.use('/images', images);
+app.use('/', home);
 
 // handle authentication errors
 app.use(function(err, req, res, next) {
-  if (err.name === "UnauthorizedError") {
+  if (err.name === 'UnauthorizedError') {
     return res.status(403).send({
-      msg:
-        "No API access token was provided in the request. Please authenticate first!",
+      msg: 'No API access token was provided in the request. Please authenticate first!',
       uploaded: true,
       success: false
     });
@@ -88,15 +85,11 @@ const apiLimiter = rateLimit({
 });
 
 // only apply to requests that begin with /images/
-app.use("/images/", apiLimiter);
+app.use('/images/', apiLimiter);
 
 // run the server
 app.listen(port, () => {
-  console.log(
-    `Running stuff on http://${hostname}:${port}. NODE_ENV: ${
-      process.env.NODE_ENV
-    }.`
-  );
+  console.log(`Running stuff on http://${hostname}:${port}. NODE_ENV: ${process.env.NODE_ENV}.`);
 });
 
 module.exports = app; // testing
