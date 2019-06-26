@@ -1,7 +1,7 @@
-import { encrypt,  decrypt } from "../src/security/security.js";
+import { encrypt, decrypt } from '../src/security/security.js';
 import { assert, expect } from 'chai';
 
-let text = "Secret text";
+let text = 'Secret text';
 /*
 describe('security.js', function() {
     describe('Undefined input', function() {
@@ -19,11 +19,11 @@ describe('security.js', function() {
 
     describe('Encryption', function() {
         it('should encrypt input text', function() {
-            let encrypted = encrypt(text);        
+            let encrypted = encrypt(text);
             assert.notEqual(text, encrypted);
         });
     });
-    
+
     describe('Decryption', function() {
         it('should correctly decrypt encrypted text', function() {
             let encrypted = encrypt(text);

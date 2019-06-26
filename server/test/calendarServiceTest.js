@@ -15,7 +15,7 @@ const ocrRes = {
 let nlpObject = nlpResponse.default[0].entities;
 
 describe('calendarService', function() {
-    
+
     describe('Undefined arguments', function() {
         it('should throw TypeError for undefined nlpResponse', function() {
             expect(() => {
@@ -23,17 +23,17 @@ describe('calendarService', function() {
             }).to.throw(TypeError, "Undefined input");
         });
     });
-    
+
     describe('Highest confidence', function(){
         it('the entity with the highest salience should be selected', function(){
-            let multiplePerson = [nlpObject[4], nlpObject[1], nlpObject[2]];    
+            let multiplePerson = [nlpObject[4], nlpObject[1], nlpObject[2]];
             assert.notEqual(createCalendarEvent(multiplePerson, ocrRes).description, "Dentist appointment, Less credible T.E. Lawrence");
         });
     });
 
     describe('Complete summary', function(){
         it('optimal description should consist of: event, organization, person', function(){
-            
+
             assert.equal(createCalendarEvent(nlpObject, ocrRes).description, "Dentist appointment, Peter O Toole, T.E. Lawrence");
         });
     });
@@ -44,7 +44,7 @@ describe('calendarService', function() {
             assert.equal(createCalendarEvent(noLocation, ocrRes).location, "UNSPECIFIED");
         });
     });
-    
+
     describe('No event', function(){
         it('no event in the NLP object should result is default description: EVENT CREATION RESULT', function(){
             let noEvent = [nlpObject[0], nlpObject[1], nlpObject[2], nlpObject[3], nlpObject[5]];
