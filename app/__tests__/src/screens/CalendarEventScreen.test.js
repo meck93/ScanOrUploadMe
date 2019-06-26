@@ -1,15 +1,15 @@
-import Enzyme from "enzyme";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
-import Adapter from "enzyme-adapter-react-16";
+import { shallow, mount } from Enzyme from 'enzyme';
 
-import { CalendarEventScreen } from "../../../src/screens/CalendarEventScreen";
+import toJson from 'enzyme-to-json';
+import Adapter from 'enzyme-adapter-react-16';
 
-import React from "react";
+import { CalendarEventScreen } from '../../../src/screens/CalendarEventScreen';
 
-import renderer from "react-test-renderer";
+import React from 'react';
 
-describe("CalendarEventScreen: Tests", () => {
+import renderer from 'react-test-renderer';
+
+describe('CalendarEventScreen: Tests', () => {
   const initialEvents = {
     currentEventId: null,
     currentEvent: null,
@@ -20,48 +20,48 @@ describe("CalendarEventScreen: Tests", () => {
     currentEventId: 1,
     currentEvent: {
       id: 1,
-      description: "Test",
-      summary: "Test",
-      location: "Test",
-      startTime: "Test",
-      endTime: "Test"
+      description: 'Test',
+      summary: 'Test',
+      location: 'Test',
+      startTime: 'Test',
+      endTime: 'Test'
     },
     events: [
       {
         id: 1,
-        description: "Test",
-        summary: "Test",
-        location: "Test",
-        startTime: "Test",
-        endTime: "Test"
+        description: 'Test',
+        summary: 'Test',
+        location: 'Test',
+        startTime: 'Test',
+        endTime: 'Test'
       }
     ]
   };
 
   const dummyState = {
     id: 12312312,
-    description: "DummyTitle",
-    summary: "DummyText",
-    location: "DummyLocation",
-    startTime: "2019-02-27T16:00:00.000Z",
-    endTime: "2019-02-27T18:00:00.000Z"
+    description: 'DummyTitle',
+    summary: 'DummyText',
+    location: 'DummyLocation',
+    startTime: '2019-02-27T16:00:00.000Z',
+    endTime: '2019-02-27T18:00:00.000Z'
   };
 
   const initializedState = {
     id: 1,
-    description: "Test",
-    summary: "Test",
-    location: "Test",
-    startTime: "Test",
-    endTime: "Test"
+    description: 'Test',
+    summary: 'Test',
+    location: 'Test',
+    startTime: 'Test',
+    endTime: 'Test'
   };
 
   jest.useFakeTimers();
 
   beforeEach(() => {});
 
-  describe("CalendarEventScreen: Shallow Render Component", () => {
-    it("renders the component without any real events", () => {
+  describe('CalendarEventScreen: Shallow Render Component', () => {
+    it('renders the component without any real events', () => {
       const wrapper = shallow(<CalendarEventScreen events={initialEvents} />);
       const component = wrapper.instance();
 
@@ -69,7 +69,7 @@ describe("CalendarEventScreen: Tests", () => {
       expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("renders the component with a real event", () => {
+    it('renders the component with a real event', () => {
       const wrapper = shallow(<CalendarEventScreen events={someEvents} />);
       const component = wrapper.instance();
 
@@ -78,8 +78,8 @@ describe("CalendarEventScreen: Tests", () => {
     });
   });
 
-  describe("test TextInput changes", () => {
-    it("test the _updateSingleStateValue function", () => {
+  describe('test TextInput changes', () => {
+    it('test the _updateSingleStateValue function', () => {
       const instanceOf = renderer
         .create(<CalendarEventScreen events={initialEvents} />, {
           disableLifecycleMethods: true
@@ -87,10 +87,10 @@ describe("CalendarEventScreen: Tests", () => {
         .getInstance();
 
       // call the state update method
-      instanceOf._updateSingleStateValue("description", "TEST_TEST");
+      instanceOf._updateSingleStateValue('description', 'TEST_TEST');
 
       // check that the update value is correct
-      expect(instanceOf.state.description).toEqual("TEST_TEST");
+      expect(instanceOf.state.description).toEqual('TEST_TEST');
     });
   });
 });

@@ -4,7 +4,7 @@ import * as Random from 'expo-random';
 import * as Crypto from 'expo-crypto';
 import Constants from 'expo-constants';
 
-var Buffer = require('buffer/').Buffer;
+const Buffer = require('buffer/').Buffer;
 
 const AUTH0_DOMAIN = 'https://dev-meck93.eu.auth0.com';
 const AUTH0_CLIENT_ID = '0X74tvmbhZVT8rCy81lzukRzx1WAZp1D';

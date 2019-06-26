@@ -52,10 +52,13 @@ export class CalendarEventScreen extends React.Component {
     // update the currentEvent
     this.props.modifyEvent(oldEvent);
   };
+
   _sendByEmail = () => {
     const event_title = this.state.description;
     const event_description = this.state.summary;
-    Linking.openURL('mailto://?subject= Invitation to: ' + event_title + '&body= ' + event_description);
+
+    // open mailto as browser link inlcuding subject and body
+    Linking.openURL(`mailto://?subject= ${event_title}&body= ${event_description}`);
   };
 
   _findEvent = () => {

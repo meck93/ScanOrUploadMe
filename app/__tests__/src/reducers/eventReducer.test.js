@@ -1,13 +1,8 @@
-import eventReducer from "../../../src/reducers/eventReducer";
-import {
-  setCurrentEvent,
-  addEvent,
-  modifyEvent,
-  deleteEvent
-} from "../../../src/actions/eventActions";
+import eventReducer from '../../../src/reducers/eventReducer';
+import { setCurrentEvent, addEvent, modifyEvent, deleteEvent } from '../../../src/actions/eventActions';
 
-describe("Redux: Calendar Reducer", () => {
-  it("should return the initial state", () => {
+describe('Redux: Calendar Reducer', () => {
+  it('should return the initial state', () => {
     const mockRepsonse = {
       currentEventId: null,
       currentEvent: null,
@@ -16,7 +11,7 @@ describe("Redux: Calendar Reducer", () => {
     expect(eventReducer(undefined, {})).toEqual(mockRepsonse);
   });
 
-  it("should handle ADD_EVENT", () => {
+  it('should handle ADD_EVENT', () => {
     const mockRepsonseAddEvent = {
       currentEventId: null,
       currentEvent: null,
@@ -35,7 +30,7 @@ describe("Redux: Calendar Reducer", () => {
     ).toEqual(mockRepsonseAddEvent);
   });
 
-  it("should handle SET_CURRENT_EVENT", () => {
+  it('should handle SET_CURRENT_EVENT', () => {
     const mockRepsonseSetCurrentEvent = {
       currentEventId: 1,
       currentEvent: { id: 1 },
@@ -54,11 +49,11 @@ describe("Redux: Calendar Reducer", () => {
     ).toEqual(mockRepsonseSetCurrentEvent);
   });
 
-  it("should handle MODIFY_EVENT", () => {
+  it('should handle MODIFY_EVENT', () => {
     const mockResponseModifyEvent = {
       currentEventId: null,
       currentEvent: null,
-      events: [{ id: 1, text: "test" }, { id: 2, text: "not-test" }]
+      events: [{ id: 1, text: 'test' }, { id: 2, text: 'not-test' }]
     };
 
     expect(
@@ -66,18 +61,18 @@ describe("Redux: Calendar Reducer", () => {
         {
           currentEventId: null,
           currentEvent: null,
-          events: [{ id: 1, text: "test" }, { id: 2, text: "test" }]
+          events: [{ id: 1, text: 'test' }, { id: 2, text: 'test' }]
         },
-        modifyEvent({ id: 2, text: "not-test" })
+        modifyEvent({ id: 2, text: 'not-test' })
       )
     ).toEqual(mockResponseModifyEvent);
   });
 
-  it("should handle DELETE_EVENT", () => {
+  it('should handle DELETE_EVENT', () => {
     const mockResponseDeleteEventNonCurrent = {
       currentEventId: null,
       currentEvent: null,
-      events: [{ id: 1, text: "test" }]
+      events: [{ id: 1, text: 'test' }]
     };
 
     // remove the non-current event
@@ -86,7 +81,7 @@ describe("Redux: Calendar Reducer", () => {
         {
           currentEventId: null,
           currentEvent: null,
-          events: [{ id: 1, text: "test" }, { id: 2, text: "test" }]
+          events: [{ id: 1, text: 'test' }, { id: 2, text: 'test' }]
         },
         deleteEvent(2)
       )
@@ -97,8 +92,8 @@ describe("Redux: Calendar Reducer", () => {
       eventReducer(
         {
           currentEventId: 2,
-          currentEvent: { id: 2, text: "test" },
-          events: [{ id: 1, text: "test" }, { id: 2, text: "test" }]
+          currentEvent: { id: 2, text: 'test' },
+          events: [{ id: 1, text: 'test' }, { id: 2, text: 'test' }]
         },
         deleteEvent(2)
       )

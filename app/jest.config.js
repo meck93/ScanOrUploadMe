@@ -24,14 +24,10 @@ module.exports = {
   // collectCoverageFrom: null,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: [
-    "\\\\node_modules\\\\",
-    "./jest.config.js",
-    "./__tests__/setupJest.js"
-  ],
+  coveragePathIgnorePatterns: ['\\\\node_modules\\\\', './jest.config.js', './__tests__/setupJest.js'],
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -90,7 +86,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  preset: "jest-expo",
+  preset: 'jest-expo',
 
   // Run tests from one or more projects
   // projects: null,
@@ -122,7 +118,7 @@ module.exports = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ["./__tests__/setupJest.js"],
+  setupFiles: ['./__tests__/setupJest.js'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: ["./node_modules/jest-enzyme/lib/index.js"],
@@ -131,7 +127,7 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "node",
+  testEnvironment: 'node',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -146,11 +142,7 @@ module.exports = {
   // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: [
-    "\\\\node_modules\\\\",
-    "./jest.config.js",
-    "./__tests__/setupJest.js"
-  ]
+  testPathIgnorePatterns: ['\\\\node_modules\\\\', './jest.config.js', './__tests__/setupJest.js']
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
