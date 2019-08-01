@@ -8,11 +8,17 @@ cache:
     - node_modules
 before_install:
   - cd ./server
+addons:
+  sonarcloud:
+    organization: meck93
+    token:
+      secure: klmraWYReUOnS5jy6SLsy2XMeNsFswbvFYkj2F/Ba53sYI1y8SOlzwY3nZiAt1sSkmYmgpNpnCcrfVTp4TLp0SDkihJzhZsZi+1ytEihdC+vRJEln4FXuSbo1Fi/9W7qXKklBb4NRQnb+TJ39mynxxUjyOrSbFHpiz+PMMzY2dFU6AxX26UzGXw16AebNcaBdpCkdNoIkzmnv8LZ4HZ6L7A5UcpmIT8+SA1n2HBqqeLigVR3i4s9oYH4gq3rEi2VbQ95eQV/ztRlMflnmIah4eFQCXLnyzb7VDLcnu+JZUBakzhNnUeT1Ryp5hZpAf1eKcFJoDerVDfxkLiL/EFcf59DQO6hXP449SAD8I9ks8J/iWyy657QeOYuwIKx1RFcVCX2YIxDq1cTJlb9Szlie266SrBy+fQAILfsrR06S8bOQ4NeRg9glaXlVPSV5eckFLrQcvm/HjypIhkA7m7jiyksyF2lFjugq+it6Ac2Jf4dRzMES9TJyRotYrdv4TxEM2IpwYER2bqYAOV6GPfqI8Yr4jivuoCiPGa4fW3frR+Acv8DtUQfpJG4jEc4SozZ/kzf9SPJ74EV0IAyvByX13ngIjbXR7OTWaDqpRrB2hcUojWCnrtYt96F33PKwRn5sb2Qcxs+yQJGdN3y8cxxd91p6F27YRSP9WKAwJdB/tE=
 install:
   - npm install
 script:
   - npm run build
   - npm run test
+  - sonar-scanner -X -D sonar.projectKey=meck93_ScanOrUploadMe
 deploy:
   provider: heroku
   api_key:
@@ -20,3 +26,6 @@ deploy:
   app: scanoruploadme
 notifications:
   email: false
+env:
+  global:
+    - secure: SONAR_TOKEN=klmraWYReUOnS5jy6SLsy2XMeNsFswbvFYkj2F/Ba53sYI1y8SOlzwY3nZiAt1sSkmYmgpNpnCcrfVTp4TLp0SDkihJzhZsZi+1ytEihdC+vRJEln4FXuSbo1Fi/9W7qXKklBb4NRQnb+TJ39mynxxUjyOrSbFHpiz+PMMzY2dFU6AxX26UzGXw16AebNcaBdpCkdNoIkzmnv8LZ4HZ6L7A5UcpmIT8+SA1n2HBqqeLigVR3i4s9oYH4gq3rEi2VbQ95eQV/ztRlMflnmIah4eFQCXLnyzb7VDLcnu+JZUBakzhNnUeT1Ryp5hZpAf1eKcFJoDerVDfxkLiL/EFcf59DQO6hXP449SAD8I9ks8J/iWyy657QeOYuwIKx1RFcVCX2YIxDq1cTJlb9Szlie266SrBy+fQAILfsrR06S8bOQ4NeRg9glaXlVPSV5eckFLrQcvm/HjypIhkA7m7jiyksyF2lFjugq+it6Ac2Jf4dRzMES9TJyRotYrdv4TxEM2IpwYER2bqYAOV6GPfqI8Yr4jivuoCiPGa4fW3frR+Acv8DtUQfpJG4jEc4SozZ/kzf9SPJ74EV0IAyvByX13ngIjbXR7OTWaDqpRrB2hcUojWCnrtYt96F33PKwRn5sb2Qcxs+yQJGdN3y8cxxd91p6F27YRSP9WKAwJdB/tE=
