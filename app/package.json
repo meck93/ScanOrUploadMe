@@ -58,7 +58,7 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-native": "^3.6.0",
     "jest": "^24.1.0",
-    "jest-cli": "^24.0.0",
+    "jest-cli": "^24.9.0",
     "jest-enzyme": "^7.0.2",
     "jest-expo": "^34.0.0",
     "jest-fetch-mock": "^2.1.1",
