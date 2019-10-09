@@ -1,5 +1,4 @@
 const express = require('express');
-const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -49,9 +48,6 @@ if (app.get('env') === 'production') {
 
 // make the content of the directory /uploads static and available via the link /uploads
 app.use('/uploads', express.static('uploads'));
-
-// apply session options to server
-app.use(session(sesh));
 
 // for parsing application/json
 app.use(bodyParser.json({ limit: '10mb', extended: true }));

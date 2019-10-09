@@ -2,7 +2,7 @@
 import { LanguageServiceClient } from '@google-cloud/language';
 
 const regeneratorRuntime = require('regenerator-runtime');
-require('dotenv').load();
+require('dotenv').config()
 
 // Creates a client
 function createClient() {
