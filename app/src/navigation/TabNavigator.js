@@ -1,31 +1,33 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { createAppContainer, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import React from "react";
+import { Platform } from "react-native";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import { createBottomTabNavigator } from "react-navigation-tabs";
 
-import TabBarIcon from '../components/TabBarIcon';
+import TabBarIcon from "../components/TabBarIcon";
 
-import CameraScreen from '../screens/CameraScreen';
-import CalendarEventScreen from '../screens/CalendarEventScreen';
-import PreferencesScreen from '../screens/PreferencesScreen';
-import SavedEventScreen from '../screens/SavedEventsScreen';
+import CameraScreen from "../screens/CameraScreen";
+import CalendarEventScreen from "../screens/CalendarEventScreen";
+import PreferencesScreen from "../screens/PreferencesScreen";
+import SavedEventScreen from "../screens/SavedEventsScreen";
 
 const CameraStack = createStackNavigator(
   {
     Camera: {
       screen: CameraScreen,
       navigationOptions: {
-        title: 'ScanMe!'
+        title: "ScanMe!"
       }
     },
     Calendar: {
       screen: CalendarEventScreen,
       navigationOptions: {
-        title: 'The created calendar event!'
+        title: "The created calendar event!"
       }
     }
   },
   {
-    initialRouteName: 'Camera'
+    initialRouteName: "Camera"
   }
 );
 
@@ -34,12 +36,12 @@ const PreferencesStack = createStackNavigator(
     Preferences: {
       screen: PreferencesScreen,
       navigationOptions: {
-        title: 'Settings'
+        title: "Settings"
       }
     }
   },
   {
-    initialRouteName: 'Preferences'
+    initialRouteName: "Preferences"
   }
 );
 
@@ -48,18 +50,18 @@ const SavedStack = createStackNavigator(
     Saved: {
       screen: SavedEventScreen,
       navigationOptions: {
-        title: 'Created Events'
+        title: "Created Events"
       }
     },
     Calendar: {
       screen: CalendarEventScreen,
       navigationOptions: {
-        title: 'The created calendar event!'
+        title: "The created calendar event!"
       }
     }
   },
   {
-    initialRouteName: 'Saved'
+    initialRouteName: "Saved"
   }
 );
 
@@ -68,37 +70,46 @@ const TabNavigator = createBottomTabNavigator(
     CameraTab: {
       screen: CameraStack,
       navigationOptions: {
-        tabBarLabel: 'Home',
+        tabBarLabel: "Home",
         tabBarIcon: ({ focused }) => (
-          <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'} />
+          <TabBarIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-home" : "md-home"}
+          />
         )
       }
     },
     PreferencesTab: {
       screen: PreferencesStack,
       navigationOptions: {
-        tabBarLabel: 'Settings',
+        tabBarLabel: "Settings",
         tabBarIcon: ({ focused }) => (
-          <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} />
+          <TabBarIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
+          />
         )
       }
     },
     SavedTab: {
       screen: SavedStack,
       navigationOptions: {
-        tabBarLabel: 'Saved',
+        tabBarLabel: "Saved",
         tabBarIcon: ({ focused }) => (
-          <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+          <TabBarIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+          />
         )
       }
     }
   },
   {
     tabBarOptions: {
-      activeTintColor: 'lightblue',
-      inactiveTintColor: 'gray'
+      activeTintColor: "lightblue",
+      inactiveTintColor: "gray"
     },
-    order: ['CameraTab', 'SavedTab', 'PreferencesTab'],
+    order: ["CameraTab", "SavedTab", "PreferencesTab"],
     animationEnabled: true
   }
 );
