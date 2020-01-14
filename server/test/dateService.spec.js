@@ -4,21 +4,6 @@ const expect = require("chai").expect;
 const assert = require("chai").assert;
 chai.use(require("chai-string"));
 
-// correct input
-const text = "time is on March 26 14.00 to 15.00";
-const startTime = new Date("March 26, 2020 13:00:00 UTC");
-const endTime = new Date("March 26, 2020 14:00:00 UTC");
-describe("extractDate using correct input", function() {
-  // make sure function returns description, start and endTime, given correct input
-  it("should return a description, start and end times", function() {
-    assert.deepEqual(extractDate(text), {
-      text: text,
-      startTime: startTime,
-      endTime: endTime
-    });
-  });
-});
-
 // incorrect input
 let now = new Date();
 const inc_startTime = new Date(now.setHours(now.getHours() + 1)).toString();
