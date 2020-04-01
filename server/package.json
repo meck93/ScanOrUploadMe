@@ -13,7 +13,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@google-cloud/language": "^3.7.1",
+    "@google-cloud/language": "^3.8.0",
     "@google-cloud/translate": "^4.2.1",
     "@google-cloud/vision": "^1.11.0",
     "body-parser": "^1.18.3",
