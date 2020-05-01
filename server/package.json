@@ -42,7 +42,7 @@
     "mocha": "^6.2.2",
     "nodemon": "^1.19.4",
     "nyc": "^14.1.1",
-    "sinon": "^7.5.0",
+    "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0"
   },
   "heroku-run-build-script": true
