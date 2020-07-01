@@ -39,7 +39,7 @@
     "@babel/preset-env": "^7.10.2",
     "@babel/register": "^7.10.4",
     "chai": "^4.2.0",
-    "mocha": "^6.2.2",
+    "mocha": "^8.0.1",
     "nodemon": "^1.19.4",
     "nyc": "^14.1.1",
     "sinon": "^7.5.0",
