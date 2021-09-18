@@ -25,7 +25,7 @@
     "@expo/vector-icons": "^10.0.0",
     "@react-native-community/masked-view": "0.1.5",
     "buffer": "^5.2.1",
-    "expo": "^36.0.0",
+    "expo": "^39.0.1",
     "expo-asset": "~8.0.0",
     "expo-calendar": "~8.0.0",
     "expo-constants": "~8.0.0",
